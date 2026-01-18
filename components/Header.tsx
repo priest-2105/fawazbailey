@@ -2,13 +2,13 @@ import DateTime from "./DateTime";
 
 export default function Header() {
     return (
-        <header className="mb-12 border-b-2 pb-6 border-zinc-900">
+        <header className="mb-12 border-b border-zinc-900 pb-8">
             <div className="flex justify-between items-start">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tighter uppercase mb-1">Fawaz Bailey</h1>
-                    <p className="text-zinc-600 font-medium">Frontend Engineer</p>
+                    <h1 className="text-3xl font-semibold tracking-tight text-ink-primary mb-1">Fawaz Bailey</h1>
+                    <p className="text-sm font-medium uppercase tracking-wide text-ink-secondary">Frontend Engineer</p>
                 </div>
-                <div className="text-right text-xs font-mono text-zinc-500 uppercase leading-relaxed">
+                <div className="text-right text-xs font-mono text-ink-muted uppercase leading-loose">
                     <div className="flex flex-col">
                         <span>Form: P-2026/V1</span>
                         <DateTime />
@@ -17,11 +17,12 @@ export default function Header() {
                 </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-mono uppercase tracking-tight">
-                <a href="https://linkedin.com" target="_blank" className="hover:underline">LinkedIn</a>
-                <a href="https://github.com" target="_blank" className="hover:underline">GitHub</a>
-                <a href="mailto:hello@example.com" className="hover:underline">Email</a>
-                <span>+234 000 000 0000</span>
+            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-2 text-sm font-medium tracking-tight text-ink-secondary">
+                <a href="https://www.linkedin.com/in/fawazbailey/" target="_blank" className="hover:text-ink-primary transition-colors">LinkedIn</a>
+                <a href="https://github.com/priest-2105" target="_blank" className="hover:text-ink-primary transition-colors">GitHub</a>
+                <a href="https://x.com/_priest_21o5" target="_blank" className="hover:text-ink-primary transition-colors">X / Twitter</a>
+                <a href="mailto:fawzybailey782@gmail.com" className="hover:text-ink-primary transition-colors">Email</a>
+                <span className="text-ink-muted leading-relaxed">+234 901 291 4046</span>
             </div>
         </header>
     );
