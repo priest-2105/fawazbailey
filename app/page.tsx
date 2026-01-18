@@ -39,7 +39,7 @@ export default function Home() {
             company="Always49"
             role="Design Engineer"
             duration="Oct 2025 – Present"
-            technologies={["Next.js", "Laravel", "UI/UX Design", "Tailwind CSS"]}
+            technologies={["Next.js", "Laravel", "UI/UX Design", "Javascript", "React"]}
             bullets={[
               "Spearheaded UI/UX design and successfully integrated designs into the development dashboard.",
               "Engineered the integration of Laravel backends with Next.js frontend architectures.",
@@ -50,7 +50,7 @@ export default function Home() {
             company="Uniskills"
             role="Frontend Engineer"
             duration="Oct 2022 – Sept 2025"
-            technologies={["Next.js", "TypeScript", "NestJS", "PostgreSQL"]}
+            technologies={["Next.js", "TypeScript", "NestJS", "PostgreSQL", "React"]}
             bullets={[
               "Developed and maintained the frontend of an education platform.",
               "Built a real-time chat system using React, WebSockets, and styled components.",
@@ -62,7 +62,7 @@ export default function Home() {
             company="Techend"
             role="Web Developer"
             duration="2021 – 2022"
-            technologies={["React", "JavaScript", "PHP", "SCSS"]}
+            technologies={["React", "JavaScript", "PHP", "MYSQL"]}
             bullets={[
               "Built responsive web pages using HTML5 and CSS3.",
               "Advanced to JavaScript and React for interactive features.",
