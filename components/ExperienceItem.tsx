@@ -19,10 +19,10 @@ export default function ExperienceItem({
                 <h3 className="text-sm font-semibold tracking-tight text-ink-primary uppercase">{company}</h3>
                 <span className="text-[10px] font-mono text-ink-muted uppercase">{duration}</span>
             </div>
-            <div className="flex justify-between items-baseline text-xs mb-3 text-ink-secondary italic">
-                <span>{role}</span>
-                <span className="text-[10px] font-mono not-italic text-ink-muted uppercase tracking-tighter">
-                    {technologies.join(" / ")}
+            <div className="text-xs mb-4">
+                <span className="text-ink-secondary italic block">{role}</span>
+                <span className="text-[9px] font-mono text-ink-muted uppercase tracking-wider block mt-1.5 border-l-2 border-zinc-100 pl-2">
+                    Tech Stack: {technologies.join(" • ")}
                 </span>
             </div>
             <ul className="text-sm leading-relaxed text-ink-secondary space-y-3 list-none border-l border-zinc-100 pl-4 ml-0.5">
