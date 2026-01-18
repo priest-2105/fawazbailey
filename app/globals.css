@@ -1,13 +1,26 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-paper: #fafaf9;
+  --color-ink: #171717;
+  --color-form-border: #e7e7e4;
 }
 
+:root {
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+}
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  * {
+    @apply border-form-border;
+  }
 }
