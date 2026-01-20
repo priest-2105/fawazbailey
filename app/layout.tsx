@@ -15,6 +15,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Fawaz Bailey | Frontend Engineer",
   description: "A form-style portfolio focusing on clarity, structure, and professional experience.",
+  icons: {
+    icon: [
+      {
+        url: "/knight-black.ico",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/knight-white.ico",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
