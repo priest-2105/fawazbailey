@@ -13,10 +13,7 @@ export const metadata: Metadata = {
   title: "Fawaz Bailey | Frontend Engineer",
   description: "Frontend engineer based in Lagos, Nigeria.",
   icons: {
-    icon: [
-      { url: "/knight-black.ico", media: "(prefers-color-scheme: light)" },
-      { url: "/knight-white.ico", media: "(prefers-color-scheme: dark)" },
-    ],
+    icon: [{ url: "/FB.svg", type: "image/svg+xml" }],
   },
 };
 

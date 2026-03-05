@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import NowPlaying from "@/components/NowPlaying";
+import ChessStats from "@/components/ChessStats";
+import ContactButton from "@/components/ContactButton";
 
 export const metadata: Metadata = {
   title: "About — Fawaz Bailey",
@@ -185,6 +187,8 @@ export default function AboutPage() {
             when they arrive, you know where to look.
           </p>
 
+          <ChessStats />
+
           {/* divider */}
           <div style={{ height: "1px", backgroundColor: "#f0f0f0", margin: "12px 0" }} />
 
@@ -269,23 +273,7 @@ export default function AboutPage() {
 
         {/* ── CTA ── */}
         <div style={{ marginTop: "64px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
-          <a
-            href="mailto:fawzybailey782@gmail.com"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              backgroundColor: "#111111",
-              color: "#ffffff",
-              fontSize: "15px",
-              fontWeight: 500,
-              padding: "12px 26px",
-              borderRadius: "999px",
-              textDecoration: "none",
-              fontFamily: F,
-            }}
-          >
-            Get in touch
-          </a>
+          <ContactButton label="Get in touch" filled={true} />
           <a
             href="https://www.linkedin.com/in/fawazbailey/"
             target="_blank"

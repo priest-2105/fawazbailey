@@ -1,6 +1,7 @@
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import ProjectCard from "@/components/ProjectCard";
+import ContactButton from "@/components/ContactButton";
 
 const PINNED_PROJECTS = [
   {
@@ -66,7 +67,7 @@ const experiences = [
   {
     company: "iHealth",
     role: "Frontend Engineer · Volunteer",
-    period: "2023 — 2024",
+    period: "Jul 2024 — Present",
     stack: ["React", "Git", "GitHub"],
     bullets: [
       "Contributed to the frontend codebase as a volunteer engineer, writing and reviewing React components across multiple features.",
@@ -77,7 +78,7 @@ const experiences = [
   {
     company: "Always49",
     role: "Frontend Engineer",
-    period: "10/2024 — 03/2025",
+    period: "Oct 2025 — Present",
     stack: ["Next.js", "TypeScript", "NestJS", "PostgreSQL"],
     bullets: [
       "Built and maintained production-grade frontend applications using Next.js and TypeScript.",
@@ -90,7 +91,7 @@ const experiences = [
   {
     company: "UniSkills",
     role: "Software Engineer",
-    period: "2022 — 09/2025",
+    period: "Nov 2022 — Oct 2025",
     stack: ["Next.js", "TypeScript", "NestJS", "React", "WebSockets", "PostgreSQL"],
     bullets: [
       "Developed and maintained the frontend of an education platform connecting students with local businesses.",
@@ -143,7 +144,7 @@ export default function Home() {
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", fontFamily: F, color: "#111111" }}>
       <NavBar />
 
-      <main style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 48px" }}>
+      <main className="home-main">
 
         {/* ────────────────────────────────────────
             HERO
@@ -194,11 +195,11 @@ export default function Home() {
           </p>
 
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <ContactButton label="Get in touch" filled={true} />
             {[
-              { label: "Get in touch", href: "mailto:fawzybailey782@gmail.com", filled: true },
-              { label: "About me →", href: "/about", filled: false },
-              { label: "GitHub ↗", href: "https://github.com/priest-2105", filled: false },
-            ].map(({ label, href, filled }) => (
+              { label: "About me →", href: "/about" },
+              { label: "GitHub ↗",   href: "https://github.com/priest-2105" },
+            ].map(({ label, href }) => (
               <a
                 key={label}
                 href={href}
@@ -207,9 +208,9 @@ export default function Home() {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  backgroundColor: filled ? "#111111" : "transparent",
-                  color: filled ? "#ffffff" : "#111111",
-                  border: filled ? "none" : "1px solid #dddddd",
+                  backgroundColor: "transparent",
+                  color: "#111111",
+                  border: "1px solid #dddddd",
                   fontSize: "15px",
                   fontWeight: 500,
                   padding: "11px 24px",
@@ -248,7 +249,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "28px" }}>
+          <div className="grid-2col" style={{ gap: "28px" }}>
             {PINNED_PROJECTS.map((p) => (
               <ProjectCard key={p.title} {...p} />
             ))}
@@ -265,10 +266,8 @@ export default function Home() {
             {experiences.map(({ company, role, period, stack, bullets }, idx) => (
               <div
                 key={company}
+                className="grid-sidebar"
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "260px 1fr",
-                  gap: "40px",
                   paddingTop: idx === 0 ? 0 : "56px",
                   paddingBottom: "56px",
                   borderBottom: "1px solid #eeeeee",
@@ -355,7 +354,7 @@ export default function Home() {
         <section style={{ paddingBottom: "112px" }}>
           <p style={LABEL}>Skills & Tools</p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "48px 40px" }}>
+          <div className="grid-3col">
             {skills.map(({ label, items }) => (
               <div key={label}>
                 <p
@@ -397,13 +396,7 @@ export default function Home() {
         <section style={{ paddingBottom: "140px" }}>
           <p style={LABEL}>Education</p>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "260px 1fr",
-              gap: "40px",
-            }}
-          >
+          <div className="grid-sidebar">
             <div>
               <p
                 style={{
@@ -470,24 +463,11 @@ export default function Home() {
               </p>
             </div>
 
-            <a
-              href="mailto:fawzybailey782@gmail.com"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                backgroundColor: "#ffffff",
-                color: "#111111",
-                fontSize: "15px",
-                fontWeight: 600,
-                padding: "13px 28px",
-                borderRadius: "999px",
-                textDecoration: "none",
-                fontFamily: F,
-                alignSelf: "flex-start",
-              }}
-            >
-              Get in touch ↗
-            </a>
+            <ContactButton
+              label="Get in touch ↗"
+              filled={true}
+              style={{ backgroundColor: "#ffffff", color: "#111111", alignSelf: "flex-start" }}
+            />
           </div>
 
           {/* divider */}
