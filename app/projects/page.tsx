@@ -162,11 +162,11 @@ export default function ProjectsPage() {
 
       {/* ── minimal top bar (not fixed on this page) ── */}
       <header
+        className="page-header"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "22px 56px",
           borderBottom: "1px solid #f0f0f0",
         }}
       >
@@ -190,7 +190,7 @@ export default function ProjectsPage() {
         </Link>
       </header>
 
-      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "72px 56px 120px" }}>
+      <main className="projects-main">
 
         {/* page title */}
         <div style={{ marginBottom: "72px" }}>
@@ -227,7 +227,7 @@ export default function ProjectsPage() {
           >
             Pinned
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+          <div className="grid-2col" style={{ gap: "24px" }}>
             {pinned.map((p) => (
               <ProjectCard key={p.title} {...p} />
             ))}
@@ -249,7 +249,7 @@ export default function ProjectsPage() {
           >
             More
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "24px" }}>
+          <div className="grid-2col" style={{ gap: "24px" }}>
             {others.map((p) => (
               <ProjectCard key={p.title} {...p} />
             ))}

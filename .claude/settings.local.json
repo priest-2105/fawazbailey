@@ -3,7 +3,8 @@
     "allow": [
       "Bash(ls:*)",
       "WebFetch(domain:jinyurao.design)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm install:*)"
     ]
   }
 }
