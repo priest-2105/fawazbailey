@@ -58,24 +58,6 @@ const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
 
 const experiences = [
   {
-    company: "Alation",
-    role: "Frontend Engineer",
-    period: "2026 — Current",
-    stack: ["Next.js", "TypeScript", "React"],
-    bullets: ["[ Details to be added ]"],
-  },
-  {
-    company: "iHealth",
-    role: "Frontend Engineer · Volunteer",
-    period: "Jul 2024 — Present",
-    stack: ["React", "Git", "GitHub"],
-    bullets: [
-      "Contributed to the frontend codebase as a volunteer engineer, writing and reviewing React components across multiple features.",
-      "Performed code reviews — catching bugs, enforcing consistency, and occasionally having to say 'this works but we're not shipping it like this'.",
-      "Managed branches, PRs, and merge workflows using Git and GitHub, keeping the codebase clean across a distributed team.",
-    ],
-  },
-  {
     company: "Always49",
     role: "Frontend Engineer",
     period: "Oct 2025 — Present",
@@ -86,6 +68,17 @@ const experiences = [
       "Translated Figma designs into responsive, accessible interfaces with strong attention to UX detail.",
       "Integrated REST APIs and collaborated with backend engineers to optimize data flow.",
       "Improved performance through code splitting, lazy loading, and targeted optimization strategies.",
+    ],
+  },
+    {
+    company: "iHealth",
+    role: "Frontend Engineer · Volunteer",
+    period: "Jul 2024 — Present",
+    stack: ["React", "Git", "GitHub"],
+    bullets: [
+      "Contributed to the frontend codebase as a volunteer engineer, writing and reviewing React components across multiple features.",
+      "Performed code reviews — catching bugs, enforcing consistency, and occasionally having to say 'this works but we're not shipping it like this'.",
+      "Managed branches, PRs, and merge workflows using Git and GitHub, keeping the codebase clean across a distributed team.",
     ],
   },
   {
