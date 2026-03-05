@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/knight-black.ico", media: "(prefers-color-scheme: light)" },
-      { url: "/knight-white.ico", media: "(prefers-color-scheme: dark)" },
+      { url: "/knight-white.png", media: "(prefers-color-scheme: dark)" },
     ],
   },
 };
