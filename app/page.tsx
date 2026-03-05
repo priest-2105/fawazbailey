@@ -67,7 +67,7 @@ const experiences = [
   {
     company: "iHealth",
     role: "Frontend Engineer · Volunteer",
-    period: "2023 — 2024",
+    period: "Jul 2024 — Present",
     stack: ["React", "Git", "GitHub"],
     bullets: [
       "Contributed to the frontend codebase as a volunteer engineer, writing and reviewing React components across multiple features.",
@@ -78,7 +78,7 @@ const experiences = [
   {
     company: "Always49",
     role: "Frontend Engineer",
-    period: "10/2024 — 03/2025",
+    period: "Oct 2025 — Present",
     stack: ["Next.js", "TypeScript", "NestJS", "PostgreSQL"],
     bullets: [
       "Built and maintained production-grade frontend applications using Next.js and TypeScript.",
@@ -91,7 +91,7 @@ const experiences = [
   {
     company: "UniSkills",
     role: "Software Engineer",
-    period: "2022 — 09/2025",
+    period: "Nov 2022 — Oct 2025",
     stack: ["Next.js", "TypeScript", "NestJS", "React", "WebSockets", "PostgreSQL"],
     bullets: [
       "Developed and maintained the frontend of an education platform connecting students with local businesses.",
