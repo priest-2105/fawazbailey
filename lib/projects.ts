@@ -78,7 +78,12 @@ export const ALL_PROJECTS: Project[] = [
     bgColor: "#f0fdf4",
     githubUrl: "https://github.com/priest-2105/readmytermsandconditions",
     liveUrl: "https://readmytermsandconditions.fawazbailey.com/",
-    images: [],
+    images: [
+      "/images/projects/readmytermsandconditions.fawazbailey.com_.png",
+      "/images/projects/readmytermsandconditions.fawazbailey.com_ (1).png",
+      "/images/projects/readmytermsandconditions.fawazbailey.com_ (2).png",
+      "/images/projects/readmytermsandconditions.fawazbailey.com_ (3).png",
+    ],
     pinned: true,
   },
   {
