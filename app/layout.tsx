@@ -11,9 +11,23 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Fawaz Bailey | Frontend Engineer",
-  description: "Frontend engineer based in Lagos, Nigeria.",
+  description: "Frontend engineer based in Lagos, Nigeria. I build web apps that solve real problems.",
+  metadataBase: new URL("https://fawazbailey.com"),
   icons: {
     icon: [{ url: "/FB.svg", type: "image/svg+xml" }],
+  },
+  openGraph: {
+    title: "Fawaz Bailey | Frontend Engineer",
+    description: "Frontend engineer based in Lagos, Nigeria. I build web apps that solve real problems.",
+    url: "https://fawazbailey.com",
+    siteName: "Fawaz Bailey",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fawaz Bailey | Frontend Engineer",
+    description: "Frontend engineer based in Lagos, Nigeria. I build web apps that solve real problems.",
+    creator: "@_priest_2105_",
   },
 };
 
