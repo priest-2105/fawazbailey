@@ -21,9 +21,9 @@ export const ALL_PROJECTS: Project[] = [
     bgColor: "#111111",
     githubUrl: "https://github.com/priest-2105/Continuum",
     images: [
-      "/images/projects/continuum-1.jpg",
-      "/images/projects/continuum-2.jpg",
-      "/images/projects/continuum-3.jpg",
+      "/images/projects/continuum.fawazbailey.com_.png",
+      "/images/projects/continuum.fawazbailey.com_ (1).png",
+      "/images/projects/continuum.fawazbailey.com_ (2).png",
     ],
     pinned: true,
   },
