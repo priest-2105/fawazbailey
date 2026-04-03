@@ -2,57 +2,7 @@ import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import ProjectCard from "@/components/ProjectCard";
 import ContactButton from "@/components/ContactButton";
-
-const PINNED_PROJECTS = [
-  {
-    title: "Continuum",
-    company: "TypeScript · 2024–Present",
-    description: "Centralized web-based archive of original software postmortems from major tech companies — preserved exactly as published, narrative and all.",
-    tags: ["TypeScript", "AI", "Vector Search"],
-    bgColor: "#111111",
-    href: "https://github.com/priest-2105/Continuum",
-  },
-  {
-    title: "Sentra",
-    company: "TypeScript · 2024–2025",
-    description: "Evaluates how production-ready a software project is by analyzing repo structure, deployment config, and engineering standards.",
-    tags: ["TypeScript", "Next.js", "GitHub API"],
-    bgColor: "#e8edff",
-    href: "https://github.com/priest-2105/Sentra",
-  },
-  {
-    title: "VeraLex",
-    company: "JavaScript · 2024",
-    description: "Comprehensive legal case management platform designed to streamline the study and analysis of legal precedents.",
-    tags: ["JavaScript", "React", "Next.js"],
-    bgColor: "#f5f0ff",
-    href: "https://github.com/priest-2105/VeraLex",
-  },
-  {
-    title: "Read My T&C",
-    company: "JavaScript · 2024",
-    description: "Full-stack React app that helps users actually understand terms and conditions — AI-powered analysis and plain-language categorization.",
-    tags: ["React", "AI", "JavaScript"],
-    bgColor: "#f0fdf4",
-    href: "https://github.com/priest-2105/readmytermsandconditions",
-  },
-  {
-    title: "Medscope",
-    company: "JavaScript · React Native",
-    description: "Mobile app for drug lookups, symptom checking, and disease research — powered by the U.S. FDA OpenFDA and NIH MedlinePlus APIs.",
-    tags: ["React Native", "JavaScript", "FDA API"],
-    bgColor: "#f0f9ff",
-    href: "https://github.com/priest-2105/Medscope",
-  },
-  {
-    title: "CSc3350 Docs",
-    company: "TypeScript · Documentation",
-    description: "Software development documentation written for a CS lab project — covering architecture decisions, system design, and implementation notes.",
-    tags: ["TypeScript", "Documentation"],
-    bgColor: "#fafaf8",
-    href: "https://github.com/priest-2105/CSc3350-Software-Development-Lab-5-Documentation",
-  },
-];
+import { PINNED } from "@/lib/projects";
 
 const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
 
@@ -243,8 +193,19 @@ export default function Home() {
           </div>
 
           <div className="grid-2col" style={{ gap: "28px" }}>
-            {PINNED_PROJECTS.map((p) => (
-              <ProjectCard key={p.title} {...p} />
+            {PINNED.map((p) => (
+              <ProjectCard
+                key={p.slug}
+                title={p.title}
+                company={p.company}
+                description={p.description}
+                tags={p.tags}
+                bgColor={p.bgColor}
+                href={`/projects/${p.slug}`}
+                githubUrl={p.githubUrl}
+                liveUrl={p.liveUrl}
+                image={p.images[0]}
+              />
             ))}
           </div>
         </section>

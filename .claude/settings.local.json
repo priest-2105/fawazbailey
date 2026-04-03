@@ -4,7 +4,8 @@
       "Bash(ls:*)",
       "WebFetch(domain:jinyurao.design)",
       "Bash(curl:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

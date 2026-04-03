@@ -142,43 +142,42 @@ export default async function ProjectDetailPage(
         {project.images.length > 0 && (
           <div style={{ marginBottom: "64px" }}>
             {/* hero image */}
-            {/* hero image placeholder */}
             <div
               style={{
-                borderRadius:    "16px",
-                overflow:        "hidden",
-                aspectRatio:     "16 / 9",
+                borderRadius: "16px",
+                overflow:     "hidden",
+                aspectRatio:  "16 / 9",
+                marginBottom: "12px",
                 backgroundColor: project.bgColor,
-                marginBottom:    "12px",
-                display:         "flex",
-                alignItems:      "center",
-                justifyContent:  "center",
               }}
             >
-              <span style={{ fontSize: "13px", color: "rgba(150,150,150,0.5)", fontFamily: "monospace" }}>
-                [ screenshot ]
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={project.images[0]}
+                alt={`${project.title} screenshot`}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              />
             </div>
 
-            {/* secondary image placeholders */}
+            {/* secondary images */}
             {project.images.length > 1 && (
               <div className="grid-2col" style={{ gap: "12px" }}>
-                {project.images.slice(1).map((_, i) => (
+                {project.images.slice(1).map((img, i) => (
                   <div
                     key={i}
                     style={{
-                      borderRadius:    "12px",
-                      overflow:        "hidden",
-                      aspectRatio:     "16 / 10",
+                      borderRadius: "12px",
+                      overflow:     "hidden",
+                      aspectRatio:  "16 / 10",
                       backgroundColor: project.bgColor,
-                      display:         "flex",
-                      alignItems:      "center",
-                      justifyContent:  "center",
                     }}
                   >
-                    <span style={{ fontSize: "12px", color: "rgba(150,150,150,0.5)", fontFamily: "monospace" }}>
-                      [ screenshot ]
-                    </span>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img}
+                      alt={`${project.title} screenshot ${i + 2}`}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
                   </div>
                 ))}
               </div>

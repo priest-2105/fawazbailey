@@ -11,7 +11,10 @@ const ALL_PROJECTS = [
     description: "Centralized web-based archive of original software postmortems from major tech companies — preserved exactly as published, narrative and all.",
     tags: ["TypeScript", "AI", "Vector Search"],
     bgColor: "#111111",
-    href: "https://github.com/priest-2105/Continuum",
+    href: "/projects/continuum",
+    githubUrl: "https://github.com/priest-2105/Continuum",
+    liveUrl: "https://continuum.fawazbailey.com/",
+    image: "/images/projects/continuum.fawazbailey.com_.png",
     pinned: true,
   },
   {
@@ -20,7 +23,8 @@ const ALL_PROJECTS = [
     description: "Evaluates how production-ready a software project is by analyzing repo structure, deployment config, and engineering standards.",
     tags: ["TypeScript", "Next.js", "GitHub API"],
     bgColor: "#e8edff",
-    href: "https://github.com/priest-2105/Sentra",
+    href: "/projects/sentra",
+    githubUrl: "https://github.com/priest-2105/Sentra",
     pinned: true,
   },
   {
@@ -29,7 +33,10 @@ const ALL_PROJECTS = [
     description: "Comprehensive legal case management platform designed to streamline the study and analysis of legal precedents.",
     tags: ["JavaScript", "React", "Next.js"],
     bgColor: "#f5f0ff",
-    href: "https://github.com/priest-2105/VeraLex",
+    href: "/projects/veralex",
+    githubUrl: "https://github.com/priest-2105/VeraLex",
+    liveUrl: "https://veralex.fawazbailey.com/",
+    image: "/images/projects/veralex-1.jpg",
     pinned: true,
   },
   {
@@ -38,7 +45,9 @@ const ALL_PROJECTS = [
     description: "Full-stack React app that helps users actually understand terms and conditions — AI-powered analysis and plain-language categorization.",
     tags: ["React", "AI", "JavaScript"],
     bgColor: "#f0fdf4",
-    href: "https://github.com/priest-2105/readmytermsandconditions",
+    href: "/projects/read-my-tc",
+    githubUrl: "https://github.com/priest-2105/readmytermsandconditions",
+    liveUrl: "https://readmytermsandconditions.fawazbailey.com/",
     pinned: true,
   },
   {
@@ -47,7 +56,8 @@ const ALL_PROJECTS = [
     description: "Mobile app for drug lookups, symptom checking, and disease research — powered by the U.S. FDA OpenFDA and NIH MedlinePlus APIs.",
     tags: ["React Native", "JavaScript", "FDA API"],
     bgColor: "#f0f9ff",
-    href: "https://github.com/priest-2105/Medscope",
+    href: "/projects/medscope",
+    githubUrl: "https://github.com/priest-2105/Medscope",
     pinned: true,
   },
   {
@@ -57,6 +67,7 @@ const ALL_PROJECTS = [
     tags: ["TypeScript", "Documentation"],
     bgColor: "#fafaf8",
     href: "https://github.com/priest-2105/CSc3350-Software-Development-Lab-5-Documentation",
+    githubUrl: "https://github.com/priest-2105/CSc3350-Software-Development-Lab-5-Documentation",
     pinned: true,
   },
 
@@ -68,6 +79,7 @@ const ALL_PROJECTS = [
     tags: ["JavaScript", "React", "E-commerce"],
     bgColor: "#fff8f0",
     href: "https://github.com/priest-2105/Rugrebels",
+    githubUrl: "https://github.com/priest-2105/Rugrebels",
     pinned: false,
   },
   {
@@ -77,6 +89,7 @@ const ALL_PROJECTS = [
     tags: ["Next.js", "TypeScript", "Spotify API"],
     bgColor: "#1a1a2e",
     href: "https://github.com/priest-2105/moodmix-v2",
+    githubUrl: "https://github.com/priest-2105/moodmix-v2",
     pinned: false,
   },
   {
@@ -86,6 +99,7 @@ const ALL_PROJECTS = [
     tags: ["React", "Django", "Stripe"],
     bgColor: "#f0f4ff",
     href: "https://github.com/priest-2105/Xvision",
+    githubUrl: "https://github.com/priest-2105/Xvision",
     pinned: false,
   },
   {
@@ -95,6 +109,7 @@ const ALL_PROJECTS = [
     tags: ["Next.js", "Tailwind", "Nonprofit"],
     bgColor: "#f0fdf4",
     href: "https://github.com/priest-2105/TerraDrop",
+    githubUrl: "https://github.com/priest-2105/TerraDrop",
     pinned: false,
   },
   {
@@ -104,6 +119,7 @@ const ALL_PROJECTS = [
     tags: ["React", "MySQL", "Web Scraping"],
     bgColor: "#f0f8ff",
     href: "https://github.com/priest-2105/LinkedMatch",
+    githubUrl: "https://github.com/priest-2105/LinkedMatch",
     pinned: false,
   },
   {
@@ -113,6 +129,7 @@ const ALL_PROJECTS = [
     tags: ["JavaScript", "React", "Task Management"],
     bgColor: "#fffbf0",
     href: "https://github.com/priest-2105/Errandly",
+    githubUrl: "https://github.com/priest-2105/Errandly",
     pinned: false,
   },
   {
@@ -122,6 +139,7 @@ const ALL_PROJECTS = [
     tags: ["JavaScript", "Next.js", "Booking"],
     bgColor: "#fff0f6",
     href: "https://github.com/priest-2105/920-appoint",
+    githubUrl: "https://github.com/priest-2105/920-appoint",
     pinned: false,
   },
   {
@@ -131,6 +149,7 @@ const ALL_PROJECTS = [
     tags: ["TypeScript", "VS Code", "Extension"],
     bgColor: "#f5f0ff",
     href: "https://github.com/priest-2105/css-unit-converter-ext",
+    githubUrl: "https://github.com/priest-2105/css-unit-converter-ext",
     pinned: false,
   },
   {
@@ -140,6 +159,7 @@ const ALL_PROJECTS = [
     tags: ["JavaScript", "Design Systems"],
     bgColor: "#fafafa",
     href: "https://github.com/priest-2105/shiva",
+    githubUrl: "https://github.com/priest-2105/shiva",
     pinned: false,
   },
   {
@@ -149,6 +169,7 @@ const ALL_PROJECTS = [
     tags: ["Three.js", "JavaScript", "3D"],
     bgColor: "#0d1117",
     href: "https://github.com/priest-2105/ThreeJS-Globe",
+    githubUrl: "https://github.com/priest-2105/ThreeJS-Globe",
     pinned: false,
   },
 ];
