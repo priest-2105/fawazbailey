@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: "Frontend engineer based in Lagos, Nigeria. I build web apps that solve real problems.",
   metadataBase: new URL("https://fawazbailey.com"),
   icons: {
-    icon: [{ url: "/FB.svg", type: "image/svg+xml" }],
+    icon: [{ url: "/images/FB-light.svg", type: "image/svg+xml" }],
   },
   openGraph: {
     title: "Fawaz Bailey | Frontend Engineer",

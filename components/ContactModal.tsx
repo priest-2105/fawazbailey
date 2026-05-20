@@ -16,7 +16,10 @@ export default function ContactModal({ open, onClose }: Props) {
   const [email, setEmail]     = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus]   = useState<Status>("idle");
+  const [mounted, setMounted] = useState(open);
   const overlayRef            = useRef<HTMLDivElement>(null);
+  const closeTimerRef         = useRef<number | null>(null);
+  const animationMs           = 220;
 
   /* close on Escape */
   useEffect(() => {
@@ -32,7 +35,31 @@ export default function ContactModal({ open, onClose }: Props) {
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  if (!open) return null;
+  useEffect(() => {
+    if (closeTimerRef.current) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+
+    if (open) {
+      setMounted(true);
+      return;
+    }
+
+    closeTimerRef.current = window.setTimeout(() => {
+      setMounted(false);
+      closeTimerRef.current = null;
+    }, animationMs);
+
+    return () => {
+      if (closeTimerRef.current) {
+        window.clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+    };
+  }, [open]);
+
+  if (!mounted) return null;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -73,7 +100,7 @@ export default function ContactModal({ open, onClose }: Props) {
       style={{
         position:        "fixed",
         inset:           0,
-        backgroundColor: "rgba(0,0,0,0.45)",
+        backgroundColor: open ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0)",
         backdropFilter:  "blur(4px)",
         WebkitBackdropFilter: "blur(4px)",
         zIndex:          1000,
@@ -81,6 +108,9 @@ export default function ContactModal({ open, onClose }: Props) {
         alignItems:      "center",
         justifyContent:  "center",
         padding:         "16px",
+        transition:      `background-color ${animationMs}ms ease, backdrop-filter ${animationMs}ms ease, opacity ${animationMs}ms ease`,
+        opacity:         open ? 1 : 0,
+        pointerEvents:   open ? "auto" : "none",
       }}
     >
       {/* panel */}
@@ -94,6 +124,9 @@ export default function ContactModal({ open, onClose }: Props) {
           fontFamily:      F,
           boxShadow:       "0 24px 60px rgba(0,0,0,0.15)",
           position:        "relative",
+          transform:       open ? "translateY(0) scale(1)" : "translateY(10px) scale(0.98)",
+          opacity:         open ? 1 : 0,
+          transition:      `transform ${animationMs}ms ease, opacity ${animationMs}ms ease`,
         }}
       >
         {/* close button */}
@@ -189,6 +222,8 @@ export default function ContactModal({ open, onClose }: Props) {
                 resize:     "vertical",
                 lineHeight: "1.6",
                 minHeight:  "120px",
+                maxHeight:  "240px",
+                overflowY:  "auto",
               }}
               onFocus={(e) => { e.target.style.borderColor = "#111111"; e.target.style.backgroundColor = "#ffffff"; }}
               onBlur={(e)  => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#f7f7f7"; }}

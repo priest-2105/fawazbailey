@@ -1,187 +1,184 @@
 import Link from "next/link";
-import Image from "next/image";
-import ProjectCard from "@/components/ProjectCard";
+import { ALL_PROJECTS } from "@/lib/projects";
 
 const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
 
-const ALL_PROJECTS = [
-  {
-    title: "Continuum",
-    company: "TypeScript · 2024–Present",
-    description: "Centralized web-based archive of original software postmortems from major tech companies — preserved exactly as published, narrative and all.",
-    tags: ["TypeScript", "AI", "Vector Search"],
-    bgColor: "#111111",
-    href: "/projects/continuum",
-    githubUrl: "https://github.com/priest-2105/Continuum",
-    liveUrl: "https://continuum.fawazbailey.com/",
-    image: "/images/projects/continuum.fawazbailey.com_.png",
-    pinned: true,
-  },
-  {
-    title: "Sentra",
-    company: "TypeScript · 2024–2025",
-    description: "Evaluates how production-ready a software project is by analyzing repo structure, deployment config, and engineering standards.",
-    tags: ["TypeScript", "Next.js", "GitHub API"],
-    bgColor: "#e8edff",
-    href: "/projects/sentra",
-    githubUrl: "https://github.com/priest-2105/Sentra",
-    pinned: true,
-  },
-  {
-    title: "VeraLex",
-    company: "JavaScript · 2024",
-    description: "Comprehensive legal case management platform designed to streamline the study and analysis of legal precedents.",
-    tags: ["JavaScript", "React", "Next.js"],
-    bgColor: "#f5f0ff",
-    href: "/projects/veralex",
-    githubUrl: "https://github.com/priest-2105/VeraLex",
-    liveUrl: "https://veralex.fawazbailey.com/",
-    image: "/images/projects/veralex-1.jpg",
-    pinned: true,
-  },
-  {
-    title: "Read My T&C",
-    company: "JavaScript · 2024",
-    description: "Full-stack React app that helps users actually understand terms and conditions — AI-powered analysis and plain-language categorization.",
-    tags: ["React", "AI", "JavaScript"],
-    bgColor: "#f0fdf4",
-    href: "/projects/read-my-tc",
-    githubUrl: "https://github.com/priest-2105/readmytermsandconditions",
-    liveUrl: "https://readmytermsandconditions.fawazbailey.com/",
-    pinned: true,
-  },
-  {
-    title: "Medscope",
-    company: "JavaScript · React Native",
-    description: "Mobile app for drug lookups, symptom checking, and disease research — powered by the U.S. FDA OpenFDA and NIH MedlinePlus APIs.",
-    tags: ["React Native", "JavaScript", "FDA API"],
-    bgColor: "#f0f9ff",
-    href: "/projects/medscope",
-    githubUrl: "https://github.com/priest-2105/Medscope",
-    pinned: true,
-  },
-  {
-    title: "CSc3350 Docs",
-    company: "TypeScript · Documentation",
-    description: "Software development documentation covering architecture decisions, system design, and implementation notes for a CS lab assignment.",
-    tags: ["TypeScript", "Documentation"],
-    bgColor: "#fafaf8",
-    href: "https://github.com/priest-2105/CSc3350-Software-Development-Lab-5-Documentation",
-    githubUrl: "https://github.com/priest-2105/CSc3350-Software-Development-Lab-5-Documentation",
-    pinned: true,
-  },
+const pinned = ALL_PROJECTS.filter((project) => project.pinned);
+const others = ALL_PROJECTS.filter((project) => !project.pinned);
 
-  // ── Other ─────────────────────────────────────────────────────────────────
-  {
-    title: "Rugrebels",
-    company: "JavaScript · E-commerce",
-    description: "Ecommerce art gallery site — because art deserves better than a PDF catalogue.",
-    tags: ["JavaScript", "React", "E-commerce"],
-    bgColor: "#fff8f0",
-    href: "https://github.com/priest-2105/Rugrebels",
-    githubUrl: "https://github.com/priest-2105/Rugrebels",
-    pinned: false,
-  },
-  {
-    title: "MoodMix",
-    company: "Next.js · Spotify API",
-    description: "Generates personalized music playlists based on your current mood. Feelings as a feature, not a bug.",
-    tags: ["Next.js", "TypeScript", "Spotify API"],
-    bgColor: "#1a1a2e",
-    href: "https://github.com/priest-2105/moodmix-v2",
-    githubUrl: "https://github.com/priest-2105/moodmix-v2",
-    pinned: false,
-  },
-  {
-    title: "Xvision",
-    company: "React · Django · Stripe",
-    description: "Full-stack ecommerce app with Stripe payments and a Django backend — built before it was fashionable to call everything a 'marketplace'.",
-    tags: ["React", "Django", "Stripe"],
-    bgColor: "#f0f4ff",
-    href: "https://github.com/priest-2105/Xvision",
-    githubUrl: "https://github.com/priest-2105/Xvision",
-    pinned: false,
-  },
-  {
-    title: "TerraDrop",
-    company: "Next.js · Tailwind",
-    description: "Landing site for a nonprofit using drones to plant trees and restore deforested land. Good cause, good code.",
-    tags: ["Next.js", "Tailwind", "Nonprofit"],
-    bgColor: "#f0fdf4",
-    href: "https://github.com/priest-2105/TerraDrop",
-    githubUrl: "https://github.com/priest-2105/TerraDrop",
-    pinned: false,
-  },
-  {
-    title: "LinkedMatch",
-    company: "React · MySQL",
-    description: "Scrapes public LinkedIn profiles, stores data in MySQL, and matches users based on shared skills, location, and goals. A dashboard visualizes match analytics.",
-    tags: ["React", "MySQL", "Web Scraping"],
-    bgColor: "#f0f8ff",
-    href: "https://github.com/priest-2105/LinkedMatch",
-    githubUrl: "https://github.com/priest-2105/LinkedMatch",
-    pinned: false,
-  },
-  {
-    title: "Errandly",
-    company: "JavaScript · 2024",
-    description: "Smart task management platform that helps you delegate errands effortlessly — because your to-do list deserves a to-do list.",
-    tags: ["JavaScript", "React", "Task Management"],
-    bgColor: "#fffbf0",
-    href: "https://github.com/priest-2105/Errandly",
-    githubUrl: "https://github.com/priest-2105/Errandly",
-    pinned: false,
-  },
-  {
-    title: "920 Appoint",
-    company: "JavaScript · Booking",
-    description: "Web-based appointment booking platform for women's hairstyles. Scheduling that doesn't require a phone call.",
-    tags: ["JavaScript", "Next.js", "Booking"],
-    bgColor: "#fff0f6",
-    href: "https://github.com/priest-2105/920-appoint",
-    githubUrl: "https://github.com/priest-2105/920-appoint",
-    pinned: false,
-  },
-  {
-    title: "CSS Unit Converter",
-    company: "TypeScript · VS Code Extension",
-    description: "VS Code extension that shows unit conversions for px, rem, vh, and vw inline. Small tool, big quality-of-life.",
-    tags: ["TypeScript", "VS Code", "Extension"],
-    bgColor: "#f5f0ff",
-    href: "https://github.com/priest-2105/css-unit-converter-ext",
-    githubUrl: "https://github.com/priest-2105/css-unit-converter-ext",
-    pinned: false,
-  },
-  {
-    title: "Shiva",
-    company: "JavaScript · Website Builder",
-    description: "A website builder that uses design systems — because not everyone wants to wrestle with code to make something that looks decent.",
-    tags: ["JavaScript", "Design Systems"],
-    bgColor: "#fafafa",
-    href: "https://github.com/priest-2105/shiva",
-    githubUrl: "https://github.com/priest-2105/shiva",
-    pinned: false,
-  },
-  {
-    title: "ThreeJS Globe",
-    company: "JavaScript · Three.js",
-    description: "An attempt to replicate the GitHub homepage globe in Three.js. It works. Mostly.",
-    tags: ["Three.js", "JavaScript", "3D"],
-    bgColor: "#0d1117",
-    href: "https://github.com/priest-2105/ThreeJS-Globe",
-    githubUrl: "https://github.com/priest-2105/ThreeJS-Globe",
-    pinned: false,
-  },
-];
+function ProjectList({
+  title,
+  projects,
+}: {
+  title: string;
+  projects: typeof ALL_PROJECTS;
+}) {
+  return (
+    <section style={{ marginBottom: title === "Pinned" ? "72px" : 0 }}>
+      <p
+        style={{
+          fontSize: "12px",
+          fontWeight: 500,
+          color: "#999999",
+          letterSpacing: "0.13em",
+          textTransform: "uppercase",
+          marginBottom: "24px",
+          fontFamily: F,
+        }}
+      >
+        {title}
+      </p>
 
-const pinned = ALL_PROJECTS.filter((p) => p.pinned);
-const others = ALL_PROJECTS.filter((p) => !p.pinned);
+      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+        {projects.map((project, index) => {
+          const isLast = index === projects.length - 1;
+          return (
+            <li
+              key={project.slug}
+              style={{
+                padding: "22px 0",
+                borderTop: "1px solid #eeeeee",
+                borderBottom: isLast ? "1px solid #eeeeee" : "none",
+              }}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "minmax(0, 1fr) auto",
+                  gap: "24px",
+                  alignItems: "start",
+                }}
+              >
+                <div style={{ minWidth: 0 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: "12px",
+                      flexWrap: "wrap",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: 700,
+                        color: "#111111",
+                        letterSpacing: "-0.02em",
+                        textDecoration: "none",
+                        fontFamily: F,
+                      }}
+                    >
+                      {project.title}
+                    </Link>
+                    <span
+                      style={{
+                        fontSize: "13px",
+                        color: "#999999",
+                        fontFamily: F,
+                      }}
+                    >
+                      {project.company}
+                    </span>
+                  </div>
+
+                  <p
+                    style={{
+                      fontSize: "16px",
+                      color: "#555555",
+                      lineHeight: 1.7,
+                      marginBottom: "14px",
+                      fontFamily: F,
+                    }}
+                  >
+                    {project.description}
+                  </p>
+
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        style={{
+                          fontSize: "12px",
+                          fontWeight: 500,
+                          color: "#555555",
+                          backgroundColor: "#f5f5f5",
+                          padding: "5px 10px",
+                          borderRadius: "999px",
+                          fontFamily: F,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    gap: "10px",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    style={{
+                      fontSize: "14px",
+                      color: "#111111",
+                      textDecoration: "none",
+                      padding: "8px 0",
+                      fontFamily: F,
+                    }}
+                  >
+                    Open
+                  </Link>
+
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontSize: "14px",
+                      color: "#999999",
+                      textDecoration: "none",
+                      fontFamily: F,
+                    }}
+                  >
+                    GitHub
+                  </a>
+
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontSize: "14px",
+                        color: "#999999",
+                        textDecoration: "none",
+                        fontFamily: F,
+                      }}
+                    >
+                      Live
+                    </a>
+                  )}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
 
 export default function ProjectsPage() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", fontFamily: F, color: "#111111" }}>
-
-      {/* ── minimal top bar (not fixed on this page) ── */}
       <header
         className="page-header"
         style={{
@@ -191,8 +188,8 @@ export default function ProjectsPage() {
           borderBottom: "1px solid #f0f0f0",
         }}
       >
-        <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-          <Image src="/FB.svg" alt="Fawaz Bailey" width={52} height={31} priority />
+        <Link href="/" style={{ fontSize: "15px", fontWeight: 500, color: "#999999", textDecoration: "none", fontFamily: F }}>
+          Back
         </Link>
         <Link
           href="/"
@@ -207,14 +204,12 @@ export default function ProjectsPage() {
             fontFamily: F,
           }}
         >
-          ← Back
+          Home
         </Link>
       </header>
 
       <main className="projects-main">
-
-        {/* page title */}
-        <div style={{ marginBottom: "72px" }}>
+        <div style={{ marginBottom: "64px" }}>
           <h1
             style={{
               fontSize: "clamp(40px, 6vw, 72px)",
@@ -229,57 +224,14 @@ export default function ProjectsPage() {
             All Projects
           </h1>
           <p style={{ fontSize: "18px", color: "#666666", lineHeight: 1.6, fontFamily: F }}>
-            {ALL_PROJECTS.length} projects — from production apps to experiments that taught me something.
+            {ALL_PROJECTS.length} projects, presented as a simple list instead of image cards.
           </p>
         </div>
 
-        {/* ── Pinned ── */}
-        <section style={{ marginBottom: "80px" }}>
-          <p
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              color: "#999999",
-              letterSpacing: "0.13em",
-              textTransform: "uppercase",
-              marginBottom: "32px",
-              fontFamily: F,
-            }}
-          >
-            Pinned
-          </p>
-          <div className="grid-2col" style={{ gap: "24px" }}>
-            {pinned.map((p) => (
-              <ProjectCard key={p.title} {...p} />
-            ))}
-          </div>
-        </section>
-
-        {/* ── Other ── */}
-        <section>
-          <p
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              color: "#999999",
-              letterSpacing: "0.13em",
-              textTransform: "uppercase",
-              marginBottom: "32px",
-              fontFamily: F,
-            }}
-          >
-            More
-          </p>
-          <div className="grid-2col" style={{ gap: "24px" }}>
-            {others.map((p) => (
-              <ProjectCard key={p.title} {...p} />
-            ))}
-          </div>
-        </section>
-
+        <ProjectList title="Pinned" projects={pinned} />
+        <ProjectList title="More" projects={others} />
       </main>
 
-      {/* footer */}
       <footer
         style={{
           borderTop: "1px solid #f0f0f0",
@@ -290,9 +242,9 @@ export default function ProjectsPage() {
           fontFamily: F,
         }}
       >
-        <p style={{ fontSize: "14px", color: "#999999" }}>© 2026 Fawaz Bailey</p>
+        <p style={{ fontSize: "14px", color: "#999999" }}>Copyright 2026 Fawaz Bailey</p>
         <Link href="/" style={{ fontSize: "14px", color: "#999999", textDecoration: "none", fontFamily: F }}>
-          ← Back to home
+          Back to home
         </Link>
       </footer>
     </div>

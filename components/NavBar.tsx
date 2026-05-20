@@ -84,7 +84,7 @@ export default function NavBar() {
         {/* Logo */}
         <a href="#about" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
           <Image
-            src="/FB.svg"
+            src="/images/FB.svg"
             alt="Fawaz Bailey"
             width={52}
             height={31}

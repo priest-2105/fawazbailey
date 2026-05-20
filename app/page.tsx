@@ -1,6 +1,5 @@
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
-import ProjectCard from "@/components/ProjectCard";
 import ContactButton from "@/components/ContactButton";
 import { PINNED } from "@/lib/projects";
 
@@ -192,20 +191,132 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid-2col" style={{ gap: "28px" }}>
+          <div style={{ borderTop: "1px solid #eeeeee" }}>
             {PINNED.map((p) => (
-              <ProjectCard
+              <div
                 key={p.slug}
-                title={p.title}
-                company={p.company}
-                description={p.description}
-                tags={p.tags}
-                bgColor={p.bgColor}
-                href={`/projects/${p.slug}`}
-                githubUrl={p.githubUrl}
-                liveUrl={p.liveUrl}
-                image={p.images[0]}
-              />
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "minmax(0, 1fr) auto",
+                  gap: "24px",
+                  alignItems: "start",
+                  padding: "24px 0",
+                  borderBottom: "1px solid #eeeeee",
+                }}
+              >
+                <div style={{ minWidth: 0 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: "12px",
+                      flexWrap: "wrap",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <Link
+                      href={`/projects/${p.slug}`}
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: 700,
+                        color: "#111111",
+                        letterSpacing: "-0.02em",
+                        textDecoration: "none",
+                        fontFamily: F,
+                      }}
+                    >
+                      {p.title}
+                    </Link>
+                    <span style={{ fontSize: "13px", color: "#999999", fontFamily: F }}>
+                      {p.company}
+                    </span>
+                  </div>
+
+                  <p
+                    style={{
+                      fontSize: "16px",
+                      color: "#555555",
+                      lineHeight: 1.7,
+                      marginBottom: "14px",
+                      fontFamily: F,
+                    }}
+                  >
+                    {p.description}
+                  </p>
+
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                    {p.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        style={{
+                          fontSize: "12px",
+                          fontWeight: 500,
+                          color: "#555555",
+                          backgroundColor: "#f5f5f5",
+                          padding: "5px 10px",
+                          borderRadius: "999px",
+                          fontFamily: F,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    gap: "10px",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Link
+                    href={`/projects/${p.slug}`}
+                    style={{
+                      fontSize: "14px",
+                      color: "#111111",
+                      textDecoration: "none",
+                      padding: "8px 0",
+                      fontFamily: F,
+                    }}
+                  >
+                    Open
+                  </Link>
+
+                  <a
+                    href={p.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontSize: "14px",
+                      color: "#999999",
+                      textDecoration: "none",
+                      fontFamily: F,
+                    }}
+                  >
+                    GitHub
+                  </a>
+
+                  {p.liveUrl && (
+                    <a
+                      href={p.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontSize: "14px",
+                        color: "#999999",
+                        textDecoration: "none",
+                        fontFamily: F,
+                      }}
+                    >
+                      Live
+                    </a>
+                  )}
+                </div>
+              </div>
             ))}
           </div>
         </section>
