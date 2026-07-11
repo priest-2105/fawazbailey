@@ -5,7 +5,9 @@
       "WebFetch(domain:jinyurao.design)",
       "Bash(curl:*)",
       "Bash(npm install:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "PowerShell(\\(Get-Content \"public\\\\images\\\\FB.svg\" -TotalCount 1\\).Substring\\(0, 300\\))",
+      "PowerShell(npx tsc --noEmit)"
     ]
   }
 }

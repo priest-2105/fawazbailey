@@ -6,7 +6,7 @@ export default function Header() {
             <div className="flex justify-between items-start">
                 <div>
                     <h1 className="text-3xl font-semibold tracking-tight text-ink-primary mb-1">Fawaz Bailey</h1>
-                    <p className="text-sm font-medium uppercase tracking-wide text-ink-secondary">Frontend Engineer</p>
+                    <p className="text-sm font-medium uppercase tracking-wide text-ink-secondary">Design &amp; Software Engineer</p>
                 </div>
                 <div className="text-right text-xs font-mono text-ink-muted uppercase leading-loose">
                     <div className="flex flex-col">

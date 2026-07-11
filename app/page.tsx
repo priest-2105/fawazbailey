@@ -94,7 +94,7 @@ export default function Home() {
         <section id="about" style={{ paddingTop: "168px", paddingBottom: "112px" }}>
           <h1
             style={{
-              fontSize: "clamp(64px, 9.5vw, 112px)",
+              fontSize: "clamp(50px, 8.5vw, 112px)",
               fontWeight: 800,
               color: "#111111",
               lineHeight: 1.02,
@@ -118,7 +118,7 @@ export default function Home() {
               fontFamily: F,
             }}
           >
-            Frontend engineer based in Lagos, Nigeria. I build web apps that solve real
+            Design and software engineer based in Lagos, Nigeria. I build web apps that solve real
             problems — occasionally fast, always deliberate, and never with a
             component named{" "}
             <code
@@ -322,8 +322,9 @@ export default function Home() {
         </section>
 
         {/* ────────────────────────────────────────
-            EXPERIENCE
+            EXPERIENCE — hidden for now, delete "false &&" below to restore
         ──────────────────────────────────────── */}
+        {false && (
         <section id="experience" style={{ paddingBottom: "112px" }}>
           <p style={LABEL}>Work</p>
 
@@ -412,6 +413,7 @@ export default function Home() {
             ))}
           </div>
         </section>
+        )}
 
         {/* ────────────────────────────────────────
             SKILLS
@@ -524,7 +526,7 @@ export default function Home() {
                 Fawaz Bailey
               </p>
               <p style={{ fontSize: "18px", color: "#666666", fontFamily: F }}>
-                Frontend Engineer · Lagos, Nigeria
+                Design &amp; Software Engineer · Lagos, Nigeria
               </p>
             </div>
 

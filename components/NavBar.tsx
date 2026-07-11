@@ -4,15 +4,25 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 const SECTIONS = ["about", "projects", "experience"] as const;
-const NAV_LINKS = [
+
+type NavLink = { label: string; href: string };
+
+const DEFAULT_LINKS: NavLink[] = [
   { label: "About",    href: "/about" },
   { label: "Projects", href: "#projects" },
-  { label: "Work",     href: "#experience" },
+  // { label: "Work",     href: "#experience" }, // hidden while the work section is commented out
   { label: "Contact",  href: "mailto:fawzybailey782@gmail.com" },
 ];
 
-export default function NavBar() {
+export default function NavBar({
+  links = DEFAULT_LINKS,
+  logoHref = "#about",
+}: {
+  links?: NavLink[];
+  logoHref?: string;
+}) {
   const [active, setActive] = useState<string>("about");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -66,6 +76,7 @@ export default function NavBar() {
       </a>
 
       <nav
+        className="page-header"
         style={{
           position: "fixed",
           top: 0,
@@ -75,27 +86,26 @@ export default function NavBar() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "22px 56px",
           backgroundColor: "rgba(255,255,255,0.88)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
         }}
       >
         {/* Logo */}
-        <a href="#about" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+        <a href={logoHref} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
           <Image
             src="/images/FB.svg"
             alt="Fawaz Bailey"
-            width={52}
+            width={40}
             height={31}
             priority
-            style={{ display: "block" }}
+            style={{ display: "block", width: "40px", height: "31px" }}
           />
         </a>
 
-        {/* Links */}
-        <div style={{ display: "flex", alignItems: "center", gap: "36px" }}>
-          {NAV_LINKS.map(({ label, href }) => {
+        {/* Links — desktop */}
+        <div className="nav-links">
+          {links.map(({ label, href }) => {
             const sectionId = href.replace("#", "");
             const isActive = active === sectionId;
 
@@ -131,6 +141,69 @@ export default function NavBar() {
             );
           })}
         </div>
+
+        {/* Hamburger — mobile only */}
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span
+            style={{
+              width: "18px",
+              height: "2px",
+              backgroundColor: "#111111",
+              borderRadius: "1px",
+              transition: "transform 0.2s, opacity 0.2s",
+              transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none",
+            }}
+          />
+          <span
+            style={{
+              width: "18px",
+              height: "2px",
+              backgroundColor: "#111111",
+              borderRadius: "1px",
+              transition: "transform 0.2s, opacity 0.2s",
+              opacity: menuOpen ? 0 : 1,
+            }}
+          />
+          <span
+            style={{
+              width: "18px",
+              height: "2px",
+              backgroundColor: "#111111",
+              borderRadius: "1px",
+              transition: "transform 0.2s, opacity 0.2s",
+              transform: menuOpen ? "translateY(-7px) rotate(-45deg)" : "none",
+            }}
+          />
+        </button>
+
+        {/* Dropdown panel — mobile only */}
+        {menuOpen && (
+          <div className="nav-mobile-panel">
+            {links.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  color: "#111111",
+                  textDecoration: "none",
+                  padding: "12px 0",
+                  borderBottom: "1px solid #f5f5f5",
+                }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        )}
       </nav>
     </>
   );

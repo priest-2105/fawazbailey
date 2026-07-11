@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import NavBar from "@/components/NavBar";
 import NowPlaying from "@/components/NowPlaying";
 import ChessStats from "@/components/ChessStats";
 import ContactButton from "@/components/ContactButton";
 
 export const metadata: Metadata = {
   title: "About - Fawaz Bailey",
-  description: "Frontend engineer, chess player, and perpetual student of how things work.",
+  description: "Design and software engineer, chess player, and perpetual student of how things work.",
 };
 
 const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
@@ -15,48 +16,16 @@ const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
 export default function AboutPage() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", fontFamily: F, color: "#111111" }}>
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "22px 56px",
-          position: "sticky",
-          top: 0,
-          backgroundColor: "rgba(255,255,255,0.88)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          zIndex: 50,
-          borderBottom: "1px solid #f5f5f5",
-        }}
-      >
-        <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-          <Image src="/images/FB.svg" alt="Fawaz Bailey" width={52} height={31} priority />
-        </Link>
-        <div style={{ display: "flex", gap: "36px", alignItems: "center" }}>
-          {[
-            { label: "Projects", href: "/projects" },
-            { label: "Work", href: "/#experience" },
-            { label: "Contact", href: "mailto:fawzybailey782@gmail.com" },
-          ].map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              style={{
-                fontSize: "15px",
-                fontWeight: 400,
-                color: "#999999",
-                textDecoration: "none",
-                fontFamily: F,
-              }}
-            >
-              {label}
-            </a>
-          ))}
-        </div>
-      </header>
+      <NavBar
+        logoHref="/"
+        links={[
+          { label: "Projects", href: "/projects" },
+          // { label: "Work", href: "/#experience" }, // hidden while the work section is commented out
+          { label: "Contact", href: "mailto:fawzybailey782@gmail.com" },
+        ]}
+      />
 
-      <main style={{ maxWidth: "780px", margin: "0 auto", padding: "80px 40px 120px" }}>
+      <main style={{ maxWidth: "780px", margin: "0 auto", padding: "150px 40px 120px" }}>
         <div
           style={{
             display: "flex",
@@ -100,7 +69,7 @@ export default function AboutPage() {
               Fawaz Bailey
             </h1>
             <p style={{ fontSize: "20px", color: "#777777", fontFamily: F, lineHeight: 1.5 }}>
-              Frontend Engineer · Lagos, Nigeria
+              Design &amp; Software Engineer · Lagos, Nigeria
             </p>
           </div>
         </div>
@@ -126,7 +95,7 @@ export default function AboutPage() {
             I&apos;ve been building professionally since 2022 - across an education platform,
             a software agency, and a handful of personal projects that range from useful to
             deeply unnecessary. The unnecessary ones are usually where I learn the most.
-            I gravitate towards frontend because it sits at the intersection of engineering
+            I gravitate towards the space where design meets software because it sits at the intersection of engineering
             and experience: the code has to work, but it also has to feel right. Getting both
             at the same time is harder than it looks and more satisfying than most things I know.
           </p>
