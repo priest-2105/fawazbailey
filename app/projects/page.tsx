@@ -224,7 +224,7 @@ export default function ProjectsPage() {
             All Projects
           </h1>
           <p style={{ fontSize: "18px", color: "#666666", lineHeight: 1.6, fontFamily: F }}>
-            {ALL_PROJECTS.length} projects, presented as a simple list instead of image cards.
+            {ALL_PROJECTS.length} projects
           </p>
         </div>
 
