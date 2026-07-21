@@ -557,8 +557,8 @@ export default function Home() {
             <div style={{ display: "flex", gap: "28px" }}>
               {[
                 { label: "GitHub",   href: "https://github.com/priest-2105" },
-                { label: "LinkedIn", href: "https://www.linkedin.com/in/fawazbailey/" },
-                { label: "X",        href: "https://x.com/_priest_2105_" },
+                { label: "LinkedIn", href: "https://www.linkedin.com/in/fawazbailey" },
+                { label: "X",        href: "https://x.com/fawazbailey" },
                 { label: "Email",    href: "mailto:fawzybailey782@gmail.com" },
               ].map(({ label, href }) => (
                 <a
