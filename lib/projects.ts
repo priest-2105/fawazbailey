@@ -13,9 +13,28 @@ export interface Project {
 
 export const ALL_PROJECTS: Project[] = [
   {
+    slug: "blick",
+    title: "Blick",
+    company: "TypeScript · 2026-Present",
+    description:
+      "Blick is a browser-based tool for browsing, animating, and exporting icons. Search across 11,000+ icons from popular libraries (Lucide, Tabler, Phosphor, Heroicons, Iconoir, Remix), or upload your own SVG. Build multi-step animation sequences (draw-on, fade, pop, spin, stagger, pulse) with a visual timeline editor, preview them live, and export as animated SVG, HTML, React component, GIF, MP4, or WebM. Optional free account for cloud-saving projects.",
+    tags: ["Next.js", "TypeScript",  "Vector SVG", "Design System"],
+    bgColor: "#1f1f1f1",
+    githubUrl: "https://github.com/priest-2105/blick",
+    liveUrl: "https://blick.fawazbailey.com/",
+    images: [
+      "/images/projects/blick.fawazbailey.com.png",
+      "/images/projects/blick.fawazbailey.com2.png",
+      "/images/projects/blick.fawazbailey.com3.png",
+      "/images/projects/blick.fawazbailey.com4.png",
+      "/images/projects/blick.fawazbailey.com5.png",
+    ],
+    pinned: true,
+  },
+  {
     slug: "continuum",
     title: "Continuum",
-    company: "TypeScript · 2024-Present",
+    company: "TypeScript · 2026-Present",
     description:
       "Centralized web-based archive of original software postmortems from major tech companies - preserved exactly as published, narrative and all.",
     tags: ["TypeScript", "AI", "Vector Search", "Github Actions"],
