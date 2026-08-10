@@ -28,6 +28,7 @@ export const ALL_PROJECTS: Project[] = [
       "/images/projects/blick.fawazbailey.com3.png",
       "/images/projects/blick.fawazbailey.com4.png",
       "/images/projects/blick.fawazbailey.com5.png",
+      "/images/projects/blick.fawazbailey.com6.png",
     ],
     pinned: true,
   },
