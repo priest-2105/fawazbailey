@@ -50,7 +50,7 @@ export default function AboutPage() {
               width={120}
               height={120}
               priority
-              style={{ objectFit: "cover", display: "block" }}
+              style={{ objectFit: "cover", display: "block", objectPosition : "bottom" }}
             />
           </div>
 
