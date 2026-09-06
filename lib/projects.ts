@@ -1,3 +1,5 @@
+export type ProjectKind = "own" | "client";
+
 export interface ProjectImage {
   src: string;
   caption?: string;
@@ -8,6 +10,7 @@ export interface Project {
   title: string;
   /** One line. Used on list rows and as page metadata. */
   tagline: string;
+  kind: ProjectKind;
   year: string;
   role: string;
   status: "Live" | "In progress" | "Archived";
@@ -19,21 +22,29 @@ export interface Project {
   tradeoff: string;
   outcome: string;
   bgColor: string;
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
   images: ProjectImage[];
   pinned: boolean;
 }
 
-// NOTE: problem/decision/tradeoff/outcome below are drafts written from the
-// old descriptions and the repos. Rewrite them in your own voice — the
-// tradeoff field especially. That one only works if it's honest.
+// NOTE: problem/decision/tradeoff/outcome are drafts written from the repos and
+// the live sites. Rewrite them in your own voice — the tradeoffs especially.
+//
+// TODO(fawaz): things I had to guess or couldn't find —
+//   · leads-crm has no name, URL, or screenshots. Name it.
+//   · m365connect stack is fingerprinted from the live site (WordPress/Superio/
+//     Manatal). Correct it if you built more than the marketing front.
+//   · augusta-newham frontend framework is inferred from Vercel hosting.
+//   · clayface, medscope, moodmix reference screenshots that don't exist on
+//     disk — images left empty until you add them.
 
 export const ALL_PROJECTS: Project[] = [
   {
     slug: "blick",
     title: "Blick",
     tagline: "Browse 11,000+ icons, animate them on a timeline, export them as anything.",
+    kind: "own",
     year: "2026 — present",
     role: "Solo build",
     status: "Live",
@@ -64,10 +75,11 @@ export const ALL_PROJECTS: Project[] = [
     slug: "continuum",
     title: "Continuum",
     tagline: "An archive of software postmortems, preserved exactly as published.",
+    kind: "own",
     year: "2026 — present",
     role: "Solo build",
     status: "Live",
-    stack: ["TypeScript", "Vector Search", "GitHub Actions"],
+    stack: ["Next.js", "TypeScript", "Vector Search", "GitHub Actions"],
     tags: ["TypeScript", "AI", "Vector Search", "GitHub Actions"],
     problem:
       "Postmortems are the most honest writing our industry produces — engineers explaining, in detail, how their systems actually failed. And they rot. Blogs get redesigned, companies get acquired, links die. The institutional memory of how software breaks is scattered across dead URLs.",
@@ -91,9 +103,10 @@ export const ALL_PROJECTS: Project[] = [
     pinned: true,
   },
   {
-    slug: "shiva",
-    title: "Shiva",
+    slug: "clayface",
+    title: "Clayface",
     tagline: "An AI design workspace that starts from your references, not a blank slate.",
+    kind: "own",
     year: "2025 — present",
     role: "Solo build",
     status: "Live",
@@ -110,16 +123,82 @@ export const ALL_PROJECTS: Project[] = [
     bgColor: "#f7f7f5",
     liveUrl: "https://shiva.fawazbailey.com/",
     githubUrl: "https://github.com/priest-2105/shiva",
-    images: [
-      { src: "/images/projects/shiva-1.jpg" },
-      { src: "/images/projects/shiva-2.jpg" },
-    ],
+    images: [],
     pinned: true,
+  },
+  {
+    slug: "augusta-newham",
+    title: "Augusta Newham",
+    tagline: "Headless Shopify storefront for an inclusive shapewear label.",
+    kind: "client",
+    year: "2025",
+    role: "Frontend engineer",
+    status: "Live",
+    stack: ["Next.js", "TypeScript", "Shopify Storefront API", "Vercel"],
+    tags: ["Shopify", "Headless", "Next.js", "E-commerce"],
+    problem:
+      "Shopify's hosted themes are quick to launch and hard to escape. Augusta Newham's entire pitch is range — XXS through 8XL, shades for every skin tone — and range is exactly what a stock theme's product templates and filtering handle worst. The brand's differentiator was being flattened by the storefront presenting it.",
+    decision:
+      "Split the stack. Shopify keeps catalog, inventory, orders and checkout; the storefront gets rebuilt as a custom frontend against the Storefront API. Payments stay Shopify's problem — everything the customer actually browses becomes ours to shape.",
+    tradeoff:
+      "Going headless means giving up the theme editor. Nobody client-side can restyle a section without a deploy, and every app in the Shopify ecosystem that assumed Liquid templates had to be replaced or rebuilt. That's a real ongoing cost, and it's only worth paying for a brand whose whole value lives in how the range is presented.",
+    outcome:
+      "A live storefront with collection pages, a size guide, and newsletter capture, running on Vercel with Shopify handling commerce underneath.",
+    bgColor: "#f4efe9",
+    liveUrl: "https://augustanewham.com",
+    images: [],
+    pinned: true,
+  },
+  {
+    slug: "m365connect",
+    title: "M365Connect",
+    tagline: "A two-sided recruitment marketplace for the Microsoft ecosystem.",
+    kind: "client",
+    year: "2025",
+    role: "Web engineer",
+    status: "Live",
+    stack: ["WordPress", "PHP", "WooCommerce", "Manatal ATS"],
+    tags: ["WordPress", "Recruitment", "Integration"],
+    problem:
+      "General job boards match on keywords, so a Microsoft 365 specialist and the recruiter hunting for one both end up wading through listings meant for neither. The niche is deep enough to justify its own market and small enough that the big boards will never serve it properly.",
+    decision:
+      "Build narrow on purpose, and don't rebuild what already exists. Two distinct paths — one for recruiters posting roles, one for professionals seeking positions and projects — rather than a single generic feed. Applicant tracking is integrated from an existing ATS rather than written from scratch.",
+    tradeoff:
+      "Leaning on WordPress and an off-the-shelf ATS meant launching in a fraction of the time a custom platform would have taken, at the cost of being boxed in by both. Matching logic in particular is only as good as what the integration exposes. For validating a niche marketplace, shipping early beat owning the stack.",
+    outcome:
+      "A live marketplace connecting Microsoft specialists with recruiters, with separate journeys for each side and job data flowing in from the ATS.",
+    bgColor: "#eaf1fb",
+    liveUrl: "https://m365connect.com",
+    images: [],
+    pinned: true,
+  },
+  {
+    slug: "leads-crm",
+    title: "Lead & Pipeline CRM",
+    tagline: "Lead capture, pipeline, email and site content in one internal dashboard.",
+    kind: "client",
+    year: "2025",
+    role: "Full-stack engineer",
+    status: "Live",
+    stack: ["Next.js", "TypeScript", "PostgreSQL"],
+    tags: ["CRM", "Dashboard", "CMS", "Email"],
+    problem:
+      "The business was running on a spreadsheet of leads, a shared inbox, and a separate CMS for the website. The current state of any given lead depended entirely on who you asked, and follow-ups fell through the gaps between the three.",
+    decision:
+      "Collapse it into one dashboard. Leads arrive, get assigned, and move through stages in the same place the outreach email is written, sent, and logged against them. Site content management lives there too, so marketing isn't a fourth tool.",
+    tradeoff:
+      "Bundling CRM, email and CMS into a single internal tool means it fits this business precisely and would need substantial work to fit anyone else. I chose depth for one client over something that generalizes — which is right for contract work and would be wrong for a product.",
+    outcome:
+      "An internal dashboard that gathers and manages inbound leads, handles email correspondence against each record, and manages site content from the same login.",
+    bgColor: "#eef3ef",
+    images: [],
+    pinned: false,
   },
   {
     slug: "sentra",
     title: "Sentra",
     tagline: "Scores how production-ready a repo actually is, and shows its work.",
+    kind: "own",
     year: "2024 — 2025",
     role: "Solo build",
     status: "Live",
@@ -147,9 +226,33 @@ export const ALL_PROJECTS: Project[] = [
     pinned: true,
   },
   {
+    slug: "moodmix",
+    title: "MoodMix",
+    tagline: "Playlists generated from how you're feeling, not what you last played.",
+    kind: "own",
+    year: "2024",
+    role: "Solo build",
+    status: "Archived",
+    stack: ["Next.js", "TypeScript", "Spotify API"],
+    tags: ["Next.js", "TypeScript", "Spotify API"],
+    problem:
+      "Recommendation engines optimize for what you've already listened to, which is great for finding more of the same and useless when your mood doesn't match your history.",
+    decision:
+      "Take mood as the explicit input instead of inferring it from listening data, and build playlists against Spotify's audio features — valence, energy, tempo — rather than genre similarity.",
+    tradeoff:
+      "Asking people to name their mood is friction, and self-reported mood is a blunt instrument. Inferring it would have been smoother and less accurate; making it explicit at least means a wrong result is correctable.",
+    outcome:
+      "A working generator that turns a stated mood into a Spotify playlist. Feelings as a feature, not a bug.",
+    bgColor: "#1a1a2e",
+    githubUrl: "https://github.com/priest-2105/moodmix-v2",
+    images: [],
+    pinned: true,
+  },
+  {
     slug: "veralex",
     title: "VeraLex",
     tagline: "Case management built around how precedent actually connects.",
+    kind: "own",
     year: "2024",
     role: "Solo build",
     status: "Live",
@@ -174,40 +277,13 @@ export const ALL_PROJECTS: Project[] = [
       { src: "/images/projects/veralex-5.jpg" },
       { src: "/images/projects/veralex-6.jpg" },
     ],
-    pinned: true,
-  },
-  {
-    slug: "read-my-tc",
-    title: "Read My T&C",
-    tagline: "Breaks terms and conditions down clause by clause, in plain language.",
-    year: "2024",
-    role: "Solo build",
-    status: "Live",
-    stack: ["React", "JavaScript", "LLM API"],
-    tags: ["React", "AI", "JavaScript"],
-    problem:
-      "Nobody reads terms and conditions. Not because they don't care — because the documents are long by design and written to be skimmed past. The parts that matter are buried on purpose.",
-    decision:
-      "Don't summarize. A one-paragraph summary saying \"this agreement contains some concerning terms\" tells you nothing you can act on. Analyze clause by clause and categorize each one in plain language, so you can see specifically which parts should worry you.",
-    tradeoff:
-      "Clause-level analysis costs meaningfully more per document and takes longer than a single summarization call. That's the whole product though — the granularity is the reason to use it, so paying for it was never really a choice.",
-    outcome:
-      "Paste an agreement and get it back segmented and categorized, with the concerning clauses surfaced rather than averaged away.",
-    bgColor: "#f0fdf4",
-    githubUrl: "https://github.com/priest-2105/readmytermsandconditions",
-    liveUrl: "https://readmytermsandconditions.fawazbailey.com/",
-    images: [
-      { src: "/images/projects/readmytermsandconditions.fawazbailey.com_.png" },
-      { src: "/images/projects/readmytermsandconditions.fawazbailey.com_ (1).png" },
-      { src: "/images/projects/readmytermsandconditions.fawazbailey.com_ (2).png" },
-      { src: "/images/projects/readmytermsandconditions.fawazbailey.com_ (3).png" },
-    ],
-    pinned: true,
+    pinned: false,
   },
   {
     slug: "medscope",
     title: "Medscope",
     tagline: "Drug and symptom lookup built only on FDA and NIH data.",
+    kind: "own",
     year: "2024",
     role: "Solo build",
     status: "Archived",
@@ -223,39 +299,15 @@ export const ALL_PROJECTS: Project[] = [
       "A React Native app for drug lookups, symptom checking, and disease research, sourced entirely from public health APIs.",
     bgColor: "#f0f9ff",
     githubUrl: "https://github.com/priest-2105/Medscope",
-    images: [
-      { src: "/images/projects/medscope-1.jpg" },
-      { src: "/images/projects/medscope-2.jpg" },
-      { src: "/images/projects/medscope-3.jpg" },
-    ],
-    pinned: true,
-  },
-  {
-    slug: "moodmix",
-    title: "MoodMix",
-    tagline: "Playlists generated from how you're feeling, not what you last played.",
-    year: "2024",
-    role: "Solo build",
-    status: "Archived",
-    stack: ["Next.js", "TypeScript", "Spotify API"],
-    tags: ["Next.js", "TypeScript", "Spotify API"],
-    problem:
-      "Recommendation engines optimize for what you've already listened to, which is great for finding more of the same and useless when your mood doesn't match your history.",
-    decision:
-      "Take mood as the explicit input instead of inferring it from listening data, and build playlists against Spotify's audio features — valence, energy, tempo — rather than genre similarity.",
-    tradeoff:
-      "Asking people to name their mood is friction, and self-reported mood is a blunt instrument. Inferring it would have been smoother and less accurate; making it explicit at least means a wrong result is correctable.",
-    outcome:
-      "A working generator that turns a stated mood into a Spotify playlist. Feelings as a feature, not a bug.",
-    bgColor: "#1a1a2e",
-    githubUrl: "https://github.com/priest-2105/moodmix-v2",
-    images: [
-      { src: "/images/projects/moodmix-1.jpg" },
-      { src: "/images/projects/moodmix-2.jpg" },
-    ],
+    images: [],
     pinned: false,
   },
 ];
 
 export const PINNED = ALL_PROJECTS.filter((p) => p.pinned);
 export const OTHERS = ALL_PROJECTS.filter((p) => !p.pinned);
+
+export const KIND_LABEL: Record<ProjectKind, string> = {
+  own: "Own Work",
+  client: "Client Work",
+};

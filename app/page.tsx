@@ -2,6 +2,7 @@ import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import ContactButton from "@/components/ContactButton";
 import NowPlaying from "@/components/NowPlaying";
+import ProjectRow from "@/components/ProjectRow";
 import { PINNED } from "@/lib/projects";
 
 const skills = [
@@ -166,56 +167,7 @@ export default function Home() {
 
           <ul style={{ listStyle: "none", padding: 0, margin: 0, borderTop: "var(--border-w) solid var(--ink)" }}>
             {PINNED.map((p) => (
-              <li key={p.slug} className="proj-row">
-                <div className="proj-row-meta">
-                  <span style={{ fontWeight: 700, color: "var(--ink)" }}>{p.year}</span>
-                  <span style={{ color: p.status === "Archived" ? "var(--ink-mute)" : "var(--accent)" }}>
-                    {p.status}
-                  </span>
-                </div>
-
-                <div style={{ minWidth: 0 }}>
-                  <Link
-                    href={`/projects/${p.slug}`}
-                    className="display proj-row-title"
-                    style={{ fontSize: "clamp(22px, 3vw, 30px)", textDecoration: "none", color: "var(--ink)" }}
-                  >
-                    {p.title}
-                  </Link>
-
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      color: "var(--ink-soft)",
-                      lineHeight: 1.65,
-                      margin: "10px 0 16px",
-                      maxWidth: "58ch",
-                    }}
-                  >
-                    {p.tagline}
-                  </p>
-
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "7px" }}>
-                    {p.tags.map((tag) => (
-                      <span key={tag} className="tag">{tag}</span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="proj-row-links">
-                  <Link href={`/projects/${p.slug}`} className="ink-link" style={{ fontWeight: 700 }}>
-                    Read →
-                  </Link>
-                  <a href={p.githubUrl} target="_blank" rel="noopener noreferrer" className="ink-link">
-                    GitHub ↗
-                  </a>
-                  {p.liveUrl && (
-                    <a href={p.liveUrl} target="_blank" rel="noopener noreferrer" className="ink-link">
-                      Live ↗
-                    </a>
-                  )}
-                </div>
-              </li>
+              <ProjectRow key={p.slug} project={p} />
             ))}
           </ul>
 
@@ -271,19 +223,8 @@ export default function Home() {
                 <p className="display" style={{ fontSize: "20px", marginBottom: "10px" }}>
                   National Open University of Nigeria
                 </p>
-                <p style={{ fontSize: "15px", color: "var(--ink-soft)", marginBottom: "8px" }}>
+                <p style={{ fontSize: "15px", color: "var(--ink-soft)" }}>
                   BSc Computer Science
-                </p>
-                <p
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: 600,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--accent)",
-                  }}
-                >
-                  Expected 2026
                 </p>
               </div>
 

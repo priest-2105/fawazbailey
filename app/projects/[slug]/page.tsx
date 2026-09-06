@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ALL_PROJECTS, type Project } from "@/lib/projects";
+import { ALL_PROJECTS, KIND_LABEL, type Project } from "@/lib/projects";
 
 export function generateStaticParams() {
   return ALL_PROJECTS.map((p) => ({ slug: p.slug }));
@@ -61,9 +61,11 @@ export default async function ProjectDetailPage(
               Live ↗
             </a>
           )}
-          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
-            GitHub ↗
-          </a>
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              GitHub ↗
+            </a>
+          )}
         </div>
       </header>
 
@@ -86,6 +88,8 @@ export default async function ProjectDetailPage(
             }}
           >
             <span style={{ color: "var(--accent)" }}>{project.status}</span>
+            <span aria-hidden>·</span>
+            <span>{KIND_LABEL[project.kind]}</span>
             <span aria-hidden>·</span>
             <span>{project.year}</span>
             <span aria-hidden>·</span>
@@ -243,12 +247,14 @@ export default async function ProjectDetailPage(
             borderTop: "var(--border-w) solid var(--ink)",
           }}
         >
-          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ink">
-            View on GitHub ↗
-          </a>
           {project.liveUrl && (
-            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ink">
               Live site ↗
+            </a>
+          )}
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              View on GitHub ↗
             </a>
           )}
           <Link href="/projects" className="btn btn-ghost">
