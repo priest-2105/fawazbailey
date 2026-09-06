@@ -709,6 +709,7 @@ button:disabled,
 
 /* ── Help affordance ── */
 .help {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -741,76 +742,92 @@ button:disabled,
   gap: 8px;
 }
 
-/* Icons stay in the DOM so focus can reach them; they're just not shown until
-   the trigger is hovered or activated. */
-.help-icons:not(.is-open) .help-slot {
-  width: 0;
-  overflow: hidden;
-}
-
+/* Icons stay mounted so the tooltip anchor maths stays stable; they collapse to
+   zero width until the trigger is hovered or activated. */
 .help-icon {
+  width: 0;
+  padding: 0;
+  border-width: 0;
   opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
   transform: translateX(-6px);
-  transition: opacity 0.16s ease, transform 0.16s ease;
+  transition: opacity 0.16s ease, transform 0.16s ease, width 0.16s ease,
+    border-width 0.16s ease;
 }
 
 .help-icons.is-open .help-icon {
+  width: 28px;
+  border-width: 1.5px;
   opacity: 1;
+  pointer-events: auto;
   transform: translateX(0);
 }
 
-.help-slot {
-  position: relative;
-  display: flex;
-}
-
+/* Anchored above the help cluster and slid horizontally to sit over whichever
+   icon is hovered. Fixed width with normal wrapping so the copy always reads as
+   a block, never as loose text beside the icon. */
 .help-tip {
   position: absolute;
-  bottom: calc(100% + 10px);
-  left: 0;
-  width: 250px;
+  bottom: calc(100% + 12px);
+  width: min(250px, calc(100vw - 56px));
+  box-sizing: border-box;
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
-  line-height: 1.55;
+  line-height: 1.5;
   letter-spacing: 0;
   text-transform: none;
+  text-align: left;
+  white-space: normal;
   color: var(--ink);
   background-color: var(--paper);
   border: var(--border-w) solid var(--ink);
   box-shadow: 4px 4px 0 var(--accent);
   padding: 11px 13px;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(4px);
-  transition: opacity 0.14s ease, transform 0.14s ease;
+  transition: opacity 0.14s ease, transform 0.14s ease, left 0.14s ease,
+    visibility 0.14s;
+  z-index: 2;
 }
 
 .help-tip.is-visible {
   opacity: 1;
+  visibility: visible;
   transform: translateY(0);
+}
+
+.help-tip-title {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.help-tip-body {
+  display: block;
+  color: var(--ink-soft);
+}
+
+.millipede-count {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  background-color: var(--paper);
+  border: 1.5px solid var(--ink-faint);
+  padding: 6px 10px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .help-icon, .help-tip { transition: none; }
 }
 
-.millipede-badge {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background-color: var(--paper);
-  border: 1.5px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--accent);
-  padding: 7px 11px;
-  transition: background-color 0.12s ease, color 0.12s ease;
-}
-
-.millipede-badge:hover {
-  background-color: var(--accent);
-  color: var(--paper);
-  box-shadow: 3px 3px 0 var(--ink);
-}

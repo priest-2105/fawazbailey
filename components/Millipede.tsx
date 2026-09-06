@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import MillipedeHelp from "./MillipedeHelp";
 
 const CODE = "millipede";
@@ -83,11 +84,6 @@ export default function Millipede() {
   useEffect(() => {
     hasCreatures.current = creatures.length > 0;
   }, [creatures.length]);
-
-  const dismiss = useCallback(() => {
-    setCreatures([]);
-    setTreats([]);
-  }, []);
 
   const dropTreat = useCallback((x: number, y: number) => {
     // Treats only exist once something is around to eat them, so a normal
@@ -492,9 +488,9 @@ export default function Millipede() {
 
       <div className="millipede-hud">
         <MillipedeHelp />
-        <button type="button" onClick={dismiss} className="millipede-badge">
-          {creatures.length} millipede{creatures.length > 1 ? "s" : ""} — dismiss
-        </button>
+        <span className="millipede-count">
+          {creatures.length} alive
+        </span>
       </div>
     </>
   );

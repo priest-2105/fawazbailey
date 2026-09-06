@@ -2,7 +2,34 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useContact } from "./ContactProvider";
+
+/** Internal routes must go through next/link. A plain <a> triggers a full
+ *  document load, which tears down the React tree — and with it anything living
+ *  in the layout, like the millipedes. */
+const isRoute = (href?: string) => !!href && href.startsWith("/");
+
+const LOGO_STYLE: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  textDecoration: "none",
+};
+
+function LogoWrap({ href, children }: { href: string; children: React.ReactNode }) {
+  if (isRoute(href)) {
+    return (
+      <Link href={href} style={LOGO_STYLE}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={href} style={LOGO_STYLE}>
+      {children}
+    </a>
+  );
+}
 
 const SECTIONS = ["about", "projects", "experience"] as const;
 
@@ -112,7 +139,7 @@ export default function NavBar({
         }}
       >
         {/* Logo */}
-        <a href={logoHref} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+        <LogoWrap href={logoHref}>
           <Image
             src="/images/FB.svg"
             alt="Fawaz Bailey"
@@ -121,7 +148,7 @@ export default function NavBar({
             priority
             style={{ display: "block", width: "40px", height: "31px" }}
           />
-        </a>
+        </LogoWrap>
 
         {/* Links — desktop */}
         <div className="nav-links">
@@ -149,6 +176,15 @@ export default function NavBar({
                   {label}
                   {underline}
                 </button>
+              );
+            }
+
+            if (isRoute(href)) {
+              return (
+                <Link key={label} href={href!} style={linkStyle(isActive)}>
+                  {label}
+                  {underline}
+                </Link>
               );
             }
 
@@ -236,6 +272,19 @@ export default function NavBar({
                   >
                     {label}
                   </button>
+                );
+              }
+
+              if (isRoute(href)) {
+                return (
+                  <Link
+                    key={label}
+                    href={href!}
+                    onClick={() => setMenuOpen(false)}
+                    style={itemStyle}
+                  >
+                    {label}
+                  </Link>
                 );
               }
 
