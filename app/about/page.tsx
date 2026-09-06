@@ -197,6 +197,11 @@ export default function AboutPage() {
             </p>
 
             <p style={{ ...BODY, fontSize: "16px", marginBottom: "18px" }}>
+              On a phone or tablet, where there&apos;s no keyboard to type into,{" "}
+              <strong>tap nine times</strong> in quick succession instead.
+            </p>
+
+            <p style={{ ...BODY, fontSize: "16px", marginBottom: "18px" }}>
               Each one only lasts thirty seconds, so you&apos;ll want to feed it. Double-tap
               anywhere, or press <strong>T</strong>, to drop a treat. Every millipede on screen
               races for the nearest one — whichever gets there first eats it, grows a segment,

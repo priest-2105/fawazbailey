@@ -8,7 +8,7 @@ const TIPS = [
     id: "summon",
     Icon: Bug,
     label: "Millipedes",
-    text: "Type “millipede” anywhere to summon one. Again for another, up to eight. Each lives 30 seconds unless you feed it.",
+    text: "Type “millipede” anywhere — or tap nine times if you have no keyboard. Again for another, up to eight. Each lives 30 seconds unless you feed it.",
   },
   {
     id: "treats",

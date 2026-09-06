@@ -51,6 +51,9 @@ body {
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Stops double-tap-to-zoom swallowing the treat and summon gestures. Pinch
+     zoom is unaffected. */
+  touch-action: manipulation;
 }
 
 /* ── Responsive grid helpers ── */

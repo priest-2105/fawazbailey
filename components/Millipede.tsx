@@ -11,8 +11,12 @@ const MARGIN = 40;
 const LIFESPAN = 30_000;
 const TREAT_BONUS = 10_000;
 const FADE_WINDOW = 5_000;
-const DOUBLE_TAP_MS = 320;
-const DOUBLE_TAP_SLOP = 40;
+// A run is a burst of taps with no more than TAP_GAP between them. Two taps
+// drops a treat, nine summons — so the run has to finish before we can tell
+// which was meant, otherwise nine taps would also drop four treats on the way.
+const TAP_GAP = 320;
+const TAP_SLOP = 60;
+const TAPS_TO_SUMMON = 9;
 
 interface Creature {
   id: number;
@@ -74,7 +78,8 @@ export default function Millipede() {
 
   const treatsRef = useRef<Treat[]>([]);
   const pointer = useRef<Point>({ x: 0, y: 0 });
-  const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
+  const tapRun = useRef({ count: 0, time: 0, x: 0, y: 0 });
+  const runTimer = useRef<number | null>(null);
   const hasCreatures = useRef(false);
 
   useEffect(() => {
@@ -90,6 +95,14 @@ export default function Millipede() {
     // double-click to select a word never leaves a green dot behind.
     if (!hasCreatures.current) return;
     setTreats((previous) => [...previous, { id: nextId.current++, x, y }]);
+  }, []);
+
+  const summon = useCallback(() => {
+    setCreatures((previous) =>
+      previous.length >= MAX_CREATURES
+        ? previous
+        : [...previous, makeCreature(nextId.current++)]
+    );
   }, []);
 
   useEffect(() => {
@@ -108,37 +121,50 @@ export default function Millipede() {
       if (buffer !== CODE) return;
 
       buffer = "";
-      setCreatures((previous) =>
-        previous.length >= MAX_CREATURES
-          ? previous
-          : [...previous, makeCreature(nextId.current++)]
-      );
+      summon();
     }
 
     function handlePointerMove(event: PointerEvent) {
       pointer.current = { x: event.clientX, y: event.clientY };
     }
 
-    // Detected by hand rather than via dblclick, which is unreliable on touch
+    // Counted by hand rather than via dblclick, which is unreliable on touch
     // browsers. One path covers mouse and touch.
     function handlePointerUp(event: PointerEvent) {
       const target = event.target as HTMLElement | null;
       if (target?.closest("a, button, input, textarea, [contenteditable='true']")) return;
 
       const now = Date.now();
-      const previous = lastTap.current;
+      const run = tapRun.current;
+      const continues =
+        run.count > 0 &&
+        now - run.time < TAP_GAP &&
+        Math.hypot(event.clientX - run.x, event.clientY - run.y) < TAP_SLOP;
 
-      if (
-        previous &&
-        now - previous.time < DOUBLE_TAP_MS &&
-        Math.hypot(event.clientX - previous.x, event.clientY - previous.y) < DOUBLE_TAP_SLOP
-      ) {
-        lastTap.current = null;
-        dropTreat(event.clientX, event.clientY);
+      run.count = continues ? run.count + 1 : 1;
+      run.time = now;
+      run.x = event.clientX;
+      run.y = event.clientY;
+
+      if (runTimer.current !== null) window.clearTimeout(runTimer.current);
+
+      // Summoning fires the instant the ninth tap lands — waiting for the run to
+      // settle would make it feel unresponsive.
+      if (run.count >= TAPS_TO_SUMMON) {
+        run.count = 0;
+        summon();
         return;
       }
 
-      lastTap.current = { time: now, x: event.clientX, y: event.clientY };
+      // A treat waits for the run to end, so it can tell a deliberate
+      // double-tap from the first two taps of a nine-tap summon.
+      runTimer.current = window.setTimeout(() => {
+        if (tapRun.current.count === 2) {
+          dropTreat(tapRun.current.x, tapRun.current.y);
+        }
+        tapRun.current.count = 0;
+        runTimer.current = null;
+      }, TAP_GAP);
     }
 
     window.addEventListener("keydown", handleKeyDown);
@@ -149,8 +175,9 @@ export default function Millipede() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
+      if (runTimer.current !== null) window.clearTimeout(runTimer.current);
     };
-  }, [dropTreat]);
+  }, [dropTreat, summon]);
 
   useEffect(() => {
     if (creatures.length === 0) {
