@@ -20,7 +20,7 @@ const BODY: React.CSSProperties = {
 
 export default function AboutPage() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "var(--paper)", color: "var(--ink)" }}>
+    <div style={{ minHeight: "100vh", color: "var(--ink)" }}>
       <NavBar
         logoHref="/"
         links={[

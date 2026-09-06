@@ -1,31 +1,58 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const CODE = "millipede";
-const SEGMENTS = 18;
-const SPACING = 12;
-const SPEED = 0.075; // px per ms
-const MARGIN = 50;
+const MAX_CREATURES = 8;
+const MARGIN = 40;
+
+interface Creature {
+  id: number;
+  segments: number;
+  spacing: number;
+  size: number;
+  speed: number;
+  steerPhase: number;
+  depthPhase: number;
+  depthSpeed: number;
+}
 
 interface Point {
   x: number;
   y: number;
 }
 
+const random = (min: number, max: number) => min + Math.random() * (max - min);
+
+function makeCreature(id: number): Creature {
+  return {
+    id,
+    segments: Math.round(random(12, 22)),
+    spacing: random(9, 14),
+    size: random(0.45, 1.35),
+    speed: random(0.045, 0.11),
+    steerPhase: random(0, Math.PI * 2),
+    depthPhase: random(0, Math.PI * 2),
+    depthSpeed: random(0.00013, 0.00032),
+  };
+}
+
 export default function Millipede() {
-  const [summoned, setSummoned] = useState(false);
+  const [creatures, setCreatures] = useState<Creature[]>([]);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const segmentRefs = useRef<(SVGGElement | null)[]>([]);
-  const legRefs = useRef<(SVGGElement | null)[]>([]);
+  const containerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const segmentRefs = useRef<(SVGGElement | null)[][]>([]);
+  const legRefs = useRef<(SVGGElement | null)[][]>([]);
 
-  const points = useRef<Point[]>([]);
-  const heading = useRef(0);
+  const points = useRef<Point[][]>([]);
+  const headings = useRef<number[]>([]);
   const frameId = useRef<number | null>(null);
+  const nextId = useRef(0);
 
-  // Listen for the summoning word. Anything typed into a field is ignored, so
-  // writing "millipede" in the contact form doesn't spawn one.
+  const dismiss = useCallback(() => setCreatures([]), []);
+
+  // Each summon adds another one rather than toggling, up to a cap — past a
+  // handful they stop reading as creatures and start reading as noise.
   useEffect(() => {
     let buffer = "";
 
@@ -35,10 +62,14 @@ export default function Millipede() {
       if (event.key.length !== 1 || event.metaKey || event.ctrlKey || event.altKey) return;
 
       buffer = (buffer + event.key.toLowerCase()).slice(-CODE.length);
-      if (buffer === CODE) {
-        buffer = "";
-        setSummoned((previous) => !previous);
-      }
+      if (buffer !== CODE) return;
+
+      buffer = "";
+      setCreatures((previous) =>
+        previous.length >= MAX_CREATURES
+          ? previous
+          : [...previous, makeCreature(nextId.current++)]
+      );
     }
 
     window.addEventListener("keydown", handleKeyDown);
@@ -46,74 +77,91 @@ export default function Millipede() {
   }, []);
 
   useEffect(() => {
-    if (!summoned) return;
+    if (creatures.length === 0) {
+      points.current = [];
+      headings.current = [];
+      return;
+    }
+
+    // Seed any creature that just appeared; leave existing ones mid-crawl.
+    creatures.forEach((creature, index) => {
+      if (points.current[index]) return;
+
+      const startX = random(MARGIN * 2, Math.max(MARGIN * 3, window.innerWidth - MARGIN * 2));
+      const startY = random(MARGIN * 2, Math.max(MARGIN * 3, window.innerHeight - MARGIN * 2));
+
+      headings.current[index] = random(0, Math.PI * 2);
+      points.current[index] = Array.from({ length: creature.segments }, (_, i) => ({
+        x: startX - i * creature.spacing,
+        y: startY,
+      }));
+    });
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const startX = window.innerWidth * 0.5;
-    const startY = window.innerHeight * 0.55;
-    points.current = Array.from({ length: SEGMENTS }, (_, i) => ({
-      x: startX - i * SPACING,
-      y: startY,
-    }));
-    heading.current = 0;
-
     let elapsed = 0;
     let previousTime: number | null = null;
 
-    function render(depth: number, time: number) {
-      const scale = 0.55 + depth * 0.7;
-      const spacing = SPACING * scale;
-      const chain = points.current;
+    function paint(time: number) {
+      creatures.forEach((creature, index) => {
+        const chain = points.current[index];
+        if (!chain) return;
 
-      // Each segment is pulled to a fixed distance behind the one ahead. This is
-      // what makes the body trail the head instead of moving as a rigid block.
-      for (let i = 1; i < chain.length; i++) {
-        const ahead = chain[i - 1];
-        const current = chain[i];
-        const dx = ahead.x - current.x;
-        const dy = ahead.y - current.y;
-        const distance = Math.hypot(dx, dy) || 1;
-        const pull = (distance - spacing) / distance;
-        current.x += dx * pull;
-        current.y += dy * pull;
-      }
+        const depth =
+          0.5 + 0.5 * Math.sin(time * creature.depthSpeed + creature.depthPhase);
+        const scale = creature.size * (0.7 + depth * 0.5);
+        const spacing = creature.spacing * scale;
 
-      for (let i = 0; i < chain.length; i++) {
-        const node = segmentRefs.current[i];
-        if (!node) continue;
-
-        const ahead = i === 0 ? null : chain[i - 1];
-        const angle = ahead
-          ? Math.atan2(ahead.y - chain[i].y, ahead.x - chain[i].x)
-          : heading.current;
-
-        node.setAttribute(
-          "transform",
-          `translate(${chain[i].x.toFixed(2)} ${chain[i].y.toFixed(2)}) rotate(${(
-            (angle * 180) / Math.PI
-          ).toFixed(2)}) scale(${scale.toFixed(3)})`
-        );
-
-        // Phase offset down the body produces the metachronal wave — the ripple
-        // that makes a millipede read as a millipede.
-        const legs = legRefs.current[i];
-        if (legs) {
-          const wave = Math.sin(time * 0.012 - i * 0.55) * 26;
-          legs.setAttribute("transform", `rotate(${wave.toFixed(2)})`);
+        // Hold each segment a fixed distance behind the one ahead — this is what
+        // makes the body trail the head instead of moving as a rigid block.
+        for (let i = 1; i < chain.length; i++) {
+          const ahead = chain[i - 1];
+          const current = chain[i];
+          const dx = ahead.x - current.x;
+          const dy = ahead.y - current.y;
+          const distance = Math.hypot(dx, dy) || 1;
+          const pull = (distance - spacing) / distance;
+          current.x += dx * pull;
+          current.y += dy * pull;
         }
-      }
 
-      if (containerRef.current) {
-        containerRef.current.style.opacity = (0.45 + depth * 0.55).toFixed(3);
-        containerRef.current.style.filter = depth < 0.35 ? "blur(1.1px)" : "none";
-      }
+        for (let i = 0; i < chain.length; i++) {
+          const node = segmentRefs.current[index]?.[i];
+          if (!node) continue;
+
+          const ahead = i === 0 ? null : chain[i - 1];
+          const angle = ahead
+            ? Math.atan2(ahead.y - chain[i].y, ahead.x - chain[i].x)
+            : headings.current[index];
+
+          node.setAttribute(
+            "transform",
+            `translate(${chain[i].x.toFixed(2)} ${chain[i].y.toFixed(2)}) rotate(${(
+              (angle * 180) / Math.PI
+            ).toFixed(2)}) scale(${scale.toFixed(3)})`
+          );
+
+          // Phase offset down the body gives the metachronal wave — the ripple
+          // that makes a millipede read as a millipede.
+          const legs = legRefs.current[index]?.[i];
+          if (legs) {
+            const wave = Math.sin(time * 0.012 * (creature.speed / 0.075) - i * 0.55) * 26;
+            legs.setAttribute("transform", `rotate(${wave.toFixed(2)})`);
+          }
+        }
+
+        const container = containerRefs.current[index];
+        if (container) {
+          container.style.opacity = (0.4 + depth * 0.6).toFixed(3);
+          container.style.filter = depth < 0.32 ? "blur(1.2px)" : "none";
+          // Far ones sink beneath the page entirely; near ones ride above the
+          // body text but still pass under buttons and panels, which sit at
+          // z-index 1. That contrast is what sells the depth.
+          container.style.zIndex = depth > 0.5 ? "0" : "-1";
+        }
+      });
     }
 
-    // Paint once up front, otherwise every segment sits stacked at the SVG
-    // origin until the first animation frame lands.
-    render(1, 0);
-
+    paint(0);
     if (reduceMotion) return;
 
     function step(time: number) {
@@ -122,31 +170,34 @@ export default function Millipede() {
       previousTime = time;
       elapsed += delta;
 
-      // Layered sines stand in for noise: a slow drift with faster wobble on top,
-      // so the path never repeats in a way the eye can latch onto.
-      const steer =
-        Math.sin(elapsed * 0.00065) * 0.9 +
-        Math.sin(elapsed * 0.00031 + 1.7) * 0.55 +
-        Math.sin(elapsed * 0.0013 + 4.2) * 0.3;
-      heading.current += steer * delta * 0.0016;
+      creatures.forEach((creature, index) => {
+        const chain = points.current[index];
+        if (!chain) return;
 
-      const head = points.current[0];
-      head.x += Math.cos(heading.current) * SPEED * delta;
-      head.y += Math.sin(heading.current) * SPEED * delta;
+        // Layered sines stand in for noise. The periods share no common
+        // multiple, so the path never visibly repeats.
+        const steer =
+          Math.sin(elapsed * 0.00065 + creature.steerPhase) * 0.9 +
+          Math.sin(elapsed * 0.00031 + creature.steerPhase * 2.1) * 0.55 +
+          Math.sin(elapsed * 0.0013 + creature.steerPhase * 0.7) * 0.3;
+        headings.current[index] += steer * delta * 0.0016;
 
-      // Reflect off the viewport edges so it never wanders out of sight.
-      if (head.x < MARGIN || head.x > window.innerWidth - MARGIN) {
-        head.x = Math.max(MARGIN, Math.min(head.x, window.innerWidth - MARGIN));
-        heading.current = Math.PI - heading.current;
-      }
-      if (head.y < MARGIN || head.y > window.innerHeight - MARGIN) {
-        head.y = Math.max(MARGIN, Math.min(head.y, window.innerHeight - MARGIN));
-        heading.current = -heading.current;
-      }
+        const head = chain[0];
+        head.x += Math.cos(headings.current[index]) * creature.speed * delta;
+        head.y += Math.sin(headings.current[index]) * creature.speed * delta;
 
-      const depth = 0.5 + 0.5 * Math.sin(elapsed * 0.00021);
-      render(depth, elapsed);
+        // Reflect off the viewport edges so nothing wanders out of sight.
+        if (head.x < MARGIN || head.x > window.innerWidth - MARGIN) {
+          head.x = Math.max(MARGIN, Math.min(head.x, window.innerWidth - MARGIN));
+          headings.current[index] = Math.PI - headings.current[index];
+        }
+        if (head.y < MARGIN || head.y > window.innerHeight - MARGIN) {
+          head.y = Math.max(MARGIN, Math.min(head.y, window.innerHeight - MARGIN));
+          headings.current[index] = -headings.current[index];
+        }
+      });
 
+      paint(elapsed);
       frameId.current = requestAnimationFrame(step);
     }
 
@@ -170,102 +221,103 @@ export default function Millipede() {
       if (frameId.current !== null) cancelAnimationFrame(frameId.current);
       frameId.current = null;
     };
-  }, [summoned]);
+  }, [creatures]);
 
-  if (!summoned) return null;
+  if (creatures.length === 0) return null;
 
   return (
     <>
-      <div
-        ref={containerRef}
-        aria-hidden
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 60,
-          pointerEvents: "none",
-        }}
-      >
-        <svg width="100%" height="100%" style={{ display: "block", overflow: "visible" }}>
-          {Array.from({ length: SEGMENTS }).map((_, i) => {
-            const isHead = i === 0;
-            const taper = 1 - (i / SEGMENTS) * 0.45;
+      {creatures.map((creature, creatureIndex) => (
+        <div
+          key={creature.id}
+          aria-hidden
+          ref={(element) => {
+            containerRefs.current[creatureIndex] = element;
+          }}
+          className="millipede-layer"
+        >
+          <svg width="100%" height="100%" style={{ display: "block", overflow: "visible" }}>
+            {Array.from({ length: creature.segments }).map((_, i) => {
+              const isHead = i === 0;
+              const taper = 1 - (i / creature.segments) * 0.45;
 
-            return (
-              <g
-                key={i}
-                ref={(element) => {
-                  segmentRefs.current[i] = element;
-                }}
-              >
+              return (
                 <g
+                  key={i}
                   ref={(element) => {
-                    legRefs.current[i] = element;
+                    (segmentRefs.current[creatureIndex] ||= [])[i] = element;
                   }}
                 >
-                  <line
-                    x1="0"
-                    y1="-3"
-                    x2="0"
-                    y2={-11 * taper}
+                  <g
+                    ref={(element) => {
+                      (legRefs.current[creatureIndex] ||= [])[i] = element;
+                    }}
+                  >
+                    <line
+                      x1="0"
+                      y1="-3"
+                      x2="0"
+                      y2={-11 * taper}
+                      stroke="var(--ink)"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                    />
+                    <line
+                      x1="0"
+                      y1="3"
+                      x2="0"
+                      y2={11 * taper}
+                      stroke="var(--ink)"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                    />
+                  </g>
+
+                  <ellipse
+                    cx="0"
+                    cy="0"
+                    rx={(isHead ? 7.5 : 6.4) * taper}
+                    ry={(isHead ? 6.4 : 5.4) * taper}
+                    fill="var(--paper)"
                     stroke="var(--ink)"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
+                    strokeWidth="2"
                   />
-                  <line
-                    x1="0"
-                    y1="3"
-                    x2="0"
-                    y2={11 * taper}
-                    stroke="var(--ink)"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
+
+                  {isHead && (
+                    <>
+                      <line
+                        x1="4"
+                        y1="-2.5"
+                        x2="12"
+                        y2="-7"
+                        stroke="var(--ink)"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1="4"
+                        y1="2.5"
+                        x2="12"
+                        y2="7"
+                        stroke="var(--ink)"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                      <circle cx="3" cy="-2.4" r="1.15" fill="var(--ink)" />
+                      <circle cx="3" cy="2.4" r="1.15" fill="var(--ink)" />
+                    </>
+                  )}
                 </g>
+              );
+            })}
+          </svg>
+        </div>
+      ))}
 
-                <ellipse
-                  cx="0"
-                  cy="0"
-                  rx={(isHead ? 7.5 : 6.4) * taper}
-                  ry={(isHead ? 6.4 : 5.4) * taper}
-                  fill="var(--paper)"
-                  stroke="var(--ink)"
-                  strokeWidth="2"
-                />
-
-                {isHead && (
-                  <>
-                    <line
-                      x1="4"
-                      y1="-2.5"
-                      x2="12"
-                      y2="-7"
-                      stroke="var(--ink)"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                    />
-                    <line
-                      x1="4"
-                      y1="2.5"
-                      x2="12"
-                      y2="7"
-                      stroke="var(--ink)"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                    />
-                    <circle cx="3" cy="-2.4" r="1.15" fill="var(--ink)" />
-                    <circle cx="3" cy="2.4" r="1.15" fill="var(--ink)" />
-                  </>
-                )}
-              </g>
-            );
-          })}
-        </svg>
-      </div>
-
-      <div className="millipede-badge">
-        Millipede summoned — type it again to dismiss
-      </div>
+      <button type="button" onClick={dismiss} className="millipede-badge">
+        {creatures.length} millipede{creatures.length > 1 ? "s" : ""} — dismiss
+        {creatures.length >= MAX_CREATURES && " (full)"}
+      </button>
     </>
   );
 }

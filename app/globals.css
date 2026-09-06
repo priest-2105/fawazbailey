@@ -40,9 +40,12 @@ html {
 }
 
 body {
-  font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
-  background-color: #ffffff;
-  color: #111111;
+  font-family: var(--font-body);
+  /* Page wrappers are deliberately transparent so the millipede layer can sit
+     below them at z-index -1 and still be seen. This is the only opaque
+     background on the page. */
+  background-color: var(--paper);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -203,6 +206,8 @@ body {
   border: var(--border-w) solid var(--ink);
   background-color: var(--paper);
   box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1;
 }
 
 .panel-accent {
@@ -232,6 +237,9 @@ body {
   padding: 12px 24px;
   border: var(--border-w) solid var(--ink);
   text-decoration: none;
+  /* Stacked above the millipede layer so creatures crawl underneath. */
+  position: relative;
+  z-index: 1;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
@@ -666,7 +674,17 @@ button:disabled,
   white-space: nowrap;
 }
 
-/* ── Millipede easter egg ── */
+/* ── Millipede easter egg ──
+   The layer's z-index is set per-frame from the creature's depth: -1 sinks it
+   below the page, 0 floats it above body text. Buttons and panels sit at
+   z-index 1 (below) so a millipede always passes *under* solid UI — that
+   occlusion is what reads as depth. */
+.millipede-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
 .millipede-badge {
   position: fixed;
   left: 20px;
@@ -682,5 +700,11 @@ button:disabled,
   border: 1.5px solid var(--ink);
   box-shadow: 3px 3px 0 var(--accent);
   padding: 7px 11px;
-  pointer-events: none;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.millipede-badge:hover {
+  background-color: var(--accent);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
 }

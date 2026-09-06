@@ -4,7 +4,7 @@ import { ALL_PROJECTS } from "@/lib/projects";
 
 export default function ProjectsPage() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "var(--paper)", color: "var(--ink)" }}>
+    <div style={{ minHeight: "100vh", color: "var(--ink)" }}>
       <header
         className="page-header"
         style={{

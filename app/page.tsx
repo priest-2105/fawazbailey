@@ -53,7 +53,7 @@ const skills = [
 
 export default function Home() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "var(--paper)", color: "var(--ink)" }}>
+    <div style={{ minHeight: "100vh", color: "var(--ink)" }}>
       <NavBar />
 
       <main className="home-main">
