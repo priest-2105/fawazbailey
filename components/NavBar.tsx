@@ -86,9 +86,10 @@ export default function NavBar({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "rgba(255,255,255,0.88)",
+          backgroundColor: "rgba(255,255,255,0.92)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "var(--border-w) solid var(--ink)",
         }}
       >
         {/* Logo */}
@@ -114,12 +115,14 @@ export default function NavBar({
                 key={label}
                 href={href}
                 style={{
-                  fontSize: "15px",
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive ? "#111111" : "#999999",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: isActive ? "var(--ink)" : "var(--ink-mute)",
                   textDecoration: "none",
                   position: "relative",
-                  paddingBottom: "3px",
+                  paddingBottom: "4px",
                   transition: "color 0.2s",
                 }}
               >
@@ -130,9 +133,8 @@ export default function NavBar({
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    height: "1.5px",
-                    backgroundColor: "#111111",
-                    borderRadius: "1px",
+                    height: "3px",
+                    backgroundColor: "var(--accent)",
                     opacity: isActive ? 1 : 0,
                     transition: "opacity 0.2s",
                   }}
