@@ -599,3 +599,69 @@ button:disabled,
   background-color: var(--accent);
   color: var(--paper);
 }
+
+/* ── Live data widgets (chess, spotify) ── */
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 18px;
+  min-width: 88px;
+  border: var(--border-w) solid var(--ink);
+  background-color: var(--paper);
+}
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.data-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  text-decoration: none;
+  border-top: 1.5px solid var(--ink-faint);
+  transition: background-color 0.14s ease;
+}
+
+.data-row:first-of-type {
+  border-top: none;
+}
+
+.data-row:hover {
+  background-color: var(--wash);
+}
+
+.result-badge {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1.5px solid var(--ink);
+}
+
+.result-win   { background-color: var(--ink);    color: var(--paper); }
+.result-loss  { background-color: var(--accent); color: var(--paper); }
+.result-draw  { background-color: var(--paper);  color: var(--ink); }
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

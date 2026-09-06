@@ -140,9 +140,7 @@ export default function AboutPage() {
             when they arrive, you know where to look.
           </p>
 
-          <div className="panel" style={{ padding: "24px" }}>
-            <ChessStats />
-          </div>
+          <ChessStats />
         </section>
 
         {/* ── Music ── */}
@@ -158,9 +156,7 @@ export default function AboutPage() {
             recommendation.
           </p>
 
-          <div className="panel" style={{ padding: "20px 24px" }}>
-            <NowPlaying />
-          </div>
+          <NowPlaying />
         </section>
 
         {/* ── Everything else ── */}
