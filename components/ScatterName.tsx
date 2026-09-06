@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type CSSProperties, type PointerEvent } from "react";
+import { RotateCcw } from "lucide-react";
 
 interface Offset {
   x: number;
@@ -75,6 +76,21 @@ export default function ScatterName({
 
   return (
     <div>
+      {/* Fixed height so revealing the button never nudges the name downward. */}
+      <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
+        {scattered && (
+          <button
+            type="button"
+            onClick={() => setOffsets({})}
+            className="name-reset"
+            aria-label="Reset name to its original position"
+            title="Reset name"
+          >
+            <RotateCcw size={15} strokeWidth={2.6} aria-hidden />
+          </button>
+        )}
+      </div>
+
       {/* Letters are aria-hidden so assistive tech reads the name as a word
           rather than spelling it out; the label carries the real text. */}
       <h1 className={className} style={style} aria-label={text}>
@@ -105,15 +121,6 @@ export default function ScatterName({
           );
         })}
       </h1>
-
-      {/* Fixed height so revealing the button never nudges the layout. */}
-      <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
-        {scattered && (
-          <button type="button" onClick={() => setOffsets({})} className="name-reset">
-            ↺ Put it back
-          </button>
-        )}
-      </div>
     </div>
   );
 }

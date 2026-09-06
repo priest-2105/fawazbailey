@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Archivo_Black } from "next/font/google";
+import ContextMenu from "@/components/ContextMenu";
 import "./globals.css";
 
 const inter = Inter({
@@ -43,7 +44,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${archivoBlack.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ContextMenu />
+      </body>
     </html>
   );
 }
