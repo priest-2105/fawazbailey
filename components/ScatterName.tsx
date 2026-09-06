@@ -35,6 +35,15 @@ export default function ScatterName({
     baseY: number;
   } | null>(null);
 
+  // Split into words, keeping each letter's index within the full string so
+  // drag offsets stay keyed consistently.
+  const words: { text: string; start: number }[] = [];
+  let cursor = 0;
+  for (const part of text.split(" ")) {
+    words.push({ text: part, start: cursor });
+    cursor += part.length + 1;
+  }
+
   const scattered = Object.keys(offsets).length > 0;
 
   function handlePointerDown(index: number, event: PointerEvent<HTMLSpanElement>) {
@@ -94,32 +103,40 @@ export default function ScatterName({
       {/* Letters are aria-hidden so assistive tech reads the name as a word
           rather than spelling it out; the label carries the real text. */}
       <h1 className={className} style={style} aria-label={text}>
-        {Array.from(text).map((character, index) => {
-          if (character === " ") {
-            return <span key={index} aria-hidden style={{ display: "inline-block", width: "0.3em" }} />;
-          }
+        {words.map((word, wordIndex) => (
+          <span key={wordIndex}>
+            {/* Each word is one unbreakable unit so a narrow viewport wraps
+                between words rather than in the middle of a name. */}
+            <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+              {Array.from(word.text).map((character, characterIndex) => {
+                const index = word.start + characterIndex;
+                const offset = offsets[index];
+                const isDragging = dragging === index;
 
-          const offset = offsets[index];
-          const isDragging = dragging === index;
-
-          return (
-            <span
-              key={index}
-              aria-hidden
-              className={`name-letter${isDragging ? " is-dragging" : ""}`}
-              onPointerDown={(event) => handlePointerDown(index, event)}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerCancel={handlePointerUp}
-              style={{
-                transform: offset ? `translate(${offset.x}px, ${offset.y}px)` : undefined,
-                zIndex: isDragging ? 2 : undefined,
-              }}
-            >
-              {character}
+                return (
+                  <span
+                    key={index}
+                    aria-hidden
+                    className={`name-letter${isDragging ? " is-dragging" : ""}`}
+                    onPointerDown={(event) => handlePointerDown(index, event)}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
+                    onPointerCancel={handlePointerUp}
+                    style={{
+                      transform: offset ? `translate(${offset.x}px, ${offset.y}px)` : undefined,
+                      zIndex: isDragging ? 2 : undefined,
+                    }}
+                  >
+                    {character}
+                  </span>
+                );
+              })}
             </span>
-          );
-        })}
+            {wordIndex < words.length - 1 && (
+              <span aria-hidden style={{ display: "inline-block", width: "0.3em" }} />
+            )}
+          </span>
+        ))}
       </h1>
     </div>
   );
