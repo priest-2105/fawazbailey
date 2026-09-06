@@ -2,16 +2,46 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useContact } from "./ContactProvider";
+
+/** Internal routes must go through next/link. A plain <a> triggers a full
+ *  document load, which tears down the React tree — and with it anything living
+ *  in the layout, like the millipedes. */
+const isRoute = (href?: string) => !!href && href.startsWith("/");
+
+const LOGO_STYLE: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  textDecoration: "none",
+};
+
+function LogoWrap({ href, children }: { href: string; children: React.ReactNode }) {
+  if (isRoute(href)) {
+    return (
+      <Link href={href} style={LOGO_STYLE}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={href} style={LOGO_STYLE}>
+      {children}
+    </a>
+  );
+}
 
 const SECTIONS = ["about", "projects", "experience"] as const;
 
-type NavLink = { label: string; href: string };
+/** `action: "contact"` renders a button that opens the contact modal
+ *  instead of navigating. */
+type NavLink = { label: string; href?: string; action?: "contact" };
 
 const DEFAULT_LINKS: NavLink[] = [
   { label: "About",    href: "/about" },
   { label: "Projects", href: "#projects" },
   // { label: "Work",     href: "#experience" }, // hidden while the work section is commented out
-  { label: "Contact",  href: "mailto:fawzybailey782@gmail.com" },
+  { label: "Contact",  action: "contact" },
 ];
 
 export default function NavBar({
@@ -23,6 +53,22 @@ export default function NavBar({
 }) {
   const [active, setActive] = useState<string>("about");
   const [menuOpen, setMenuOpen] = useState(false);
+  const { open: openContact } = useContact();
+
+  const linkStyle = (isActive: boolean): React.CSSProperties => ({
+    fontSize: "14px",
+    fontWeight: 600,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    color: isActive ? "var(--ink)" : "var(--ink-mute)",
+    textDecoration: "none",
+    position: "relative",
+    paddingBottom: "4px",
+    background: "none",
+    border: "none",
+    fontFamily: "inherit",
+    transition: "color 0.2s",
+  });
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -86,13 +132,14 @@ export default function NavBar({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "rgba(255,255,255,0.88)",
+          backgroundColor: "rgba(255,255,255,0.92)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "var(--border-w) solid var(--ink)",
         }}
       >
         {/* Logo */}
-        <a href={logoHref} style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+        <LogoWrap href={logoHref}>
           <Image
             src="/images/FB.svg"
             alt="Fawaz Bailey"
@@ -101,42 +148,50 @@ export default function NavBar({
             priority
             style={{ display: "block", width: "40px", height: "31px" }}
           />
-        </a>
+        </LogoWrap>
 
         {/* Links — desktop */}
         <div className="nav-links">
-          {links.map(({ label, href }) => {
-            const sectionId = href.replace("#", "");
-            const isActive = active === sectionId;
+          {links.map(({ label, href, action }) => {
+            const isActive = !!href && active === href.replace("#", "");
+
+            const underline = (
+              <span
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "3px",
+                  backgroundColor: "var(--accent)",
+                  opacity: isActive ? 1 : 0,
+                  transition: "opacity 0.2s",
+                }}
+              />
+            );
+
+            if (action === "contact") {
+              return (
+                <button key={label} type="button" onClick={openContact} style={linkStyle(false)}>
+                  {label}
+                  {underline}
+                </button>
+              );
+            }
+
+            if (isRoute(href)) {
+              return (
+                <Link key={label} href={href!} style={linkStyle(isActive)}>
+                  {label}
+                  {underline}
+                </Link>
+              );
+            }
 
             return (
-              <a
-                key={label}
-                href={href}
-                style={{
-                  fontSize: "15px",
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive ? "#111111" : "#999999",
-                  textDecoration: "none",
-                  position: "relative",
-                  paddingBottom: "3px",
-                  transition: "color 0.2s",
-                }}
-              >
+              <a key={label} href={href} style={linkStyle(isActive)}>
                 {label}
-                <span
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "1.5px",
-                    backgroundColor: "#111111",
-                    borderRadius: "1px",
-                    opacity: isActive ? 1 : 0,
-                    transition: "opacity 0.2s",
-                  }}
-                />
+                {underline}
               </a>
             );
           })}
@@ -185,23 +240,60 @@ export default function NavBar({
         {/* Dropdown panel — mobile only */}
         {menuOpen && (
           <div className="nav-mobile-panel">
-            {links.map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  fontSize: "16px",
-                  fontWeight: 500,
-                  color: "#111111",
-                  textDecoration: "none",
-                  padding: "12px 0",
-                  borderBottom: "1px solid #f5f5f5",
-                }}
-              >
-                {label}
-              </a>
-            ))}
+            {links.map(({ label, href, action }) => {
+              const itemStyle: React.CSSProperties = {
+                fontSize: "14px",
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--ink)",
+                textDecoration: "none",
+                textAlign: "left",
+                padding: "13px 0",
+                borderBottom: "1.5px solid var(--ink-faint)",
+                background: "none",
+                border: "none",
+                borderBottomWidth: "1.5px",
+                borderBottomStyle: "solid",
+                borderBottomColor: "var(--ink-faint)",
+                fontFamily: "inherit",
+              };
+
+              if (action === "contact") {
+                return (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      openContact();
+                    }}
+                    style={itemStyle}
+                  >
+                    {label}
+                  </button>
+                );
+              }
+
+              if (isRoute(href)) {
+                return (
+                  <Link
+                    key={label}
+                    href={href!}
+                    onClick={() => setMenuOpen(false)}
+                    style={itemStyle}
+                  >
+                    {label}
+                  </Link>
+                );
+              }
+
+              return (
+                <a key={label} href={href} onClick={() => setMenuOpen(false)} style={itemStyle}>
+                  {label}
+                </a>
+              );
+            })}
           </div>
         )}
       </nav>

@@ -1,57 +1,23 @@
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import ContactButton from "@/components/ContactButton";
+import NowPlaying from "@/components/NowPlaying";
+import ProjectRow from "@/components/ProjectRow";
+import ScatterName from "@/components/ScatterName";
 import { PINNED } from "@/lib/projects";
 
-const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
-
-const experiences = [
-  {
-    company: "Always49",
-    role: "Frontend Engineer",
-    period: "Oct 2025 — Present",
-    stack: ["Next.js", "TypeScript", "NestJS", "PostgreSQL"],
-    bullets: [
-      "Built and maintained production-grade frontend applications using Next.js and TypeScript.",
-      "Developed reusable component systems to ensure UI consistency across client projects.",
-      "Translated Figma designs into responsive, accessible interfaces with strong attention to UX detail.",
-      "Integrated REST APIs and collaborated with backend engineers to optimize data flow.",
-      "Improved performance through code splitting, lazy loading, and targeted optimization strategies.",
-    ],
-  },
-    {
-    company: "iHealth",
-    role: "Frontend Engineer · Volunteer",
-    period: "Jul 2024 — Present",
-    stack: ["React", "Git", "GitHub"],
-    bullets: [
-      "Contributed to the frontend codebase as a volunteer engineer, writing and reviewing React components across multiple features.",
-      "Performed code reviews — catching bugs, enforcing consistency, and occasionally having to say 'this works but we're not shipping it like this'.",
-      "Managed branches, PRs, and merge workflows using Git and GitHub, keeping the codebase clean across a distributed team.",
-    ],
-  },
-  {
-    company: "UniSkills",
-    role: "Software Engineer",
-    period: "Nov 2022 — Oct 2025",
-    stack: ["Next.js", "TypeScript", "NestJS", "React", "WebSockets", "PostgreSQL"],
-    bullets: [
-      "Developed and maintained the frontend of an education platform connecting students with local businesses.",
-      "Built a real-time chat system from scratch with React.js, WebSockets, and Styled Components.",
-      "Led the Laravel to Next.js migration, focusing on performance and UX improvements.",
-      "Collaborated with backend developers to integrate APIs efficiently.",
-    ],
-  },
-];
-
+// TODO(fawaz): I added Vue as asked, plus entries evidenced by the project
+// stacks — PHP, WordPress and WooCommerce from M365Connect, Prisma from
+// Clayface, GitHub Actions from Continuum, Shopify Storefront API from Augusta
+// Newham. Prune anything you wouldn't want to be interviewed on.
 const skills = [
   {
     label: "Languages",
-    items: ["JavaScript", "TypeScript", "Golang", "Python", "Java"],
+    items: ["JavaScript", "TypeScript", "Golang", "Python", "Java", "PHP"],
   },
   {
     label: "Frameworks",
-    items: ["React", "Next.js", "React Native", "NestJS", "Laravel", "Django"],
+    items: ["React", "Next.js", "React Native", "Vue", "NestJS", "Laravel", "Django", "WordPress"],
   },
   {
     label: "Styling",
@@ -59,395 +25,201 @@ const skills = [
   },
   {
     label: "Data & APIs",
-    items: ["REST API", "GraphQL", "WebSockets", "Supabase", "Redis", "PostgreSQL", "MySQL", "MongoDB"],
+    items: [
+      "REST API",
+      "GraphQL",
+      "WebSockets",
+      "Prisma",
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "Supabase",
+      "Redis",
+    ],
+  },
+  {
+    label: "Commerce",
+    items: ["Shopify Storefront API", "Shopify Headless", "WooCommerce", "Stripe"],
   },
   {
     label: "Tools",
-    items: ["Git / GitHub", "Figma", "Docker", "Vercel", "Stripe", "Shopify", "WordPress", "Framer"],
+    items: ["Git / GitHub", "GitHub Actions", "Figma", "Docker", "Vercel", "Framer"],
   },
   {
     label: "Honorable Mentions",
-    items: ["Three.js", "VS Code Extensions", "Web Scraping"],
+    items: ["Three.js", "Blender", "VS Code Extensions", "Web Scraping"],
   },
 ];
 
-const LABEL: React.CSSProperties = {
-  fontSize: "12px",
-  fontWeight: 500,
-  color: "#999999",
-  letterSpacing: "0.13em",
-  textTransform: "uppercase" as const,
-  marginBottom: "40px",
-  fontFamily: F,
-};
-
 export default function Home() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", fontFamily: F, color: "#111111" }}>
+    <div style={{ minHeight: "100vh", color: "var(--ink)" }}>
       <NavBar />
 
       <main className="home-main">
 
-        {/* ────────────────────────────────────────
-            HERO
-        ──────────────────────────────────────── */}
-        <section id="about" style={{ paddingTop: "168px", paddingBottom: "112px" }}>
-          <h1
+        {/* ════════ HERO ════════ */}
+        <section id="about" style={{ position: "relative", paddingTop: "150px", paddingBottom: "100px" }}>
+          <div
+            className="halftone"
+            aria-hidden
             style={{
-              fontSize: "clamp(50px, 8.5vw, 112px)",
-              fontWeight: 800,
-              color: "#111111",
-              lineHeight: 1.02,
-              letterSpacing: "-0.04em",
-              marginBottom: "32px",
-              fontFamily: F,
+              position: "absolute",
+              top: "110px",
+              right: 0,
+              width: "min(380px, 40vw)",
+              height: "260px",
+              opacity: 0.55,
+              pointerEvents: "none",
+              zIndex: 0,
             }}
-          >
-            Hi, I&apos;m Fawaz Bailey.
-          </h1>
+          />
 
-          {/* tagline */}
-          <p
-            style={{
-              fontSize: "clamp(18px, 2.2vw, 22px)",
-              fontWeight: 400,
-              color: "#555555",
-              lineHeight: 1.65,
-              maxWidth: "620px",
-              marginBottom: "32px",
-              fontFamily: F,
-            }}
-          >
-            Design and software engineer based in Lagos, Nigeria. I build web apps that solve real
-            problems — occasionally fast, always deliberate, and never with a
-            component named{" "}
-            <code
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <p
               style={{
-                fontFamily: "monospace",
-                fontSize: "0.82em",
-                backgroundColor: "#f4f4f4",
-                padding: "2px 7px",
-                borderRadius: "4px",
-                color: "#333333",
+                fontSize: "12px",
+                fontWeight: 600,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "var(--accent)",
+                marginBottom: "14px",
               }}
             >
-              FinalFinal2.tsx
-            </code>
-            .
-          </p>
+              Hi, I&apos;m
+            </p>
 
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            <ContactButton label="Get in touch" filled={true} />
-            {[
-              { label: "About me →", href: "/about" },
-              { label: "GitHub ↗",   href: "https://github.com/priest-2105" },
-            ].map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  backgroundColor: "transparent",
-                  color: "#111111",
-                  border: "1px solid #dddddd",
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  padding: "11px 24px",
-                  borderRadius: "999px",
-                  textDecoration: "none",
-                  fontFamily: F,
-                }}
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-        </section>
+            <ScatterName
+              text="Fawaz Bailey"
+              className="display"
+              style={{ fontSize: "clamp(48px, 10vw, 132px)", marginBottom: "12px" }}
+            />
 
-        {/* ────────────────────────────────────────
-            PROJECTS
-        ──────────────────────────────────────── */}
-        <section id="projects" style={{ paddingBottom: "112px" }}>
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "40px" }}>
-            <p style={{ ...LABEL, marginBottom: 0 }}>Projects</p>
-            <Link
-              href="/projects"
+            <p
               style={{
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "#999999",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "4px",
-                fontFamily: F,
-                transition: "color 0.2s",
+                fontSize: "13px",
+                fontWeight: 600,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--ink-mute)",
+                marginBottom: "36px",
+                paddingBottom: "26px",
+                borderBottom: "var(--border-w) solid var(--ink)",
+                maxWidth: "620px",
               }}
             >
-              View all ↗
-            </Link>
-          </div>
+              Design &amp; Software Engineer · Lagos, Nigeria
+            </p>
 
-          <div style={{ borderTop: "1px solid #eeeeee" }}>
-            {PINNED.map((p) => (
-              <div
-                key={p.slug}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "minmax(0, 1fr) auto",
-                  gap: "24px",
-                  alignItems: "start",
-                  padding: "24px 0",
-                  borderBottom: "1px solid #eeeeee",
-                }}
-              >
-                <div style={{ minWidth: 0 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: "12px",
-                      flexWrap: "wrap",
-                      marginBottom: "8px",
-                    }}
-                  >
-                    <Link
-                      href={`/projects/${p.slug}`}
-                      style={{
-                        fontSize: "20px",
-                        fontWeight: 700,
-                        color: "#111111",
-                        letterSpacing: "-0.02em",
-                        textDecoration: "none",
-                        fontFamily: F,
-                      }}
-                    >
-                      {p.title}
-                    </Link>
-                    <span style={{ fontSize: "13px", color: "#999999", fontFamily: F }}>
-                      {p.company}
-                    </span>
-                  </div>
+            <div style={{ maxWidth: "620px", marginBottom: "36px" }}>
+              <p style={{ fontSize: "clamp(17px, 2.1vw, 20px)", color: "var(--ink-soft)", lineHeight: 1.7 }}>
+                Most of what I&apos;ve built started the same way — something was annoying me, and
+                the existing fix was worse than the problem. I care more about the decision behind
+                an interface than the interface itself, so every project here tells you what I gave
+                up to build it.
+              </p>
 
-                  <p
-                    style={{
-                      fontSize: "16px",
-                      color: "#555555",
-                      lineHeight: 1.7,
-                      marginBottom: "14px",
-                      fontFamily: F,
-                    }}
-                  >
-                    {p.description}
-                  </p>
-
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                    {p.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: 500,
-                          color: "#555555",
-                          backgroundColor: "#f5f5f5",
-                          padding: "5px 10px",
-                          borderRadius: "999px",
-                          fontFamily: F,
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div
+              <p style={{ fontSize: "clamp(17px, 2.1vw, 20px)", color: "var(--ink-soft)", lineHeight: 1.7, marginTop: "18px" }}>
+                Occasionally fast, always deliberate, and never with a component named{" "}
+                <code
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-end",
-                    gap: "10px",
-                    flexShrink: 0,
+                    fontFamily: "monospace",
+                    fontSize: "0.85em",
+                    backgroundColor: "var(--wash)",
+                    border: "1.5px solid var(--ink)",
+                    padding: "1px 7px",
                   }}
                 >
-                  <Link
-                    href={`/projects/${p.slug}`}
-                    style={{
-                      fontSize: "14px",
-                      color: "#111111",
-                      textDecoration: "none",
-                      padding: "8px 0",
-                      fontFamily: F,
-                    }}
-                  >
-                    Open
-                  </Link>
+                  FinalFinal2.tsx
+                </code>
+                .
+              </p>
+            </div>
 
-                  <a
-                    href={p.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      fontSize: "14px",
-                      color: "#999999",
-                      textDecoration: "none",
-                      fontFamily: F,
-                    }}
-                  >
-                    GitHub
-                  </a>
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "44px" }}>
+              <ContactButton label="Get in touch" filled={true} />
+              <Link href="/about" className="btn btn-ghost">About me →</Link>
+              <a
+                href="https://github.com/priest-2105"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost"
+              >
+                GitHub ↗
+              </a>
+            </div>
 
-                  {p.liveUrl && (
-                    <a
-                      href={p.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        fontSize: "14px",
-                        color: "#999999",
-                        textDecoration: "none",
-                        fontFamily: F,
-                      }}
-                    >
-                      Live
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ────────────────────────────────────────
-            EXPERIENCE — hidden for now, delete "false &&" below to restore
-        ──────────────────────────────────────── */}
-        {false && (
-        <section id="experience" style={{ paddingBottom: "112px" }}>
-          <p style={LABEL}>Work</p>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
-            {experiences.map(({ company, role, period, stack, bullets }, idx) => (
-              <div
-                key={company}
-                className="grid-sidebar"
+            {/* living detail */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "14px",
+                flexWrap: "wrap",
+                borderTop: "1.5px solid var(--ink-faint)",
+                paddingTop: "20px",
+                maxWidth: "620px",
+              }}
+            >
+              <span
                 style={{
-                  paddingTop: idx === 0 ? 0 : "56px",
-                  paddingBottom: "56px",
-                  borderBottom: "1px solid #eeeeee",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: "var(--ink-mute)",
                 }}
               >
-                {/* left col — company info */}
-                <div>
-                  <p
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: 700,
-                      color: "#111111",
-                      letterSpacing: "-0.02em",
-                      marginBottom: "6px",
-                      fontFamily: F,
-                    }}
-                  >
-                    {company}
-                  </p>
-                  <p style={{ fontSize: "15px", color: "#888888", marginBottom: "12px", fontFamily: F }}>
-                    {role}
-                  </p>
-                  <p style={{ fontSize: "13px", color: "#bbbbbb", marginBottom: "16px", fontFamily: F }}>
-                    {period}
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                    {stack.map((s) => (
-                      <span
-                        key={s}
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: 500,
-                          color: "#555555",
-                          backgroundColor: "#f5f5f5",
-                          padding: "4px 10px",
-                          borderRadius: "999px",
-                          fontFamily: F,
-                        }}
-                      >
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* right col — bullets */}
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, alignSelf: "start" }}>
-                  {bullets.map((b, i) => (
-                    <li
-                      key={i}
-                      style={{
-                        fontSize: "16px",
-                        color: "#444444",
-                        lineHeight: 1.75,
-                        marginBottom: "10px",
-                        paddingLeft: "18px",
-                        position: "relative",
-                        fontFamily: F,
-                      }}
-                    >
-                      <span
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          color: "#cccccc",
-                          userSelect: "none",
-                          fontSize: "16px",
-                        }}
-                      >
-                        –
-                      </span>
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+                Right now
+              </span>
+              <NowPlaying />
+            </div>
           </div>
         </section>
-        )}
 
-        {/* ────────────────────────────────────────
-            SKILLS
-        ──────────────────────────────────────── */}
-        <section style={{ paddingBottom: "112px" }}>
-          <p style={LABEL}>Skills & Tools</p>
+        {/* ════════ WORK ════════ */}
+        <section id="projects" style={{ paddingBottom: "104px" }}>
+          <p className="kicker">
+            <span className="kicker-num">01</span> The Work
+          </p>
+
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, borderTop: "var(--border-w) solid var(--ink)" }}>
+            {PINNED.map((p) => (
+              <ProjectRow key={p.slug} project={p} />
+            ))}
+          </ul>
+
+          <div style={{ marginTop: "32px" }}>
+            <Link href="/projects" className="btn btn-ghost">Every project ↗</Link>
+          </div>
+        </section>
+
+        {/* ════════ TOOLKIT ════════ */}
+        <section style={{ paddingBottom: "104px" }}>
+          <p className="kicker">
+            <span className="kicker-num">02</span> Toolkit
+          </p>
 
           <div className="grid-3col">
             {skills.map(({ label, items }) => (
-              <div key={label}>
+              <div key={label} className="panel" style={{ padding: "24px" }}>
                 <p
                   style={{
                     fontSize: "11px",
-                    fontWeight: 600,
-                    color: "#cccccc",
+                    fontWeight: 700,
                     letterSpacing: "0.14em",
-                    textTransform: "uppercase" as const,
-                    marginBottom: "20px",
-                    fontFamily: F,
+                    textTransform: "uppercase",
+                    color: "var(--accent)",
+                    marginBottom: "16px",
+                    paddingBottom: "12px",
+                    borderBottom: "1.5px solid var(--ink)",
                   }}
                 >
                   {label}
                 </p>
                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                   {items.map((item) => (
-                    <li
-                      key={item}
-                      style={{
-                        fontSize: "16px",
-                        color: "#111111",
-                        lineHeight: 2,
-                        fontFamily: F,
-                      }}
-                    >
+                    <li key={item} style={{ fontSize: "15px", color: "var(--ink-soft)", lineHeight: 1.95 }}>
                       {item}
                     </li>
                   ))}
@@ -457,75 +229,68 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ────────────────────────────────────────
-            EDUCATION
-        ──────────────────────────────────────── */}
-        <section style={{ paddingBottom: "140px" }}>
-          <p style={LABEL}>Education</p>
+        {/* ════════ EDUCATION ════════ */}
+        <section style={{ paddingBottom: "128px" }}>
+          <p className="kicker">
+            <span className="kicker-num">03</span> Education
+          </p>
 
-          <div className="grid-sidebar">
-            <div>
-              <p
-                style={{
-                  fontSize: "20px",
-                  fontWeight: 700,
-                  color: "#111111",
-                  letterSpacing: "-0.02em",
-                  marginBottom: "6px",
-                  fontFamily: F,
-                }}
-              >
-                National Open University of Nigeria
-              </p>
-              <p style={{ fontSize: "15px", color: "#888888", marginBottom: "12px", fontFamily: F }}>
-                BSc Computer Science
-              </p>
-              <p style={{ fontSize: "13px", color: "#bbbbbb", fontFamily: F }}>
-                Expected 2026
+          <div className="panel" style={{ padding: "clamp(24px, 4vw, 40px)" }}>
+            <div className="grid-sidebar">
+              <div>
+                <p className="display" style={{ fontSize: "20px", marginBottom: "10px" }}>
+                  National Open University of Nigeria
+                </p>
+                <p style={{ fontSize: "15px", color: "var(--ink-soft)" }}>
+                  BSc Computer Science
+                </p>
+              </div>
+
+              <p style={{ fontSize: "16px", color: "var(--ink-soft)", lineHeight: 1.8, alignSelf: "start" }}>
+                Software Engineering · Web &amp; Internet Technology · Algorithms &amp; Data Structures ·
+                Systems Design &amp; Security · Data-Driven Computing · Java
               </p>
             </div>
-
-            <p style={{ fontSize: "16px", color: "#444444", lineHeight: 1.8, fontFamily: F, alignSelf: "start" }}>
-              Software Engineering · Web & Internet Technology · Algorithms & Data Structures ·
-              Systems Design & Security · Data-Driven Computing · Java
-            </p>
           </div>
         </section>
 
       </main>
 
-      {/* ────────────────────────────────────────
-          FOOTER
-      ──────────────────────────────────────── */}
-      <footer style={{ backgroundColor: "#111111", padding: "80px 48px", fontFamily: F }}>
+      {/* ════════ FOOTER ════════ */}
+      <footer
+        style={{
+          backgroundColor: "var(--ink)",
+          borderTop: "var(--border-w) solid var(--ink)",
+          padding: "80px 48px",
+        }}
+      >
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-
-          {/* top row */}
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-start",
-              marginBottom: "64px",
+              marginBottom: "56px",
               flexWrap: "wrap",
               gap: "32px",
             }}
           >
             <div>
               <p
+                className="display"
+                style={{ fontSize: "clamp(34px, 5.5vw, 60px)", color: "var(--paper)", marginBottom: "14px" }}
+              >
+                Let&apos;s build<br />something
+              </p>
+              <p
                 style={{
-                  fontSize: "clamp(36px, 5vw, 56px)",
-                  fontWeight: 800,
-                  color: "#ffffff",
-                  letterSpacing: "-0.03em",
-                  lineHeight: 1.05,
-                  marginBottom: "12px",
-                  fontFamily: F,
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "var(--ink-mute)",
                 }}
               >
-                Fawaz Bailey
-              </p>
-              <p style={{ fontSize: "18px", color: "#666666", fontFamily: F }}>
                 Design &amp; Software Engineer · Lagos, Nigeria
               </p>
             </div>
@@ -533,14 +298,12 @@ export default function Home() {
             <ContactButton
               label="Get in touch ↗"
               filled={true}
-              style={{ backgroundColor: "#ffffff", color: "#111111", alignSelf: "flex-start" }}
+              style={{ backgroundColor: "var(--paper)", color: "var(--ink)", alignSelf: "flex-start" }}
             />
           </div>
 
-          {/* divider */}
-          <div style={{ height: "1px", backgroundColor: "#2a2a2a", marginBottom: "32px" }} />
+          <div style={{ height: "var(--border-w)", backgroundColor: "#3a3a3a", marginBottom: "28px" }} />
 
-          {/* bottom row */}
           <div
             style={{
               display: "flex",
@@ -550,11 +313,9 @@ export default function Home() {
               gap: "16px",
             }}
           >
-            <p style={{ fontSize: "14px", color: "#555555", fontFamily: F }}>
-              © 2026 Fawaz Bailey
-            </p>
+            <p style={{ fontSize: "13px", color: "#666666" }}>© 2026 Fawaz Bailey</p>
 
-            <div style={{ display: "flex", gap: "28px" }}>
+            <div style={{ display: "flex", gap: "26px", flexWrap: "wrap" }}>
               {[
                 { label: "GitHub",   href: "https://github.com/priest-2105" },
                 { label: "LinkedIn", href: "https://www.linkedin.com/in/fawazbailey" },
@@ -566,12 +327,7 @@ export default function Home() {
                   href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  style={{
-                    fontSize: "15px",
-                    color: "#666666",
-                    textDecoration: "none",
-                    fontFamily: F,
-                  }}
+                  className="footer-link"
                 >
                   {label}
                 </a>

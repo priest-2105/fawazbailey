@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ALL_PROJECTS } from "@/lib/projects";
-
-const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
+import { ALL_PROJECTS, KIND_LABEL, type Project } from "@/lib/projects";
 
 export function generateStaticParams() {
   return ALL_PROJECTS.map((p) => ({ slug: p.slug }));
@@ -17,8 +15,17 @@ export async function generateMetadata(
   if (!project) return {};
   return {
     title: `${project.title} — Fawaz Bailey`,
-    description: project.description,
+    description: project.tagline,
   };
+}
+
+function narrative(project: Project) {
+  return [
+    { num: "01", label: "The problem", body: project.problem, accent: false },
+    { num: "02", label: "The decision", body: project.decision, accent: false },
+    { num: "03", label: "The tradeoff", body: project.tradeoff, accent: true },
+    { num: "04", label: "What shipped", body: project.outcome, accent: false },
+  ];
 }
 
 export default async function ProjectDetailPage(
@@ -28,228 +35,229 @@ export default async function ProjectDetailPage(
   const project = ALL_PROJECTS.find((p) => p.slug === slug);
   if (!project) notFound();
 
-  return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", fontFamily: F, color: "#111111" }}>
+  const [hero, ...rest] = project.images;
 
-      {/* header */}
+  return (
+    <div style={{ minHeight: "100vh", color: "var(--ink)" }}>
+
       <header
         className="page-header"
         style={{
-          display:        "flex",
-          alignItems:     "center",
+          display: "flex",
+          alignItems: "center",
           justifyContent: "space-between",
-          borderBottom:   "1px solid #f0f0f0",
+          borderBottom: "var(--border-w) solid var(--ink)",
+          gap: "16px",
+          flexWrap: "wrap",
         }}
       >
-        <Link
-          href="/projects"
-          style={{ fontSize: "15px", fontWeight: 500, color: "#999999", textDecoration: "none", fontFamily: F }}
-        >
-          ← Projects
+        <Link href="/projects" className="ink-link" style={{ fontSize: "14px", fontWeight: 600 }}>
+          ← All projects
         </Link>
 
         <div style={{ display: "flex", gap: "12px" }}>
           {project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display:         "inline-flex",
-                alignItems:      "center",
-                backgroundColor: "#111111",
-                color:           "#ffffff",
-                fontSize:        "14px",
-                fontWeight:      500,
-                padding:         "9px 20px",
-                borderRadius:    "999px",
-                textDecoration:  "none",
-                fontFamily:      F,
-              }}
-            >
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ink">
               Live ↗
             </a>
           )}
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display:        "inline-flex",
-              alignItems:     "center",
-              border:         "1px solid #dddddd",
-              color:          "#111111",
-              fontSize:       "14px",
-              fontWeight:     500,
-              padding:        "9px 20px",
-              borderRadius:   "999px",
-              textDecoration: "none",
-              fontFamily:     F,
-            }}
-          >
-            GitHub ↗
-          </a>
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              GitHub ↗
+            </a>
+          )}
         </div>
       </header>
 
       <main className="projects-main">
 
-        {/* title block */}
-        <div style={{ marginBottom: "56px" }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                style={{
-                  fontSize:        "12px",
-                  fontWeight:      500,
-                  backgroundColor: "#f5f5f5",
-                  color:           "#555555",
-                  padding:         "5px 12px",
-                  borderRadius:    "999px",
-                  fontFamily:      F,
-                }}
-              >
-                {tag}
-              </span>
-            ))}
+        {/* ── Title block ── */}
+        <div style={{ marginBottom: "48px" }}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              gap: "10px 16px",
+              fontSize: "12px",
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--ink-mute)",
+              marginBottom: "20px",
+            }}
+          >
+            <span style={{ color: "var(--accent)" }}>{project.status}</span>
+            <span aria-hidden>·</span>
+            <span>{KIND_LABEL[project.kind]}</span>
+            <span aria-hidden>·</span>
+            <span>{project.year}</span>
+            <span aria-hidden>·</span>
+            <span>{project.role}</span>
           </div>
 
           <h1
+            className="display"
             style={{
-              fontSize:      "clamp(36px, 5.5vw, 64px)",
-              fontWeight:    800,
-              color:         "#111111",
-              letterSpacing: "-0.03em",
-              lineHeight:    1.05,
-              marginBottom:  "16px",
-              fontFamily:    F,
+              fontSize: "clamp(40px, 7vw, 84px)",
+              marginBottom: "20px",
             }}
           >
             {project.title}
           </h1>
 
-          <p style={{ fontSize: "18px", color: "#555555", lineHeight: 1.7, maxWidth: "640px", fontFamily: F }}>
-            {project.description}
-          </p>
-
-          <p style={{ fontSize: "14px", color: "#aaaaaa", marginTop: "12px", fontFamily: F }}>
-            {project.company}
+          <p
+            style={{
+              fontSize: "clamp(18px, 2.4vw, 22px)",
+              color: "var(--ink-soft)",
+              lineHeight: 1.55,
+              maxWidth: "620px",
+            }}
+          >
+            {project.tagline}
           </p>
         </div>
 
-        {/* image gallery */}
-        {project.images.length > 0 && (
-          <div style={{ marginBottom: "64px" }}>
-            {/* hero image */}
-            <div
-              style={{
-                borderRadius: "16px",
-                overflow:     "hidden",
-                aspectRatio:  "16 / 9",
-                marginBottom: "12px",
-                backgroundColor: project.bgColor,
-              }}
-            >
+        {/* ── Hero image ── */}
+        {hero && (
+          <figure className="panel" style={{ marginBottom: "72px", padding: "10px" }}>
+            <div style={{ aspectRatio: "16 / 9", backgroundColor: project.bgColor, overflow: "hidden" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={project.images[0]}
+                src={hero.src}
                 alt={`${project.title} screenshot`}
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
               />
             </div>
+            {hero.caption && (
+              <figcaption
+                style={{
+                  fontSize: "13px",
+                  color: "var(--ink-mute)",
+                  padding: "12px 4px 2px",
+                  lineHeight: 1.55,
+                }}
+              >
+                {hero.caption}
+              </figcaption>
+            )}
+          </figure>
+        )}
 
-            {/* secondary images */}
-            {project.images.length > 1 && (
-              <div className="grid-2col" style={{ gap: "12px" }}>
-                {project.images.slice(1).map((img, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      borderRadius: "12px",
-                      overflow:     "hidden",
-                      aspectRatio:  "16 / 10",
-                      backgroundColor: project.bgColor,
-                    }}
-                  >
+        {/* ── Narrative panels ── */}
+        <section style={{ display: "flex", flexDirection: "column", gap: "28px", marginBottom: "72px" }}>
+          {narrative(project).map(({ num, label, body, accent }) => (
+            <article
+              key={num}
+              className={`panel${accent ? " panel-accent" : ""}`}
+              style={{ padding: "clamp(24px, 4vw, 40px)" }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  gap: "14px",
+                  marginBottom: "18px",
+                }}
+              >
+                <span
+                  className="display"
+                  style={{ fontSize: "15px", color: accent ? "var(--accent)" : "var(--ink-faint)" }}
+                >
+                  {num}
+                </span>
+                <h2
+                  className="display"
+                  style={{ fontSize: "clamp(19px, 2.6vw, 26px)" }}
+                >
+                  {label}
+                </h2>
+              </div>
+
+              <p
+                style={{
+                  fontSize: "17px",
+                  lineHeight: 1.75,
+                  color: "var(--ink-soft)",
+                  maxWidth: "62ch",
+                }}
+              >
+                {body}
+              </p>
+            </article>
+          ))}
+        </section>
+
+        {/* ── Stack ── */}
+        <section style={{ marginBottom: "72px" }}>
+          <p className="kicker">
+            <span className="kicker-num">05</span> Built with
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+            {project.stack.map((item) => (
+              <span key={item} className="tag">{item}</span>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Gallery ── */}
+        {rest.length > 0 && (
+          <section style={{ marginBottom: "72px" }}>
+            <p className="kicker">
+              <span className="kicker-num">06</span> Screens
+            </p>
+
+            <div className="grid-2col" style={{ gap: "24px" }}>
+              {rest.map((image, i) => (
+                <figure key={image.src} className="panel pop" style={{ padding: "8px" }}>
+                  <div style={{ aspectRatio: "16 / 10", backgroundColor: project.bgColor, overflow: "hidden" }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={img}
-                      alt={`${project.title} screenshot ${i + 2}`}
+                      src={image.src}
+                      alt={image.caption ?? `${project.title} screenshot ${i + 2}`}
+                      loading="lazy"
                       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                     />
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  {image.caption && (
+                    <figcaption
+                      style={{
+                        fontSize: "13px",
+                        color: "var(--ink-mute)",
+                        padding: "10px 4px 2px",
+                        lineHeight: 1.55,
+                      }}
+                    >
+                      {image.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          </section>
         )}
 
-        {/* bottom CTA */}
+        {/* ── CTA ── */}
         <div
           style={{
-            display:      "flex",
-            gap:          "12px",
-            flexWrap:     "wrap",
-            paddingTop:   "32px",
-            borderTop:    "1px solid #f0f0f0",
+            display: "flex",
+            gap: "12px",
+            flexWrap: "wrap",
+            paddingTop: "40px",
+            borderTop: "var(--border-w) solid var(--ink)",
           }}
         >
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display:         "inline-flex",
-              alignItems:      "center",
-              backgroundColor: "#111111",
-              color:           "#ffffff",
-              fontSize:        "15px",
-              fontWeight:      500,
-              padding:         "12px 26px",
-              borderRadius:    "999px",
-              textDecoration:  "none",
-              fontFamily:      F,
-            }}
-          >
-            View on GitHub ↗
-          </a>
           {project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display:        "inline-flex",
-                alignItems:     "center",
-                border:         "1px solid #dddddd",
-                color:          "#111111",
-                fontSize:       "15px",
-                fontWeight:     500,
-                padding:        "12px 26px",
-                borderRadius:   "999px",
-                textDecoration: "none",
-                fontFamily:     F,
-              }}
-            >
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ink">
               Live site ↗
             </a>
           )}
-          <Link
-            href="/projects"
-            style={{
-              display:        "inline-flex",
-              alignItems:     "center",
-              border:         "1px solid #dddddd",
-              color:          "#111111",
-              fontSize:       "15px",
-              fontWeight:     500,
-              padding:        "12px 26px",
-              borderRadius:   "999px",
-              textDecoration: "none",
-              fontFamily:     F,
-            }}
-          >
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              View on GitHub ↗
+            </a>
+          )}
+          <Link href="/projects" className="btn btn-ghost">
             ← All projects
           </Link>
         </div>
@@ -258,16 +266,19 @@ export default async function ProjectDetailPage(
 
       <footer
         style={{
-          borderTop:      "1px solid #f0f0f0",
-          padding:        "32px 56px",
-          display:        "flex",
+          borderTop: "var(--border-w) solid var(--ink)",
+          padding: "28px 56px",
+          display: "flex",
           justifyContent: "space-between",
-          alignItems:     "center",
-          fontFamily:     F,
+          alignItems: "center",
+          gap: "16px",
+          flexWrap: "wrap",
+          fontSize: "13px",
+          color: "var(--ink-mute)",
         }}
       >
-        <p style={{ fontSize: "14px", color: "#999999" }}>© 2026 Fawaz Bailey</p>
-        <Link href="/" style={{ fontSize: "14px", color: "#999999", textDecoration: "none" }}>
+        <p>© 2026 Fawaz Bailey</p>
+        <Link href="/" className="ink-link" style={{ fontWeight: 600 }}>
           ← Home
         </Link>
       </footer>

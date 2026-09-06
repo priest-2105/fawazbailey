@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Archivo_Black } from "next/font/google";
+import ContextMenu from "@/components/ContextMenu";
+import ContactProvider from "@/components/ContactProvider";
+import Millipede from "@/components/Millipede";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const archivoBlack = Archivo_Black({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -35,8 +45,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+    <html lang="en" className={`${inter.variable} ${archivoBlack.variable}`}>
+      <body>
+        <ContactProvider>
+          {children}
+          <ContextMenu />
+          <Millipede />
+        </ContactProvider>
+      </body>
     </html>
   );
 }
