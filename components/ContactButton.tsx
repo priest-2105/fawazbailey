@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import ContactModal from "./ContactModal";
+import { useContact } from "./ContactProvider";
 
 interface Props {
   label?: string;
@@ -10,19 +9,16 @@ interface Props {
 }
 
 export default function ContactButton({ label = "Get in touch", filled = true, style }: Props) {
-  const [open, setOpen] = useState(false);
+  const { open } = useContact();
 
   return (
-    <>
-      <button
-        onClick={() => setOpen(true)}
-        className={`btn ${filled ? "btn-ink" : "btn-ghost"}`}
-        style={style}
-      >
-        {label}
-      </button>
-
-      <ContactModal open={open} onClose={() => setOpen(false)} />
-    </>
+    <button
+      type="button"
+      onClick={open}
+      className={`btn ${filled ? "btn-ink" : "btn-ghost"}`}
+      style={style}
+    >
+      {label}
+    </button>
   );
 }

@@ -6,14 +6,18 @@ import ProjectRow from "@/components/ProjectRow";
 import ScatterName from "@/components/ScatterName";
 import { PINNED } from "@/lib/projects";
 
+// TODO(fawaz): I added Vue as asked, plus entries evidenced by the project
+// stacks — PHP, WordPress and WooCommerce from M365Connect, Prisma from
+// Clayface, GitHub Actions from Continuum, Shopify Storefront API from Augusta
+// Newham. Prune anything you wouldn't want to be interviewed on.
 const skills = [
   {
     label: "Languages",
-    items: ["JavaScript", "TypeScript", "Golang", "Python", "Java"],
+    items: ["JavaScript", "TypeScript", "Golang", "Python", "Java", "PHP"],
   },
   {
     label: "Frameworks",
-    items: ["React", "Next.js", "React Native", "NestJS", "Laravel", "Django"],
+    items: ["React", "Next.js", "React Native", "Vue", "NestJS", "Laravel", "Django", "WordPress"],
   },
   {
     label: "Styling",
@@ -21,15 +25,29 @@ const skills = [
   },
   {
     label: "Data & APIs",
-    items: ["REST API", "GraphQL", "WebSockets", "Supabase", "Redis", "PostgreSQL", "MySQL", "MongoDB"],
+    items: [
+      "REST API",
+      "GraphQL",
+      "WebSockets",
+      "Prisma",
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "Supabase",
+      "Redis",
+    ],
+  },
+  {
+    label: "Commerce",
+    items: ["Shopify Storefront API", "Shopify Headless", "WooCommerce", "Stripe"],
   },
   {
     label: "Tools",
-    items: ["Git / GitHub", "Figma", "Docker", "Vercel", "Stripe", "Shopify", "WordPress", "Framer"],
+    items: ["Git / GitHub", "GitHub Actions", "Figma", "Docker", "Vercel", "Framer"],
   },
   {
     label: "Honorable Mentions",
-    items: ["Three.js", "VS Code Extensions", "Web Scraping"],
+    items: ["Three.js", "Blender", "VS Code Extensions", "Web Scraping"],
   },
 ];
 

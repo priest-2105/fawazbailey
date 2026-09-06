@@ -7,176 +7,169 @@ import ChessStats from "@/components/ChessStats";
 import ContactButton from "@/components/ContactButton";
 
 export const metadata: Metadata = {
-  title: "About - Fawaz Bailey",
-  description: "Design and software engineer, chess player, and perpetual student of how things work.",
+  title: "About — Fawaz Bailey",
+  description:
+    "Design and software engineer, chess player, and perpetual student of how things work.",
 };
 
-const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
+const BODY: React.CSSProperties = {
+  fontSize: "17px",
+  color: "var(--ink-soft)",
+  lineHeight: 1.85,
+};
 
 export default function AboutPage() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", fontFamily: F, color: "#111111" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "var(--paper)", color: "var(--ink)" }}>
       <NavBar
         logoHref="/"
         links={[
           { label: "Projects", href: "/projects" },
-          // { label: "Work", href: "/#experience" }, // hidden while the work section is commented out
-          { label: "Contact", href: "mailto:fawzybailey782@gmail.com" },
+          { label: "Contact", action: "contact" },
         ]}
       />
 
-      <main style={{ maxWidth: "780px", margin: "0 auto", padding: "150px 40px 120px" }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "40px",
-            marginBottom: "72px",
-          }}
-        >
+      <main style={{ maxWidth: "820px", margin: "0 auto", padding: "150px 40px 120px" }}>
+
+        {/* ── Header ── */}
+        <div style={{ marginBottom: "64px" }}>
           <div
+            className="panel"
             style={{
-              width: "120px",
-              height: "120px",
-              borderRadius: "999px",
+              width: "132px",
+              height: "132px",
               overflow: "hidden",
-              backgroundColor: "#f0f0f0",
-              flexShrink: 0,
+              padding: 0,
+              marginBottom: "32px",
             }}
           >
             <Image
               src="/images/headshot/head-profile.jpeg"
               alt="Fawaz Bailey portrait"
-              width={120}
-              height={120}
+              width={132}
+              height={132}
               priority
-              style={{ objectFit: "cover", display: "block", objectPosition : "bottom" }}
+              style={{
+                objectFit: "cover",
+                objectPosition: "bottom",
+                display: "block",
+                width: "100%",
+                height: "100%",
+              }}
             />
           </div>
 
-          <div>
-            <h1
-              style={{
-                fontSize: "clamp(40px, 6vw, 64px)",
-                fontWeight: 800,
-                color: "#111111",
-                letterSpacing: "-0.03em",
-                lineHeight: 1.05,
-                marginBottom: "12px",
-                fontFamily: F,
-              }}
-            >
-              Fawaz Bailey
-            </h1>
-            <p style={{ fontSize: "20px", color: "#777777", fontFamily: F, lineHeight: 1.5 }}>
-              Design &amp; Software Engineer · Lagos, Nigeria
-            </p>
-          </div>
+          <h1 className="display" style={{ fontSize: "clamp(40px, 7vw, 76px)", marginBottom: "18px" }}>
+            Fawaz Bailey
+          </h1>
+
+          <p
+            style={{
+              fontSize: "13px",
+              fontWeight: 600,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--ink-mute)",
+              paddingBottom: "26px",
+              borderBottom: "var(--border-w) solid var(--ink)",
+            }}
+          >
+            Design &amp; Software Engineer · Lagos, Nigeria
+          </p>
         </div>
 
-        <article style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
-          <p style={{ fontSize: "20px", fontWeight: 500, color: "#111111", lineHeight: 1.7, fontFamily: F }}>
-            I started writing code because I wanted to build things - not because I had a
+        {/* ── Intro ── */}
+        <section style={{ marginBottom: "72px" }}>
+          <p
+            style={{
+              fontSize: "clamp(19px, 2.4vw, 23px)",
+              color: "var(--ink)",
+              lineHeight: 1.65,
+              fontWeight: 500,
+              marginBottom: "26px",
+            }}
+          >
+            I started writing code because I wanted to build things — not because I had a
             five-year plan or a LinkedIn post about it. I just wanted to make stuff that worked.
             That instinct stuck.
           </p>
 
-          <p style={{ fontSize: "18px", color: "#444444", lineHeight: 1.85, fontFamily: F }}>
-            My first name is actually spelled Fawas - but I've always preferred it with the Z.
+          <p style={{ ...BODY, marginBottom: "22px" }}>
+            My first name is actually spelled Fawas — but I&apos;ve always preferred it with the Z.
             I&apos;m currently a Computer Science student at the National Open University of Nigeria,
             studying while shipping real products. Most of what I know didn&apos;t come from a
-            lecture - it came from doing something wrong, staring at it until I understood why,
-            and then doing it again properly. I&apos;ve found that the gap between understanding
-            something in theory and actually building it is where most of the real learning happens.
-            That gap is also where it gets interesting.
+            lecture — it came from doing something wrong, staring at it until I understood why,
+            and then doing it again properly. The gap between understanding something in theory
+            and actually building it is where most of the real learning happens. That gap is also
+            where it gets interesting.
           </p>
 
-          <p style={{ fontSize: "18px", color: "#444444", lineHeight: 1.85, fontFamily: F }}>
-            I&apos;ve been building professionally since 2022 - across an education platform,
+          <p style={BODY}>
+            I&apos;ve been building professionally since 2022 — across an education platform,
             a software agency, and a handful of personal projects that range from useful to
             deeply unnecessary. The unnecessary ones are usually where I learn the most.
-            I gravitate towards the space where design meets software because it sits at the intersection of engineering
-            and experience: the code has to work, but it also has to feel right. Getting both
-            at the same time is harder than it looks and more satisfying than most things I know.
+            I gravitate towards the space where design meets software because it sits at the
+            intersection of engineering and experience: the code has to work, but it also has to
+            feel right. Getting both at the same time is harder than it looks and more satisfying
+            than most things I know.
+          </p>
+        </section>
+
+        {/* ── Chess ── */}
+        <section style={{ marginBottom: "72px" }}>
+          <p className="kicker">
+            <span className="kicker-num">01</span> Chess
           </p>
 
-          <div style={{ height: "1px", backgroundColor: "#f0f0f0", margin: "12px 0" }} />
-
-          <h2
-            style={{
-              fontSize: "13px",
-              fontWeight: 600,
-              color: "#aaaaaa",
-              letterSpacing: "0.13em",
-              textTransform: "uppercase",
-              fontFamily: F,
-            }}
-          >
-            Chess
-          </h2>
-
-          <p style={{ fontSize: "18px", color: "#444444", lineHeight: 1.85, fontFamily: F }}>
-            Chess takes up a serious amount of my mental bandwidth - and I mean that in the
+          <p style={{ ...BODY, marginBottom: "22px" }}>
+            Chess takes up a serious amount of my mental bandwidth — and I mean that in the
             best possible way. I&apos;ve spent more time studying openings, endgames, and
             positional ideas than I&apos;d like to put in writing. There&apos;s something about
             the game that maps cleanly onto how I think about problems in general: you
             rarely win by playing the best move in isolation, you win by setting up the board
             so the right move becomes obvious three moves from now. I try to bring that same
-            logic to software - architecture decisions, component design, the moments where
+            logic to software — architecture decisions, component design, the moments where
             it&apos;s tempting to hack something together just to make the test pass.
           </p>
 
-          <p style={{ fontSize: "18px", color: "#444444", lineHeight: 1.85, fontFamily: F }}>
+          <p style={{ ...BODY, marginBottom: "32px" }}>
             Chess also taught me that losing is most of the job. You can play a near-perfect
-            game and still lose because of one decision in move 22 that you didn&apos;t fully
-            think through. That&apos;s a useful thing to internalize when you&apos;re writing
+            game and still lose because of one decision on move 22 that you didn&apos;t fully
+            think through. That&apos;s a useful thing to internalise when you&apos;re writing
             software. The bugs are coming. The question is whether you set things up so that
             when they arrive, you know where to look.
           </p>
 
-          <ChessStats />
+          <div className="panel" style={{ padding: "24px" }}>
+            <ChessStats />
+          </div>
+        </section>
 
-          <div style={{ height: "1px", backgroundColor: "#f0f0f0", margin: "12px 0" }} />
-
-          <h2
-            style={{
-              fontSize: "13px",
-              fontWeight: 600,
-              color: "#aaaaaa",
-              letterSpacing: "0.13em",
-              textTransform: "uppercase",
-              fontFamily: F,
-            }}
-          >
-            Music
-          </h2>
-
-          <p style={{ fontSize: "18px", color: "#444444", lineHeight: 1.85, fontFamily: F }}>
-            Music is always on. There&apos;s probably a pattern in there if you
-            looked hard enough. My GitHub contribution graph and my listening history are
-            essentially the same document presented differently. You can also reach out if you need a playlist recommendation
+        {/* ── Music ── */}
+        <section style={{ marginBottom: "72px" }}>
+          <p className="kicker">
+            <span className="kicker-num">02</span> Music
           </p>
 
-          <NowPlaying />
+          <p style={{ ...BODY, marginBottom: "28px" }}>
+            Music is always on. There&apos;s probably a pattern in there if you looked hard
+            enough — my GitHub contribution graph and my listening history are essentially the
+            same document presented differently. You can also reach out if you need a playlist
+            recommendation.
+          </p>
 
-          <div />
+          <div className="panel" style={{ padding: "20px 24px" }}>
+            <NowPlaying />
+          </div>
+        </section>
 
-          <div style={{ height: "1px", backgroundColor: "#f0f0f0", margin: "12px 0" }} />
+        {/* ── Everything else ── */}
+        <section style={{ marginBottom: "72px" }}>
+          <p className="kicker">
+            <span className="kicker-num">03</span> Everything else
+          </p>
 
-          <h2
-            style={{
-              fontSize: "13px",
-              fontWeight: 600,
-              color: "#aaaaaa",
-              letterSpacing: "0.13em",
-              textTransform: "uppercase",
-              fontFamily: F,
-            }}
-          >
-            Everything else
-          </h2>
-
-          <p style={{ fontSize: "18px", color: "#444444", lineHeight: 1.85, fontFamily: F }}>
+          <p style={{ ...BODY, marginBottom: "22px" }}>
             Outside of those two, I&apos;m drawn to things that are well-made. Interfaces
             that get out of your way. Tools that do exactly one thing and do it perfectly.
             Writing that doesn&apos;t waste your time. Systems that are honest about what
@@ -184,66 +177,53 @@ export default function AboutPage() {
             them broken when I can fix them.
           </p>
 
-          <p style={{ fontSize: "18px", color: "#444444", lineHeight: 1.85, fontFamily: F }}>
+          <p style={BODY}>
             I&apos;m based in Lagos, open to remote work, and currently building.
             If something I&apos;ve made or said is interesting to you, I&apos;m easy to reach.
           </p>
-        </article>
+        </section>
 
-        <div style={{ marginTop: "64px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
+        {/* ── CTA ── */}
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            flexWrap: "wrap",
+            paddingTop: "40px",
+            borderTop: "var(--border-w) solid var(--ink)",
+          }}
+        >
           <ContactButton label="Get in touch" filled={true} />
           <a
             href="https://www.linkedin.com/in/fawazbailey/"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              border: "1px solid #dddddd",
-              color: "#111111",
-              fontSize: "15px",
-              fontWeight: 500,
-              padding: "12px 26px",
-              borderRadius: "999px",
-              textDecoration: "none",
-              fontFamily: F,
-            }}
+            className="btn btn-ghost"
           >
             LinkedIn ↗
           </a>
-          <Link
-            href="/"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              border: "1px solid #dddddd",
-              color: "#111111",
-              fontSize: "15px",
-              fontWeight: 500,
-              padding: "12px 26px",
-              borderRadius: "999px",
-              textDecoration: "none",
-              fontFamily: F,
-            }}
-          >
-            Back home
+          <Link href="/projects" className="btn btn-ghost">
+            See the work →
           </Link>
         </div>
       </main>
 
       <footer
         style={{
-          borderTop: "1px solid #f0f0f0",
-          padding: "32px 56px",
+          borderTop: "var(--border-w) solid var(--ink)",
+          padding: "28px 56px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          fontFamily: F,
+          gap: "16px",
+          flexWrap: "wrap",
+          fontSize: "13px",
+          color: "var(--ink-mute)",
         }}
       >
-        <p style={{ fontSize: "14px", color: "#999999" }}>Copyright 2026 Fawaz Bailey</p>
-        <Link href="/" style={{ fontSize: "14px", color: "#999999", textDecoration: "none" }}>
-          Back to home
+        <p>© 2026 Fawaz Bailey</p>
+        <Link href="/" className="ink-link" style={{ fontWeight: 600 }}>
+          ← Home
         </Link>
       </footer>
     </div>

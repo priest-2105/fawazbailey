@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Archivo_Black } from "next/font/google";
 import ContextMenu from "@/components/ContextMenu";
+import ContactProvider from "@/components/ContactProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -45,8 +46,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${archivoBlack.variable}`}>
       <body>
-        {children}
-        <ContextMenu />
+        <ContactProvider>
+          {children}
+          <ContextMenu />
+        </ContactProvider>
       </body>
     </html>
   );

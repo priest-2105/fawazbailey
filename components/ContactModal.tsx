@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-
-const F = "var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif";
+import { useEffect, useRef, useState } from "react";
+import { X } from "lucide-react";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -11,178 +10,121 @@ interface Props {
   onClose: () => void;
 }
 
-export default function ContactModal({ open, onClose }: Props) {
-  const [name, setName]       = useState("");
-  const [email, setEmail]     = useState("");
-  const [message, setMessage] = useState("");
-  const [status, setStatus]   = useState<Status>("idle");
-  const [mounted, setMounted] = useState(open);
-  const overlayRef            = useRef<HTMLDivElement>(null);
-  const closeTimerRef         = useRef<number | null>(null);
-  const animationMs           = 220;
+const EMAIL = "fawzybailey782@gmail.com";
 
-  /* close on Escape */
+export default function ContactModal({ open, onClose }: Props) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<Status>("idle");
+
+  const panelRef = useRef<HTMLDivElement>(null);
+  const restoreFocusTo = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     if (!open) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose]);
 
-  /* lock body scroll while open */
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [open]);
+    restoreFocusTo.current = document.activeElement as HTMLElement | null;
+    panelRef.current?.querySelector<HTMLInputElement>("input, textarea")?.focus();
 
-  useEffect(() => {
-    if (closeTimerRef.current) {
-      window.clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      // Keep tabbing inside the dialog — otherwise focus wanders onto the page
+      // behind the overlay, where it can't be seen.
+      if (event.key !== "Tab") return;
+
+      const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
+        "button, input, textarea, a[href]"
+      );
+      if (!focusable || focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     }
 
-    if (open) {
-      setMounted(true);
-      return;
-    }
-
-    closeTimerRef.current = window.setTimeout(() => {
-      setMounted(false);
-      closeTimerRef.current = null;
-    }, animationMs);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      if (closeTimerRef.current) {
-        window.clearTimeout(closeTimerRef.current);
-        closeTimerRef.current = null;
-      }
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = overflow;
+      restoreFocusTo.current?.focus?.();
     };
-  }, [open]);
+  }, [open, onClose]);
 
-  if (!mounted) return null;
+  if (!open) return null;
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
     setStatus("sending");
+
     try {
-      const res = await fetch("/api/contact", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message }),
       });
-      if (!res.ok) throw new Error();
+      if (!response.ok) throw new Error("Request failed");
+
       setStatus("sent");
-      setName(""); setEmail(""); setMessage("");
+      setName("");
+      setEmail("");
+      setMessage("");
     } catch {
       setStatus("error");
     }
   }
 
-  const inputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "12px 14px",
-    fontSize: "15px",
-    fontFamily: F,
-    color: "#111111",
-    backgroundColor: "#f7f7f7",
-    border: "1px solid transparent",
-    borderRadius: "10px",
-    outline: "none",
-    boxSizing: "border-box",
-    transition: "border-color 0.15s, background-color 0.15s",
-  };
-
   return (
-    /* overlay */
     <div
-      ref={overlayRef}
-      onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
-      style={{
-        position:        "fixed",
-        inset:           0,
-        backgroundColor: open ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0)",
-        backdropFilter:  "blur(4px)",
-        WebkitBackdropFilter: "blur(4px)",
-        zIndex:          1000,
-        display:         "flex",
-        alignItems:      "center",
-        justifyContent:  "center",
-        padding:         "16px",
-        transition:      `background-color ${animationMs}ms ease, backdrop-filter ${animationMs}ms ease, opacity ${animationMs}ms ease`,
-        opacity:         open ? 1 : 0,
-        pointerEvents:   open ? "auto" : "none",
+      className="modal-overlay"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
       }}
     >
-      {/* panel */}
       <div
-        style={{
-          backgroundColor: "#ffffff",
-          borderRadius:    "20px",
-          padding:         "clamp(24px, 5vw, 40px)",
-          width:           "100%",
-          maxWidth:        "480px",
-          fontFamily:      F,
-          boxShadow:       "0 24px 60px rgba(0,0,0,0.15)",
-          position:        "relative",
-          transform:       open ? "translateY(0) scale(1)" : "translateY(10px) scale(0.98)",
-          opacity:         open ? 1 : 0,
-          transition:      `transform ${animationMs}ms ease, opacity ${animationMs}ms ease`,
-        }}
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="contact-heading"
+        className="modal-panel"
       >
-        {/* close button */}
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          style={{
-            position:        "absolute",
-            top:             "16px",
-            right:           "16px",
-            width:           "32px",
-            height:          "32px",
-            borderRadius:    "999px",
-            border:          "none",
-            backgroundColor: "#f0f0f0",
-            cursor:          "pointer",
-            display:         "flex",
-            alignItems:      "center",
-            justifyContent:  "center",
-            fontSize:        "16px",
-            color:           "#777777",
-            fontFamily:      F,
-          }}
-        >
-          ×
+        <button type="button" onClick={onClose} aria-label="Close" className="modal-close">
+          <X size={16} strokeWidth={2.6} aria-hidden />
         </button>
 
-        <h2
-          style={{
-            fontSize:      "22px",
-            fontWeight:    700,
-            color:         "#111111",
-            letterSpacing: "-0.02em",
-            marginBottom:  "6px",
-            fontFamily:    F,
-          }}
-        >
+        <p className="kicker" style={{ marginBottom: "14px" }}>
+          <span className="kicker-num">✉</span> Say hello
+        </p>
+
+        <h2 id="contact-heading" className="display" style={{ fontSize: "30px", marginBottom: "10px" }}>
           Get in touch
         </h2>
-        <p style={{ fontSize: "14px", color: "#888888", marginBottom: "28px", fontFamily: F }}>
-          I&apos;ll get back to you as soon as I can.
+
+        <p style={{ fontSize: "15px", color: "var(--ink-soft)", lineHeight: 1.6, marginBottom: "26px" }}>
+          Tell me what you&apos;re building. I read everything and reply to most of it.
         </p>
 
         {status === "sent" ? (
-          <div
-            style={{
-              padding:         "24px",
-              backgroundColor: "#f0fdf4",
-              borderRadius:    "12px",
-              textAlign:       "center",
-            }}
-          >
-            <p style={{ fontSize: "16px", fontWeight: 600, color: "#16a34a", marginBottom: "6px", fontFamily: F }}>
-              Message sent.
+          <div className="panel panel-accent" style={{ padding: "22px" }}>
+            <p className="display" style={{ fontSize: "17px", marginBottom: "8px" }}>
+              Message sent
             </p>
-            <p style={{ fontSize: "14px", color: "#555555", fontFamily: F }}>
+            <p style={{ fontSize: "15px", color: "var(--ink-soft)", lineHeight: 1.6 }}>
               Thanks — I&apos;ll be in touch soon.
             </p>
           </div>
@@ -192,67 +134,55 @@ export default function ContactModal({ open, onClose }: Props) {
               <input
                 type="text"
                 placeholder="Your name"
+                aria-label="Your name"
                 required
+                disabled={status === "sending"}
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                style={{ ...inputStyle, flex: "1 1 140px" }}
-                onFocus={(e) => { e.target.style.borderColor = "#111111"; e.target.style.backgroundColor = "#ffffff"; }}
-                onBlur={(e)  => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#f7f7f7"; }}
+                onChange={(event) => setName(event.target.value)}
+                className="field"
+                style={{ flex: "1 1 150px" }}
               />
               <input
                 type="email"
                 placeholder="Your email"
+                aria-label="Your email"
                 required
+                disabled={status === "sending"}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{ ...inputStyle, flex: "1 1 140px" }}
-                onFocus={(e) => { e.target.style.borderColor = "#111111"; e.target.style.backgroundColor = "#ffffff"; }}
-                onBlur={(e)  => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#f7f7f7"; }}
+                onChange={(event) => setEmail(event.target.value)}
+                className="field"
+                style={{ flex: "1 1 150px" }}
               />
             </div>
 
             <textarea
               placeholder="What's on your mind?"
+              aria-label="Your message"
               required
               rows={5}
+              disabled={status === "sending"}
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              style={{
-                ...inputStyle,
-                resize:     "vertical",
-                lineHeight: "1.6",
-                minHeight:  "120px",
-                maxHeight:  "240px",
-                overflowY:  "auto",
-              }}
-              onFocus={(e) => { e.target.style.borderColor = "#111111"; e.target.style.backgroundColor = "#ffffff"; }}
-              onBlur={(e)  => { e.target.style.borderColor = "transparent"; e.target.style.backgroundColor = "#f7f7f7"; }}
+              onChange={(event) => setMessage(event.target.value)}
+              className="field"
+              style={{ resize: "vertical", lineHeight: 1.6, minHeight: "130px", maxHeight: "260px" }}
             />
 
             {status === "error" && (
-              <p style={{ fontSize: "13px", color: "#dc2626", fontFamily: F }}>
-                Something went wrong. Try emailing me directly at fawzybailey782@gmail.com
+              <p role="alert" style={{ fontSize: "13px", color: "var(--accent)", lineHeight: 1.6 }}>
+                Something went wrong. Email me directly at{" "}
+                <a href={`mailto:${EMAIL}`} className="ink-link" style={{ fontWeight: 600 }}>
+                  {EMAIL}
+                </a>
               </p>
             )}
 
             <button
               type="submit"
               disabled={status === "sending"}
-              style={{
-                backgroundColor: status === "sending" ? "#555555" : "#111111",
-                color:           "#ffffff",
-                border:          "none",
-                borderRadius:    "999px",
-                padding:         "13px 28px",
-                fontSize:        "15px",
-                fontWeight:      600,
-                fontFamily:      F,
-                cursor:          status === "sending" ? "not-allowed" : "pointer",
-                alignSelf:       "flex-start",
-                transition:      "background-color 0.15s",
-              }}
+              className="btn btn-ink"
+              style={{ alignSelf: "flex-start", marginTop: "4px" }}
             >
-              {status === "sending" ? "Sending…" : "Send message"}
+              {status === "sending" ? "Sending…" : "Send message →"}
             </button>
           </form>
         )}
