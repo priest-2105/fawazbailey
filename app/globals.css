@@ -9,6 +9,9 @@
   --ink-mute: #8a8a8a;
   --ink-faint: #c4c4c4;
   --wash: #f5f5f5;
+  /* The one deliberate break from the two-colour palette: treats need to read
+     as food at a glance, and red already means "accent" everywhere else. */
+  --treat: #2eb85c;
 
   --border-w: 2px;
   --shadow: 5px 5px 0 var(--ink);
@@ -685,11 +688,38 @@ button:disabled,
   pointer-events: none;
 }
 
-.millipede-badge {
+/* Treats sit above body text but below buttons, same as a near millipede. */
+.treat-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.millipede-hud {
   position: fixed;
   left: 20px;
   bottom: 20px;
   z-index: 61;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.millipede-hint {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  background-color: var(--paper);
+  border: 1.5px solid var(--ink-faint);
+  padding: 6px 10px;
+}
+
+.millipede-badge {
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: 700;

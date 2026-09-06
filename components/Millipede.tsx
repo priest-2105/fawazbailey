@@ -4,7 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const CODE = "millipede";
 const MAX_CREATURES = 8;
+const MAX_SEGMENTS = 40;
 const MARGIN = 40;
+const TREAT_COOLDOWN = 10_000;
+const DOUBLE_TAP_MS = 320;
+const DOUBLE_TAP_SLOP = 40;
 
 interface Creature {
   id: number;
@@ -18,6 +22,12 @@ interface Creature {
 }
 
 interface Point {
+  x: number;
+  y: number;
+}
+
+interface Treat {
+  id: number;
   x: number;
   y: number;
 }
@@ -39,6 +49,8 @@ function makeCreature(id: number): Creature {
 
 export default function Millipede() {
   const [creatures, setCreatures] = useState<Creature[]>([]);
+  const [treats, setTreats] = useState<Treat[]>([]);
+  const [cooldownLeft, setCooldownLeft] = useState(0);
 
   const containerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const segmentRefs = useRef<(SVGGElement | null)[][]>([]);
@@ -49,10 +61,50 @@ export default function Millipede() {
   const frameId = useRef<number | null>(null);
   const nextId = useRef(0);
 
-  const dismiss = useCallback(() => setCreatures([]), []);
+  // The loop reads treats through a ref so dropping one doesn't tear down and
+  // restart the animation.
+  const treatsRef = useRef<Treat[]>([]);
+  const lastDrop = useRef(0);
+  const pointer = useRef<Point>({ x: 0, y: 0 });
+  const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
+  const hasCreatures = useRef(false);
 
-  // Each summon adds another one rather than toggling, up to a cap — past a
-  // handful they stop reading as creatures and start reading as noise.
+  useEffect(() => {
+    treatsRef.current = treats;
+  }, [treats]);
+
+  useEffect(() => {
+    hasCreatures.current = creatures.length > 0;
+  }, [creatures.length]);
+
+  const dismiss = useCallback(() => {
+    setCreatures([]);
+    setTreats([]);
+  }, []);
+
+  const dropTreat = useCallback((x: number, y: number) => {
+    // Treats only exist once something is around to eat them, so a normal
+    // double-click to select a word never leaves a green dot behind.
+    if (!hasCreatures.current) return;
+
+    const now = Date.now();
+    if (now - lastDrop.current < TREAT_COOLDOWN) return;
+    lastDrop.current = now;
+
+    setTreats((previous) => [...previous, { id: nextId.current++, x, y }]);
+    setCooldownLeft(Math.ceil(TREAT_COOLDOWN / 1000));
+  }, []);
+
+  // Tick the cooldown readout only while one is running.
+  useEffect(() => {
+    if (cooldownLeft <= 0) return;
+    const timer = setInterval(() => {
+      const remaining = Math.ceil((TREAT_COOLDOWN - (Date.now() - lastDrop.current)) / 1000);
+      setCooldownLeft(remaining > 0 ? remaining : 0);
+    }, 500);
+    return () => clearInterval(timer);
+  }, [cooldownLeft]);
+
   useEffect(() => {
     let buffer = "";
 
@@ -60,6 +112,10 @@ export default function Millipede() {
       const target = event.target as HTMLElement | null;
       if (target?.closest("input, textarea, [contenteditable='true']")) return;
       if (event.key.length !== 1 || event.metaKey || event.ctrlKey || event.altKey) return;
+
+      if (event.key.toLowerCase() === "t") {
+        dropTreat(pointer.current.x, pointer.current.y);
+      }
 
       buffer = (buffer + event.key.toLowerCase()).slice(-CODE.length);
       if (buffer !== CODE) return;
@@ -72,9 +128,42 @@ export default function Millipede() {
       );
     }
 
+    function handlePointerMove(event: PointerEvent) {
+      pointer.current = { x: event.clientX, y: event.clientY };
+    }
+
+    // Detecting the double tap by hand rather than relying on dblclick, which
+    // is unreliable on touch browsers.
+    function handlePointerUp(event: PointerEvent) {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("a, button, input, textarea, [contenteditable='true']")) return;
+
+      const now = Date.now();
+      const previous = lastTap.current;
+
+      if (
+        previous &&
+        now - previous.time < DOUBLE_TAP_MS &&
+        Math.hypot(event.clientX - previous.x, event.clientY - previous.y) < DOUBLE_TAP_SLOP
+      ) {
+        lastTap.current = null;
+        dropTreat(event.clientX, event.clientY);
+        return;
+      }
+
+      lastTap.current = { time: now, x: event.clientX, y: event.clientY };
+    }
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+    };
+  }, [dropTreat]);
 
   useEffect(() => {
     if (creatures.length === 0) {
@@ -83,18 +172,27 @@ export default function Millipede() {
       return;
     }
 
-    // Seed any creature that just appeared; leave existing ones mid-crawl.
     creatures.forEach((creature, index) => {
-      if (points.current[index]) return;
+      const existing = points.current[index];
 
-      const startX = random(MARGIN * 2, Math.max(MARGIN * 3, window.innerWidth - MARGIN * 2));
-      const startY = random(MARGIN * 2, Math.max(MARGIN * 3, window.innerHeight - MARGIN * 2));
+      if (!existing) {
+        const startX = random(MARGIN * 2, Math.max(MARGIN * 3, window.innerWidth - MARGIN * 2));
+        const startY = random(MARGIN * 2, Math.max(MARGIN * 3, window.innerHeight - MARGIN * 2));
 
-      headings.current[index] = random(0, Math.PI * 2);
-      points.current[index] = Array.from({ length: creature.segments }, (_, i) => ({
-        x: startX - i * creature.spacing,
-        y: startY,
-      }));
+        headings.current[index] = random(0, Math.PI * 2);
+        points.current[index] = Array.from({ length: creature.segments }, (_, i) => ({
+          x: startX - i * creature.spacing,
+          y: startY,
+        }));
+        return;
+      }
+
+      // Grown since the last pass — stack the new segments onto the tail so the
+      // body extends backwards rather than teleporting.
+      while (existing.length < creature.segments) {
+        const tail = existing[existing.length - 1];
+        existing.push({ x: tail.x, y: tail.y });
+      }
     });
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -111,8 +209,6 @@ export default function Millipede() {
         const scale = creature.size * (0.7 + depth * 0.5);
         const spacing = creature.spacing * scale;
 
-        // Hold each segment a fixed distance behind the one ahead — this is what
-        // makes the body trail the head instead of moving as a rigid block.
         for (let i = 1; i < chain.length; i++) {
           const ahead = chain[i - 1];
           const current = chain[i];
@@ -140,8 +236,6 @@ export default function Millipede() {
             ).toFixed(2)}) scale(${scale.toFixed(3)})`
           );
 
-          // Phase offset down the body gives the metachronal wave — the ripple
-          // that makes a millipede read as a millipede.
           const legs = legRefs.current[index]?.[i];
           if (legs) {
             const wave = Math.sin(time * 0.012 * (creature.speed / 0.075) - i * 0.55) * 26;
@@ -153,9 +247,6 @@ export default function Millipede() {
         if (container) {
           container.style.opacity = (0.4 + depth * 0.6).toFixed(3);
           container.style.filter = depth < 0.32 ? "blur(1.2px)" : "none";
-          // Far ones sink beneath the page entirely; near ones ride above the
-          // body text but still pass under buttons and panels, which sit at
-          // z-index 1. That contrast is what sells the depth.
           container.style.zIndex = depth > 0.5 ? "0" : "-1";
         }
       });
@@ -170,23 +261,47 @@ export default function Millipede() {
       previousTime = time;
       elapsed += delta;
 
+      const currentTreats = treatsRef.current;
+      const eaten = new Set<number>();
+      const grown = new Set<number>();
+
       creatures.forEach((creature, index) => {
         const chain = points.current[index];
         if (!chain) return;
 
-        // Layered sines stand in for noise. The periods share no common
-        // multiple, so the path never visibly repeats.
-        const steer =
-          Math.sin(elapsed * 0.00065 + creature.steerPhase) * 0.9 +
-          Math.sin(elapsed * 0.00031 + creature.steerPhase * 2.1) * 0.55 +
-          Math.sin(elapsed * 0.0013 + creature.steerPhase * 0.7) * 0.3;
-        headings.current[index] += steer * delta * 0.0016;
-
         const head = chain[0];
+
+        // Nearest uneaten treat wins the creature's attention.
+        let target: Treat | null = null;
+        let best = Infinity;
+        for (const treat of currentTreats) {
+          if (eaten.has(treat.id)) continue;
+          const distance = Math.hypot(treat.x - head.x, treat.y - head.y);
+          if (distance < best) {
+            best = distance;
+            target = treat;
+          }
+        }
+
+        if (target) {
+          // Steer proportionally toward the treat, taking the shorter way round
+          // so it never spins the long way to turn a few degrees.
+          const desired = Math.atan2(target.y - head.y, target.x - head.x);
+          let difference = desired - headings.current[index];
+          while (difference > Math.PI) difference -= Math.PI * 2;
+          while (difference < -Math.PI) difference += Math.PI * 2;
+          headings.current[index] += difference * Math.min(1, delta * 0.006);
+        } else {
+          const steer =
+            Math.sin(elapsed * 0.00065 + creature.steerPhase) * 0.9 +
+            Math.sin(elapsed * 0.00031 + creature.steerPhase * 2.1) * 0.55 +
+            Math.sin(elapsed * 0.0013 + creature.steerPhase * 0.7) * 0.3;
+          headings.current[index] += steer * delta * 0.0016;
+        }
+
         head.x += Math.cos(headings.current[index]) * creature.speed * delta;
         head.y += Math.sin(headings.current[index]) * creature.speed * delta;
 
-        // Reflect off the viewport edges so nothing wanders out of sight.
         if (head.x < MARGIN || head.x > window.innerWidth - MARGIN) {
           head.x = Math.max(MARGIN, Math.min(head.x, window.innerWidth - MARGIN));
           headings.current[index] = Math.PI - headings.current[index];
@@ -195,7 +310,23 @@ export default function Millipede() {
           head.y = Math.max(MARGIN, Math.min(head.y, window.innerHeight - MARGIN));
           headings.current[index] = -headings.current[index];
         }
+
+        if (target && best < 18 && creature.segments < MAX_SEGMENTS) {
+          eaten.add(target.id);
+          grown.add(creature.id);
+        }
       });
+
+      if (eaten.size > 0) {
+        setTreats((previous) => previous.filter((treat) => !eaten.has(treat.id)));
+        setCreatures((previous) =>
+          previous.map((creature) =>
+            grown.has(creature.id)
+              ? { ...creature, segments: Math.min(creature.segments + 1, MAX_SEGMENTS) }
+              : creature
+          )
+        );
+      }
 
       paint(elapsed);
       frameId.current = requestAnimationFrame(step);
@@ -203,7 +334,6 @@ export default function Millipede() {
 
     frameId.current = requestAnimationFrame(step);
 
-    // Don't burn frames in a background tab.
     function handleVisibility() {
       if (document.hidden) {
         if (frameId.current !== null) cancelAnimationFrame(frameId.current);
@@ -227,6 +357,25 @@ export default function Millipede() {
 
   return (
     <>
+      {treats.length > 0 && (
+        <div className="treat-layer" aria-hidden>
+          <svg width="100%" height="100%" style={{ display: "block", overflow: "visible" }}>
+            {treats.map((treat) => (
+              <g key={treat.id} transform={`translate(${treat.x} ${treat.y})`}>
+                <circle
+                  r="7"
+                  fill="var(--treat)"
+                  stroke="var(--ink)"
+                  strokeWidth="2"
+                  style={{ animation: "pulse 1.6s infinite" }}
+                />
+                <circle cx="-2" cy="-2.4" r="1.6" fill="var(--paper)" opacity="0.75" />
+              </g>
+            ))}
+          </svg>
+        </div>
+      )}
+
       {creatures.map((creature, creatureIndex) => (
         <div
           key={creature.id}
@@ -314,10 +463,14 @@ export default function Millipede() {
         </div>
       ))}
 
-      <button type="button" onClick={dismiss} className="millipede-badge">
-        {creatures.length} millipede{creatures.length > 1 ? "s" : ""} — dismiss
-        {creatures.length >= MAX_CREATURES && " (full)"}
-      </button>
+      <div className="millipede-hud">
+        <button type="button" onClick={dismiss} className="millipede-badge">
+          {creatures.length} millipede{creatures.length > 1 ? "s" : ""} — dismiss
+        </button>
+        <span className="millipede-hint">
+          {cooldownLeft > 0 ? `Treat ready in ${cooldownLeft}s` : "Double-tap or press T for a treat"}
+        </span>
+      </div>
     </>
   );
 }
