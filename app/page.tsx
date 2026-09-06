@@ -3,6 +3,7 @@ import NavBar from "@/components/NavBar";
 import ContactButton from "@/components/ContactButton";
 import NowPlaying from "@/components/NowPlaying";
 import ProjectRow from "@/components/ProjectRow";
+import ScatterName from "@/components/ScatterName";
 import { PINNED } from "@/lib/projects";
 
 const skills = [
@@ -70,12 +71,11 @@ export default function Home() {
               Hi, I&apos;m
             </p>
 
-            <h1
+            <ScatterName
+              text="Fawaz Bailey"
               className="display"
-              style={{ fontSize: "clamp(48px, 10vw, 132px)", marginBottom: "22px" }}
-            >
-              Fawaz Bailey
-            </h1>
+              style={{ fontSize: "clamp(48px, 10vw, 132px)", marginBottom: "12px" }}
+            />
 
             <p
               style={{

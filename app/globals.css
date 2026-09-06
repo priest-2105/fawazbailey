@@ -416,7 +416,8 @@ summary,
 label,
 [role="button"],
 .btn,
-.nav-toggle {
+.nav-toggle,
+.name-letter {
   cursor: var(--cursor-arrow-accent), pointer;
 }
 
@@ -442,4 +443,47 @@ button:disabled,
   [role="button"] {
     cursor: auto;
   }
+}
+
+/* ── Draggable hero name ── */
+.name-letter {
+  display: inline-block;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+  /* Only animates on reset — the drag itself disables this, otherwise every
+     pointermove would be chasing a 0.45s transition and feel like mud. */
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.name-letter.is-dragging {
+  transition: none;
+}
+
+.name-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background-color: var(--paper);
+  border: 1.5px solid var(--ink);
+  padding: 5px 11px;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+}
+
+.name-reset:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .name-letter,
+  .name-reset { transition: none; }
+  .name-reset:hover { transform: none; }
 }
