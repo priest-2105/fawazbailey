@@ -665,3 +665,22 @@ button:disabled,
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ── Millipede easter egg ── */
+.millipede-badge {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 61;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background-color: var(--paper);
+  border: 1.5px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--accent);
+  padding: 7px 11px;
+  pointer-events: none;
+}
