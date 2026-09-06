@@ -17,6 +17,11 @@
 
   --font-body: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
   --font-display: var(--font-archivo), "Archivo Black", var(--font-body);
+
+  /* Inked cursors. The trailing "3 2" is the hotspot — the real click
+     point — and must stay on the arrow tip if the path ever changes. */
+  --cursor-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M3 2 L3 20 L8 15.5 L11.5 22 L15 20.5 L11.5 14.5 L18 14.5 Z' fill='%23ffffff' stroke='%23111111' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E") 3 2;
+  --cursor-arrow-accent: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M3 2 L3 20 L8 15.5 L11.5 22 L15 20.5 L11.5 14.5 L18 14.5 Z' fill='%23e63946' stroke='%23111111' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E") 3 2;
 }
 
 * {
@@ -92,7 +97,6 @@ body {
   background: none;
   border: none;
   padding: 8px;
-  cursor: pointer;
 }
 
 .nav-mobile-panel {
@@ -228,7 +232,6 @@ body {
   padding: 12px 24px;
   border: var(--border-w) solid var(--ink);
   text-decoration: none;
-  cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
@@ -393,4 +396,50 @@ body {
 
 .footer-link:hover {
   color: var(--accent);
+}
+
+/* ═══════════════════════════════════════════
+   INKED CURSOR
+   White fill + heavy black outline so it stays
+   legible on paper and on the dark footer.
+   Trailing numbers are the hotspot (the actual
+   click point) and must sit on the arrow tip.
+   ═══════════════════════════════════════════ */
+
+body {
+  cursor: var(--cursor-arrow), auto;
+}
+
+a,
+button,
+summary,
+label,
+[role="button"],
+.btn,
+.nav-toggle {
+  cursor: var(--cursor-arrow-accent), pointer;
+}
+
+input,
+textarea,
+select {
+  cursor: auto;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Windows High Contrast / forced colours override our art anyway —
+   hand the OS cursor back rather than fighting it. */
+@media (forced-colors: active) {
+  body,
+  a,
+  button,
+  summary,
+  label,
+  [role="button"] {
+    cursor: auto;
+  }
 }
