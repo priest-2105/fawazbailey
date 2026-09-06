@@ -707,16 +707,92 @@ button:disabled,
   flex-wrap: wrap;
 }
 
-.millipede-hint {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
+/* ── Help affordance ── */
+.help {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.help-trigger,
+.help-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
   background-color: var(--paper);
-  border: 1.5px solid var(--ink-faint);
-  padding: 6px 10px;
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  flex-shrink: 0;
+}
+
+.help-trigger:hover,
+.help-icon:hover,
+.help-icon:focus-visible {
+  background-color: var(--accent);
+  color: var(--paper);
+}
+
+.help-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Icons stay in the DOM so focus can reach them; they're just not shown until
+   the trigger is hovered or activated. */
+.help-icons:not(.is-open) .help-slot {
+  width: 0;
+  overflow: hidden;
+}
+
+.help-icon {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.help-icons.is-open .help-icon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.help-slot {
+  position: relative;
+  display: flex;
+}
+
+.help-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  width: 250px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  background-color: var(--paper);
+  border: var(--border-w) solid var(--ink);
+  box-shadow: 4px 4px 0 var(--accent);
+  padding: 11px 13px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+
+.help-tip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .help-icon, .help-tip { transition: none; }
 }
 
 .millipede-badge {

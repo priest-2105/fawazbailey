@@ -1,12 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import MillipedeHelp from "./MillipedeHelp";
 
 const CODE = "millipede";
 const MAX_CREATURES = 8;
 const MAX_SEGMENTS = 40;
 const MARGIN = 40;
-const TREAT_COOLDOWN = 10_000;
+const LIFESPAN = 30_000;
+const TREAT_BONUS = 10_000;
+const FADE_WINDOW = 5_000;
 const DOUBLE_TAP_MS = 320;
 const DOUBLE_TAP_SLOP = 40;
 
@@ -19,6 +22,7 @@ interface Creature {
   steerPhase: number;
   depthPhase: number;
   depthSpeed: number;
+  expiresAt: number;
 }
 
 interface Point {
@@ -44,27 +48,30 @@ function makeCreature(id: number): Creature {
     steerPhase: random(0, Math.PI * 2),
     depthPhase: random(0, Math.PI * 2),
     depthSpeed: random(0.00013, 0.00032),
+    expiresAt: Date.now() + LIFESPAN,
   };
 }
 
 export default function Millipede() {
   const [creatures, setCreatures] = useState<Creature[]>([]);
   const [treats, setTreats] = useState<Treat[]>([]);
-  const [cooldownLeft, setCooldownLeft] = useState(0);
 
-  const containerRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const segmentRefs = useRef<(SVGGElement | null)[][]>([]);
-  const legRefs = useRef<(SVGGElement | null)[][]>([]);
+  // Everything the loop touches is keyed by creature id, not array index —
+  // creatures now expire from anywhere in the list, and index-keyed state would
+  // hand one millipede another's body the moment a gap opened up.
+  const containerRefs = useRef(new Map<number, HTMLDivElement>());
+  const segmentRefs = useRef(new Map<number, (SVGGElement | null)[]>());
+  const legRefs = useRef(new Map<number, (SVGGElement | null)[]>());
+  const chains = useRef(new Map<number, Point[]>());
+  const headings = useRef(new Map<number, number>());
 
-  const points = useRef<Point[][]>([]);
-  const headings = useRef<number[]>([]);
   const frameId = useRef<number | null>(null);
   const nextId = useRef(0);
+  // Survives effect restarts so leg phase and depth don't jump every time a
+  // creature is born, fed, or expires.
+  const elapsed = useRef(0);
 
-  // The loop reads treats through a ref so dropping one doesn't tear down and
-  // restart the animation.
   const treatsRef = useRef<Treat[]>([]);
-  const lastDrop = useRef(0);
   const pointer = useRef<Point>({ x: 0, y: 0 });
   const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
   const hasCreatures = useRef(false);
@@ -86,24 +93,8 @@ export default function Millipede() {
     // Treats only exist once something is around to eat them, so a normal
     // double-click to select a word never leaves a green dot behind.
     if (!hasCreatures.current) return;
-
-    const now = Date.now();
-    if (now - lastDrop.current < TREAT_COOLDOWN) return;
-    lastDrop.current = now;
-
     setTreats((previous) => [...previous, { id: nextId.current++, x, y }]);
-    setCooldownLeft(Math.ceil(TREAT_COOLDOWN / 1000));
   }, []);
-
-  // Tick the cooldown readout only while one is running.
-  useEffect(() => {
-    if (cooldownLeft <= 0) return;
-    const timer = setInterval(() => {
-      const remaining = Math.ceil((TREAT_COOLDOWN - (Date.now() - lastDrop.current)) / 1000);
-      setCooldownLeft(remaining > 0 ? remaining : 0);
-    }, 500);
-    return () => clearInterval(timer);
-  }, [cooldownLeft]);
 
   useEffect(() => {
     let buffer = "";
@@ -132,8 +123,8 @@ export default function Millipede() {
       pointer.current = { x: event.clientX, y: event.clientY };
     }
 
-    // Detecting the double tap by hand rather than relying on dblclick, which
-    // is unreliable on touch browsers.
+    // Detected by hand rather than via dblclick, which is unreliable on touch
+    // browsers. One path covers mouse and touch.
     function handlePointerUp(event: PointerEvent) {
       const target = event.target as HTMLElement | null;
       if (target?.closest("a, button, input, textarea, [contenteditable='true']")) return;
@@ -167,28 +158,39 @@ export default function Millipede() {
 
   useEffect(() => {
     if (creatures.length === 0) {
-      points.current = [];
-      headings.current = [];
+      chains.current.clear();
+      headings.current.clear();
       return;
     }
 
-    creatures.forEach((creature, index) => {
-      const existing = points.current[index];
+    const live = new Set(creatures.map((creature) => creature.id));
+    for (const id of chains.current.keys()) {
+      if (!live.has(id)) {
+        chains.current.delete(id);
+        headings.current.delete(id);
+      }
+    }
+
+    creatures.forEach((creature) => {
+      const existing = chains.current.get(creature.id);
 
       if (!existing) {
         const startX = random(MARGIN * 2, Math.max(MARGIN * 3, window.innerWidth - MARGIN * 2));
         const startY = random(MARGIN * 2, Math.max(MARGIN * 3, window.innerHeight - MARGIN * 2));
 
-        headings.current[index] = random(0, Math.PI * 2);
-        points.current[index] = Array.from({ length: creature.segments }, (_, i) => ({
-          x: startX - i * creature.spacing,
-          y: startY,
-        }));
+        headings.current.set(creature.id, random(0, Math.PI * 2));
+        chains.current.set(
+          creature.id,
+          Array.from({ length: creature.segments }, (_, i) => ({
+            x: startX - i * creature.spacing,
+            y: startY,
+          }))
+        );
         return;
       }
 
-      // Grown since the last pass — stack the new segments onto the tail so the
-      // body extends backwards rather than teleporting.
+      // Grown since the last pass — stack new segments onto the tail so the body
+      // extends backwards rather than teleporting.
       while (existing.length < creature.segments) {
         const tail = existing[existing.length - 1];
         existing.push({ x: tail.x, y: tail.y });
@@ -196,16 +198,14 @@ export default function Millipede() {
     });
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let elapsed = 0;
     let previousTime: number | null = null;
 
-    function paint(time: number) {
-      creatures.forEach((creature, index) => {
-        const chain = points.current[index];
+    function paint(time: number, now: number) {
+      creatures.forEach((creature) => {
+        const chain = chains.current.get(creature.id);
         if (!chain) return;
 
-        const depth =
-          0.5 + 0.5 * Math.sin(time * creature.depthSpeed + creature.depthPhase);
+        const depth = 0.5 + 0.5 * Math.sin(time * creature.depthSpeed + creature.depthPhase);
         const scale = creature.size * (0.7 + depth * 0.5);
         const spacing = creature.spacing * scale;
 
@@ -220,14 +220,17 @@ export default function Millipede() {
           current.y += dy * pull;
         }
 
+        const segments = segmentRefs.current.get(creature.id);
+        const legs = legRefs.current.get(creature.id);
+
         for (let i = 0; i < chain.length; i++) {
-          const node = segmentRefs.current[index]?.[i];
+          const node = segments?.[i];
           if (!node) continue;
 
           const ahead = i === 0 ? null : chain[i - 1];
           const angle = ahead
             ? Math.atan2(ahead.y - chain[i].y, ahead.x - chain[i].x)
-            : headings.current[index];
+            : headings.current.get(creature.id) ?? 0;
 
           node.setAttribute(
             "transform",
@@ -236,42 +239,48 @@ export default function Millipede() {
             ).toFixed(2)}) scale(${scale.toFixed(3)})`
           );
 
-          const legs = legRefs.current[index]?.[i];
-          if (legs) {
+          const leg = legs?.[i];
+          if (leg) {
             const wave = Math.sin(time * 0.012 * (creature.speed / 0.075) - i * 0.55) * 26;
-            legs.setAttribute("transform", `rotate(${wave.toFixed(2)})`);
+            leg.setAttribute("transform", `rotate(${wave.toFixed(2)})`);
           }
         }
 
-        const container = containerRefs.current[index];
+        const container = containerRefs.current.get(creature.id);
         if (container) {
-          container.style.opacity = (0.4 + depth * 0.6).toFixed(3);
+          // Fading out over the last few seconds is the only signal that a
+          // millipede is about to go — cleaner than a countdown on screen.
+          const remaining = creature.expiresAt - now;
+          const dying = remaining < FADE_WINDOW ? Math.max(0, remaining / FADE_WINDOW) : 1;
+
+          container.style.opacity = ((0.4 + depth * 0.6) * dying).toFixed(3);
           container.style.filter = depth < 0.32 ? "blur(1.2px)" : "none";
           container.style.zIndex = depth > 0.5 ? "0" : "-1";
         }
       });
     }
 
-    paint(0);
+    paint(elapsed.current, Date.now());
     if (reduceMotion) return;
 
     function step(time: number) {
       if (previousTime === null) previousTime = time;
       const delta = Math.min(time - previousTime, 50);
       previousTime = time;
-      elapsed += delta;
+      elapsed.current += delta;
 
+      const now = Date.now();
       const currentTreats = treatsRef.current;
       const eaten = new Set<number>();
-      const grown = new Set<number>();
+      const fed = new Set<number>();
 
-      creatures.forEach((creature, index) => {
-        const chain = points.current[index];
+      creatures.forEach((creature) => {
+        const chain = chains.current.get(creature.id);
         if (!chain) return;
 
         const head = chain[0];
+        let heading = headings.current.get(creature.id) ?? 0;
 
-        // Nearest uneaten treat wins the creature's attention.
         let target: Treat | null = null;
         let best = Infinity;
         for (const treat of currentTreats) {
@@ -284,51 +293,64 @@ export default function Millipede() {
         }
 
         if (target) {
-          // Steer proportionally toward the treat, taking the shorter way round
-          // so it never spins the long way to turn a few degrees.
+          // Steer proportionally, taking the shorter way round the circle so it
+          // never spins 355° to correct 5°.
           const desired = Math.atan2(target.y - head.y, target.x - head.x);
-          let difference = desired - headings.current[index];
+          let difference = desired - heading;
           while (difference > Math.PI) difference -= Math.PI * 2;
           while (difference < -Math.PI) difference += Math.PI * 2;
-          headings.current[index] += difference * Math.min(1, delta * 0.006);
+          heading += difference * Math.min(1, delta * 0.006);
         } else {
           const steer =
-            Math.sin(elapsed * 0.00065 + creature.steerPhase) * 0.9 +
-            Math.sin(elapsed * 0.00031 + creature.steerPhase * 2.1) * 0.55 +
-            Math.sin(elapsed * 0.0013 + creature.steerPhase * 0.7) * 0.3;
-          headings.current[index] += steer * delta * 0.0016;
+            Math.sin(elapsed.current * 0.00065 + creature.steerPhase) * 0.9 +
+            Math.sin(elapsed.current * 0.00031 + creature.steerPhase * 2.1) * 0.55 +
+            Math.sin(elapsed.current * 0.0013 + creature.steerPhase * 0.7) * 0.3;
+          heading += steer * delta * 0.0016;
         }
 
-        head.x += Math.cos(headings.current[index]) * creature.speed * delta;
-        head.y += Math.sin(headings.current[index]) * creature.speed * delta;
+        head.x += Math.cos(heading) * creature.speed * delta;
+        head.y += Math.sin(heading) * creature.speed * delta;
 
         if (head.x < MARGIN || head.x > window.innerWidth - MARGIN) {
           head.x = Math.max(MARGIN, Math.min(head.x, window.innerWidth - MARGIN));
-          headings.current[index] = Math.PI - headings.current[index];
+          heading = Math.PI - heading;
         }
         if (head.y < MARGIN || head.y > window.innerHeight - MARGIN) {
           head.y = Math.max(MARGIN, Math.min(head.y, window.innerHeight - MARGIN));
-          headings.current[index] = -headings.current[index];
+          heading = -heading;
         }
 
-        if (target && best < 18 && creature.segments < MAX_SEGMENTS) {
+        headings.current.set(creature.id, heading);
+
+        if (target && best < 18) {
           eaten.add(target.id);
-          grown.add(creature.id);
+          fed.add(creature.id);
         }
       });
 
-      if (eaten.size > 0) {
-        setTreats((previous) => previous.filter((treat) => !eaten.has(treat.id)));
+      const expired = creatures.filter((creature) => creature.expiresAt <= now);
+
+      if (eaten.size > 0 || expired.length > 0) {
+        if (eaten.size > 0) {
+          setTreats((previous) => previous.filter((treat) => !eaten.has(treat.id)));
+        }
+
         setCreatures((previous) =>
-          previous.map((creature) =>
-            grown.has(creature.id)
-              ? { ...creature, segments: Math.min(creature.segments + 1, MAX_SEGMENTS) }
-              : creature
-          )
+          previous
+            .filter((creature) => creature.expiresAt > now || fed.has(creature.id))
+            .map((creature) =>
+              fed.has(creature.id)
+                ? {
+                    ...creature,
+                    segments: Math.min(creature.segments + 1, MAX_SEGMENTS),
+                    expiresAt: Math.max(creature.expiresAt, now) + TREAT_BONUS,
+                  }
+                : creature
+            )
         );
       }
 
-      paint(elapsed);
+      paint(elapsed.current, now);
       frameId.current = requestAnimationFrame(step);
     }
 
@@ -376,12 +398,13 @@ export default function Millipede() {
         </div>
       )}
 
-      {creatures.map((creature, creatureIndex) => (
+      {creatures.map((creature) => (
         <div
           key={creature.id}
           aria-hidden
           ref={(element) => {
-            containerRefs.current[creatureIndex] = element;
+            if (element) containerRefs.current.set(creature.id, element);
+            else containerRefs.current.delete(creature.id);
           }}
           className="millipede-layer"
         >
@@ -394,12 +417,16 @@ export default function Millipede() {
                 <g
                   key={i}
                   ref={(element) => {
-                    (segmentRefs.current[creatureIndex] ||= [])[i] = element;
+                    const list = segmentRefs.current.get(creature.id) ?? [];
+                    list[i] = element;
+                    segmentRefs.current.set(creature.id, list);
                   }}
                 >
                   <g
                     ref={(element) => {
-                      (legRefs.current[creatureIndex] ||= [])[i] = element;
+                      const list = legRefs.current.get(creature.id) ?? [];
+                      list[i] = element;
+                      legRefs.current.set(creature.id, list);
                     }}
                   >
                     <line
@@ -464,12 +491,10 @@ export default function Millipede() {
       ))}
 
       <div className="millipede-hud">
+        <MillipedeHelp />
         <button type="button" onClick={dismiss} className="millipede-badge">
           {creatures.length} millipede{creatures.length > 1 ? "s" : ""} — dismiss
         </button>
-        <span className="millipede-hint">
-          {cooldownLeft > 0 ? `Treat ready in ${cooldownLeft}s` : "Double-tap or press T for a treat"}
-        </span>
       </div>
     </>
   );

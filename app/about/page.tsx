@@ -179,6 +179,36 @@ export default function AboutPage() {
           </p>
         </section>
 
+        {/* ── Easter egg ── */}
+        <section style={{ marginBottom: "72px" }}>
+          <p className="kicker">
+            <span className="kicker-num">04</span> Something for reading this far
+          </p>
+
+          <div className="panel panel-accent" style={{ padding: "clamp(24px, 4vw, 34px)" }}>
+            <p className="display" style={{ fontSize: "22px", marginBottom: "16px" }}>
+              There are millipedes in this site
+            </p>
+
+            <p style={{ ...BODY, fontSize: "16px", marginBottom: "18px" }}>
+              Type the word <strong>millipede</strong> — anywhere, on any page, no input box
+              needed — and one crawls out. Type it again for another, up to eight. They wander
+              on their own and pass underneath the buttons and panels as they go.
+            </p>
+
+            <p style={{ ...BODY, fontSize: "16px", marginBottom: "18px" }}>
+              Each one only lasts thirty seconds, so you&apos;ll want to feed it. Double-tap
+              anywhere, or press <strong>T</strong>, to drop a treat. Every millipede on screen
+              races for the nearest one — whichever gets there first eats it, grows a segment,
+              and earns another ten seconds.
+            </p>
+
+            <p style={{ fontSize: "13px", color: "var(--ink-mute)", lineHeight: 1.6 }}>
+              A help icon appears in the corner once they&apos;re out, in case you forget.
+            </p>
+          </div>
+        </section>
+
         {/* ── CTA ── */}
         <div
           style={{
