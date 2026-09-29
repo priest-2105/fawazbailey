@@ -8,6 +8,7 @@ colors:
   commerce-line: "#cdd6ca"
   commerce-sage: "#dce5d5"
   commerce-lilac: "#e5e0ee"
+  commerce-rose: "#f0e1e3"
   heading-sage: "#627760"
   tab-track: "#e9eee5"
   tab-selected: "#fff"
@@ -131,11 +132,11 @@ The commerce route uses restrained green typography, pale surfaces, rectangular 
 - Large balanced headings, fine rules, and generous responsive gutters.
 - Understated link motion and visible keyboard focus.
 
-The current content covers two verified stores. The complete store inventory is still unconfirmed; content and capture provenance are recorded in `docs/ecommerce-projects-research.md`.
+The current content covers two live stores and one hosted preview. The complete store inventory is still unconfirmed; content and capture provenance are recorded in `docs/ecommerce-projects-research.md`.
 
 ## Colors
 
-The palette places deep pine text over cool paper, with sage and lilac fields supporting the storefront images.
+The palette places deep pine text over cool paper, with sage, lilac and rose fields supporting the storefront images.
 
 ### Primary
 
@@ -144,8 +145,9 @@ The palette places deep pine text over cool paper, with sage and lilac fields su
 
 ### Secondary
 
-- **Sage field** (`commerce-sage`): one storefront's preview and screenshot stage.
-- **Lilac field** (`commerce-lilac`): the other storefront's preview and screenshot stage.
+- **Sage field** (`commerce-sage`): Augusta Newham's preview and screenshot stage.
+- **Lilac field** (`commerce-lilac`): 920 Luxury's preview and screenshot stage.
+- **Rose field** (`commerce-rose`): Brownie Bakes' preview and screenshot stage, a warm counterpart to the bakery's pink and plum.
 - **Visits green**, **appointments purple**, and **range lilac** (`chart-visits`, `chart-appointments`, `chart-range`): distinct reported activity categories; pine ink identifies confirmed sales. The lighter appointment segment communicates the supplied range.
 
 ### Neutral

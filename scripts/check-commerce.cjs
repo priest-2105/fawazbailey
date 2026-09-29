@@ -27,23 +27,39 @@ async function main() {
     await page.waitForFunction(() => { const chart = document.querySelector('.recharts-wrapper'); const container = document.querySelector('.recharts-responsive-container'); return chart && container && Math.abs(chart.getBoundingClientRect().width - container.getBoundingClientRect().width) < 2; });
     console.log('layout', await page.evaluate(() => ({ width: innerWidth, scrollWidth: document.documentElement.scrollWidth, brokenImages: [...document.images].filter(i => !i.complete || !i.naturalWidth).map(i => i.src) })));
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error(`Horizontal overflow at ${width}`);
-    if (width === 1440 || width === 390) await page.getByRole('region', { name: 'From near-zero sales to 15 a week.' }).screenshot({ path: `.impeccable/review/chart-${width}.png` });
+    if (width === 1440 || width === 390) await page.getByRole('region', { name: 'The performance, in perspective.' }).screenshot({ path: `.impeccable/review/chart-${width}.png` });
     if (width === 390) {
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
       await page.screenshot({ path: '.impeccable/review/mobile.png', fullPage: true });
       await page.screenshot({ path: '.impeccable/review/mobile-hero.png' });
     }
   }
-  const results = page.getByRole('region', { name: 'From near-zero sales to 15 a week.' });
-  await results.getByText('View figures & measurement notes').click();
-  if (!await results.getByRole('table').isVisible()) throw new Error('Chart data table did not open');
-  if (!await results.getByRole('cell', {name: '15–20 / week', exact: true}).isVisible()) throw new Error('Appointment range missing');
-  await results.getByText('View figures & measurement notes').click();
-  await page.setViewportSize({width: 1440, height: 1000});
-  await page.locator('.recharts-bar-rectangle').first().hover();
-  await page.getByText('Around 50 visits per week', {exact:true}).waitFor({state:'visible'});
-  console.log('Chart tooltip and accessible data table passed');
-  for (const slug of ['augusta-newham', '920-luxury']) {
+  const results = page.getByRole('region', { name: 'The performance, in perspective.' });
+  await results.getByText('How to read these results').click();
+  if (!await results.getByRole('table').isVisible()) throw new Error('Search data table did not open');
+  if (await results.getByRole('table').locator('tbody tr').count() !== 92) throw new Error('Expected all 92 daily rows');
+  await results.getByText('How to read these results').click();
+  const metricTabs = results.getByRole('tab');
+  await metricTabs.first().click();
+  await metricTabs.first().press('ArrowRight');
+  if (await page.locator('#search-clicks-tab').getAttribute('aria-selected') !== 'true') throw new Error('Metric tab keyboard movement failed');
+  await page.locator('#search-clicks-tab').press('End');
+  if (await page.locator('#search-position-tab').getAttribute('aria-selected') !== 'true') throw new Error('Metric End key failed');
+  await page.locator('#search-impressions-tab').click();
+  console.log('Chart metric tabs and data table passed');
+  for (const [name, href] of [['View actual data for 920 Luxury (opens in a new tab)', 'Screenshot%20(2090).png'], ['View actual data for Augusta Newham (opens in a new tab)', 'Screenshot%20(2089).png']]) {
+    const link = page.getByRole('link', { name });
+    if (await link.getAttribute('target') !== '_blank' || !(await link.getAttribute('href')).endsWith(href)) throw new Error(`Evidence link wrong: ${name}`);
+    const status = (await page.request.get(new URL(await link.getAttribute('href'), page.url()).href)).status();
+    if (status !== 200) throw new Error(`Evidence file ${href} returned ${status}`);
+  }
+  console.log('Actual-data links passed');
+  const brownie = page.locator('#brownie-bakes');
+  if (await brownie.getByText(/shopify/i).count()) throw new Error('Brownie must not mention Shopify');
+  await brownie.getByRole('heading', { name: 'No results to report yet.' }).waitFor();
+  await brownie.getByText('Early preview · Pending review and handover').waitFor();
+  console.log('Brownie preview status passed');
+  for (const slug of ['augusta-newham', '920-luxury', 'brownie-bakes']) {
     await page.locator(`[id="${slug}-mobile-tab"]`).click();
     await page.locator(`[id="${slug}-screen"] img`).evaluate(img => img.decode());
     if (await page.locator(`[id="${slug}-mobile-tab"]`).getAttribute('aria-selected') !== 'true') throw new Error('Mobile tab failed');
@@ -51,6 +67,7 @@ async function main() {
     await page.locator(`[id="${slug}-mobile-tab"]`).press('ArrowLeft');
     if (await page.locator(`[id="${slug}-desktop-tab"]`).getAttribute('aria-selected') !== 'true') throw new Error('Keyboard tab navigation failed');
   }
+  console.log('Screenshot tabs passed');
   await page.setViewportSize({ width: 390, height: 900 });
   await page.getByRole('link', {name: 'Explore the projects'}).click();
   if (!page.url().endsWith('#work')) throw new Error('Work anchor failed');

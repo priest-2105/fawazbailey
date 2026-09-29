@@ -4,9 +4,9 @@ The new route is `/ecommerce-projects`. Content is centralized in `lib/ecommerce
 
 ## Scope
 
-Included projects have both source evidence belonging to this developer and a verified live storefront. The full ecommerce project list was requested from the user and remains unconfirmed. Do not interpret this initial two-store collection as an exhaustive inventory.
+Included projects have source evidence belonging to this developer and a public URL: two live storefronts and one hosted preview. The full ecommerce project list was requested from the user and remains unconfirmed. Do not interpret this three-project collection as an exhaustive inventory.
 
-Other local directories were checked but not added: Ogechi Collective is a film studio, Heelushion is an Expo app, Vestiaire currently has a starter homepage, and Brownie Bakes uses an Instagram enquiry flow without a verified public website URL in the checked source files.
+Other local directories were checked but not added: Ogechi Collective is a film studio, Heelushion is an Expo app, and Vestiaire currently has a starter homepage.
 
 ## Augusta Newham
 
@@ -33,9 +33,21 @@ Other local directories were checked but not added: Ogechi Collective is a film 
 - Desktop capture: 1440 × 1000. Mobile capture: 390 × 844.
 - Files: `public/images/ecommerce/920-luxury-desktop.jpg` and `920-luxury-mobile.jpg`.
 
+## Brownie Bakes
+
+- Hosted preview: https://browniebakes.notanothershittydemo.site/ — an early preview pending review and handover with the bakery, not a production launch.
+- Local implementation evidence: the user's `PROJECTs/browniebakes` project (Next.js 16, React 19, Three.js; no Shopify or payment dependency).
+- `app/lib/catalog.ts`: five flavours with box-of-3/6/12 pricing; the box-of-6 price is marked as an estimate. `app/lib/shop.ts` marks delivery fee, custom pricing and box prices as placeholders and states that checkout is a demo.
+- `app/components/cookie-scene.tsx`: Three.js cookie box loaded from a Draco-compressed GLB, lazy-imported on the client, with matching open/closed image posters as the no-WebGL fallback, context-loss handling, and reduced motion skipping the lid animation.
+- `app/components/cookie-builder.tsx`, `builder-scene.tsx`, `app/lib/customizer.ts`: custom cookie studio with four bases and up to four toppings; placement is seeded per topping so pieces stay put; price rises per extra; the preview docks while scrolling.
+- `app/components/order-enquiry.tsx`: composes an enquiry the customer copies and sends on Instagram; the bakery confirms availability and price.
+- `app/components/cart-context.tsx`, `checkout-form.tsx`: prototype cart in local storage, pickup or Kamloops delivery (postal-code check), dates after two business days of preparation. The checkout says "Demo checkout … no payment is taken and nothing is sent to Brownie Bakes" and "Online payment isn't switched on yet."
+- No sales, traffic or CRO data exists. The route shows a status panel instead of analytics.
+- Files: `public/images/ecommerce/brownie-bakes-desktop.jpg` and `brownie-bakes-mobile.jpg` (1440 × 1000, 390 × 844). Known issue: these captures were taken before the 3D box poster and logo finished loading, so the hero stage is empty. A re-capture is pending: on 2026-09-29 the preview host intermittently failed TLS handshakes, and a full load in headless Chrome needed a `load` wait of a few minutes.
+
 ## Screenshot provenance
 
-All four shipping JPGs are original browser screenshots of the URLs above, captured for this showcase on 2026-09-29. They are not generated mockups. No site content was changed for the captures. The sites' own photos and branding remain part of the screenshots.
+The Augusta and 920 JPGs are original browser screenshots of the URLs above, captured for this showcase on 2026-09-29; the Brownie JPGs are browser screenshots of its hosted preview. They are not generated mockups. No site content was changed for the captures. The sites' own photos and branding remain part of the screenshots.
 
 Research text and full-page review captures are local-only under `.impeccable/research` and `.impeccable/review`. Public images are compressed JPGs served through Next Image.
 

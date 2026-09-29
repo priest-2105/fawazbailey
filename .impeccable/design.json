@@ -88,6 +88,20 @@
           "oklch(95% 0.0195 302.19)"
         ]
       },
+      "commerce-rose": {
+        "role": "secondary",
+        "displayName": "Rose Field",
+        "tonalRamp": [
+          "oklch(15% 0.0166 8.19)",
+          "oklch(27% 0.0166 8.19)",
+          "oklch(38% 0.0166 8.19)",
+          "oklch(50% 0.0166 8.19)",
+          "oklch(61% 0.0166 8.19)",
+          "oklch(73% 0.0166 8.19)",
+          "oklch(84% 0.0166 8.19)",
+          "oklch(95% 0.0166 8.19)"
+        ]
+      },
       "heading-sage": {
         "role": "primary",
         "displayName": "Heading Sage",
