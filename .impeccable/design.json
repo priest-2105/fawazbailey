@@ -1,0 +1,299 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-29T00:59:16.749Z",
+  "title": "Design System: Fawaz Bailey Commerce",
+  "extensions": {
+    "colorMeta": {
+      "commerce-paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0069 124.45)",
+          "oklch(27% 0.0069 124.45)",
+          "oklch(38% 0.0069 124.45)",
+          "oklch(50% 0.0069 124.45)",
+          "oklch(61% 0.0069 124.45)",
+          "oklch(73% 0.0069 124.45)",
+          "oklch(84% 0.0069 124.45)",
+          "oklch(95% 0.0069 124.45)"
+        ]
+      },
+      "commerce-ink": {
+        "role": "primary",
+        "displayName": "Pine Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0391 160.42)",
+          "oklch(27% 0.0391 160.42)",
+          "oklch(38% 0.0391 160.42)",
+          "oklch(50% 0.0391 160.42)",
+          "oklch(61% 0.0391 160.42)",
+          "oklch(73% 0.0391 160.42)",
+          "oklch(84% 0.0391 160.42)",
+          "oklch(95% 0.0391 160.42)"
+        ]
+      },
+      "commerce-muted": {
+        "role": "neutral",
+        "displayName": "Muted Green",
+        "tonalRamp": [
+          "oklch(15% 0.0244 156.18)",
+          "oklch(27% 0.0244 156.18)",
+          "oklch(38% 0.0244 156.18)",
+          "oklch(50% 0.0244 156.18)",
+          "oklch(61% 0.0244 156.18)",
+          "oklch(73% 0.0244 156.18)",
+          "oklch(84% 0.0244 156.18)",
+          "oklch(95% 0.0244 156.18)"
+        ]
+      },
+      "commerce-line": {
+        "role": "neutral",
+        "displayName": "Quiet Rule",
+        "tonalRamp": [
+          "oklch(15% 0.0190 137.80)",
+          "oklch(27% 0.0190 137.80)",
+          "oklch(38% 0.0190 137.80)",
+          "oklch(50% 0.0190 137.80)",
+          "oklch(61% 0.0190 137.80)",
+          "oklch(73% 0.0190 137.80)",
+          "oklch(84% 0.0190 137.80)",
+          "oklch(95% 0.0190 137.80)"
+        ]
+      },
+      "commerce-sage": {
+        "role": "secondary",
+        "displayName": "Sage Field",
+        "tonalRamp": [
+          "oklch(15% 0.0235 131.16)",
+          "oklch(27% 0.0235 131.16)",
+          "oklch(38% 0.0235 131.16)",
+          "oklch(50% 0.0235 131.16)",
+          "oklch(61% 0.0235 131.16)",
+          "oklch(73% 0.0235 131.16)",
+          "oklch(84% 0.0235 131.16)",
+          "oklch(95% 0.0235 131.16)"
+        ]
+      },
+      "commerce-lilac": {
+        "role": "secondary",
+        "displayName": "Lilac Field",
+        "tonalRamp": [
+          "oklch(15% 0.0195 302.19)",
+          "oklch(27% 0.0195 302.19)",
+          "oklch(38% 0.0195 302.19)",
+          "oklch(50% 0.0195 302.19)",
+          "oklch(61% 0.0195 302.19)",
+          "oklch(73% 0.0195 302.19)",
+          "oklch(84% 0.0195 302.19)",
+          "oklch(95% 0.0195 302.19)"
+        ]
+      },
+      "heading-sage": {
+        "role": "primary",
+        "displayName": "Heading Sage",
+        "tonalRamp": [
+          "oklch(15% 0.0430 142.66)",
+          "oklch(27% 0.0430 142.66)",
+          "oklch(38% 0.0430 142.66)",
+          "oklch(50% 0.0430 142.66)",
+          "oklch(61% 0.0430 142.66)",
+          "oklch(73% 0.0430 142.66)",
+          "oklch(84% 0.0430 142.66)",
+          "oklch(95% 0.0430 142.66)"
+        ]
+      },
+      "tab-track": {
+        "role": "neutral",
+        "displayName": "Tab Track",
+        "tonalRamp": [
+          "oklch(15% 0.0131 130.78)",
+          "oklch(27% 0.0131 130.78)",
+          "oklch(38% 0.0131 130.78)",
+          "oklch(50% 0.0131 130.78)",
+          "oklch(61% 0.0131 130.78)",
+          "oklch(73% 0.0131 130.78)",
+          "oklch(84% 0.0131 130.78)",
+          "oklch(95% 0.0131 130.78)"
+        ]
+      },
+      "tab-selected": {
+        "role": "neutral",
+        "displayName": "Selected White",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(27% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(50% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(73% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Commerce hero only; smaller clamp below 640px."
+      },
+      "headline": {
+        "displayName": "Section headline",
+        "purpose": "Work section heading."
+      },
+      "project-title": {
+        "displayName": "Project title",
+        "purpose": "Store identity."
+      },
+      "story-title": {
+        "displayName": "Story headline",
+        "purpose": "Editorial project story."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Route base typography."
+      },
+      "story-body": {
+        "displayName": "Story body",
+        "purpose": "Longer explanations, maximum 70ch."
+      },
+      "action-label": {
+        "displayName": "Action label",
+        "purpose": "Text and store links."
+      },
+      "tab-label": {
+        "displayName": "Screenshot tab",
+        "purpose": "Desktop/Mobile switch."
+      }
+    },
+    "shadows": [
+      {
+        "name": "preview-screen",
+        "value": "0 10px 30px #20392c14",
+        "purpose": "Separate preview screenshot from its tonal field."
+      },
+      {
+        "name": "project-screen",
+        "value": "0 12px 36px #20392c18",
+        "purpose": "Separate larger project screenshot from its stage."
+      }
+    ],
+    "motion": [
+      {
+        "name": "preview-lift",
+        "value": "transform .5s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Preview capture rises 8px on hover."
+      },
+      {
+        "name": "action-reversal",
+        "value": "background .2s, color .2s",
+        "purpose": "Circular preview action reverses colors."
+      },
+      {
+        "name": "arrow-shift",
+        "value": "transform .2s",
+        "purpose": "Store arrow shifts 2px and contact arrow 4px diagonally."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media (prefers-reduced-motion: reduce)",
+        "purpose": "Disable transitions and hover transforms; use scroll-behavior: auto."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-contact-alignment",
+        "value": "min-width: 1680px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "max-width: 1000px"
+      },
+      {
+        "name": "single-column-projects",
+        "value": "max-width: 800px"
+      },
+      {
+        "name": "single-column-previews",
+        "value": "max-width: 640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Text Link",
+      "kind": "button",
+      "refersTo": "text-link",
+      "description": "Understated in-page action; rendered as an anchor.",
+      "html": "<a class=\"ds-link\" href=\"#work\">Explore the projects <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M12 5v14m-7-7 7 7 7-7\"/></svg></a>",
+      "css": ".ds-link{display:inline-flex;align-items:center;gap:9px;min-height:44px;color:#20392c;font:650 13px Manrope,sans-serif;text-decoration:none;text-underline-offset:5px}.ds-link:hover{text-decoration:underline}.ds-link:focus-visible,.ds-nav a:focus-visible,.ds-tab:focus-visible,.ds-preview:focus-visible{outline:2px solid #20392c;outline-offset:6px}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "description": "Compact independent commerce navigation.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Commerce navigation\"><a href=\"#work\">The work</a><a href=\"#contact\">Get in touch <svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:36px;font:600 13px Manrope,sans-serif}.ds-nav a{display:inline-flex;align-items:center;gap:9px;min-height:44px;color:#20392c;text-decoration:none;text-underline-offset:5px}.ds-nav a:hover{text-decoration:underline}.ds-link:focus-visible,.ds-nav a:focus-visible,.ds-tab:focus-visible,.ds-preview:focus-visible{outline:2px solid #20392c;outline-offset:6px}@media(max-width:640px){.ds-nav{gap:18px;font-size:11px}.ds-nav a{gap:4px}}"
+    },
+    {
+      "name": "Inactive Screenshot Tab",
+      "kind": "button",
+      "refersTo": "view-tab",
+      "description": "Visual sample of an inactive screenshot choice; production tab semantics and keyboard behavior live in ProjectScreens.tsx.",
+      "html": "<div class=\"ds-track\"><button class=\"ds-tab\" type=\"button\">Mobile</button></div>",
+      "css": ".ds-track{display:inline-flex;padding:4px;background:#e9eee5;border-radius:6px}.ds-tab{display:flex;align-items:center;gap:7px;min-height:36px;padding:8px 12px;border:0;border-radius:3px;background:transparent;color:#526157;font:11px Manrope,sans-serif;cursor:pointer}.ds-tab:hover{color:#20392c;background:#f5f7f2}.ds-link:focus-visible,.ds-nav a:focus-visible,.ds-tab:focus-visible,.ds-preview:focus-visible{outline:2px solid #20392c;outline-offset:6px}@media(max-width:640px){.ds-tab{font-size:10px;min-height:38px;padding:6px 8px}}"
+    },
+    {
+      "name": "Selected Screenshot Tab",
+      "kind": "button",
+      "refersTo": "view-tab-selected",
+      "description": "Visual sample of the selected screenshot choice.",
+      "html": "<div class=\"ds-track\"><button class=\"ds-tab\" type=\"button\" aria-pressed=\"true\">Desktop</button></div>",
+      "css": ".ds-track{display:inline-flex;padding:4px;background:#e9eee5;border-radius:6px}.ds-tab{display:flex;align-items:center;gap:7px;min-height:36px;padding:8px 12px;border:0;border-radius:3px;background:#fff;color:#20392c;font:11px Manrope,sans-serif;cursor:pointer}.ds-tab:hover{background:#f5f7f2}.ds-link:focus-visible,.ds-nav a:focus-visible,.ds-tab:focus-visible,.ds-preview:focus-visible{outline:2px solid #20392c;outline-offset:6px}@media(max-width:640px){.ds-tab{font-size:10px;min-height:38px;padding:6px 8px}}"
+    },
+    {
+      "name": "Preview Action",
+      "kind": "button",
+      "refersTo": "preview-action",
+      "description": "Circular arrow inside a linked storefront preview; standalone sample demonstrates its visual hover state.",
+      "html": "<a class=\"ds-preview\" href=\"#work\" aria-label=\"Read the project story\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M12 5v14m-7-7 7 7 7-7\"/></svg></a>",
+      "css": ".ds-preview{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;color:#20392c;background:#f5f7f2;transition:background .2s,color .2s}.ds-preview:hover{color:#f5f7f2;background:#20392c}.ds-link:focus-visible,.ds-nav a:focus-visible,.ds-tab:focus-visible,.ds-preview:focus-visible{outline:2px solid #20392c;outline-offset:6px}@media(prefers-reduced-motion:reduce){.ds-preview{transition:none}}"
+    },
+    {
+      "name": "Contact Link",
+      "kind": "button",
+      "description": "Reversed email action on the pine contact surface.",
+      "html": "<div class=\"ds-contact\"><a class=\"ds-contact-link\" href=\"mailto:fawzybailey782@gmail.com\">Let's talk <svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></a></div>",
+      "css": ".ds-contact{background:#20392c;color:#f5f7f2;padding:24px}.ds-contact-link{display:flex;align-items:center;justify-content:space-between;gap:64px;padding:22px 0;border-bottom:1px solid #96ad96;color:inherit;font:24px Manrope,sans-serif;text-decoration:none}.ds-contact-link svg{width:28px;height:28px;transition:transform .2s}.ds-contact-link:hover svg{transform:translate(4px,-4px)}.ds-contact-link:focus-visible{outline:2px solid #f5f7f2;outline-offset:6px}@media(prefers-reduced-motion:reduce){.ds-contact-link svg{transition:none}.ds-contact-link:hover svg{transform:none}}"
+    },
+    {
+      "name": "Implementation Disclosure",
+      "kind": "custom",
+      "description": "Native keyboard-operable disclosure beneath the two-column architecture and ordered implementation flow.",
+      "html": "<details class=\"ds-details\"><summary>A closer look at the implementation</summary><p>The custom Next.js storefront connects to Shopify as its commerce backend.</p></details>",
+      "css": ".ds-details{margin-top:28px;color:#20392c;font:12px Manrope,sans-serif}.ds-details summary{cursor:pointer;padding:10px 0;font-weight:600;width:fit-content}.ds-details summary:focus-visible{outline:2px solid #20392c;outline-offset:6px}.ds-details p{max-width:72ch;margin-top:8px;color:#526157;font-size:13px;line-height:1.85}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Storefront Collection",
+    "overview": "This document describes the implemented visual world of `/ecommerce-projects` only. The original portfolio's comic design in `app/globals.css` remains the incumbent system for its existing routes. These tokens must not be promoted to global portfolio defaults.\n\nThe commerce route uses restrained green typography, pale surfaces, rectangular imagery, and spacious editorial layouts. Real storefront captures provide the visual detail; light rules organize the surrounding explanations. The North Star and descriptive color names are documentation language inferred from this implementation, not a recorded user approval. Direct implementation was an assumption made for the user's speed requirement, not a standing workflow preference.",
+    "keyCharacteristics": [
+      "Route-scoped Manrope typography and cool green surfaces.",
+      "Real desktop and mobile screenshots with quiet tonal framing.",
+      "Large balanced headings, fine rules, and generous responsive gutters.",
+      "Understated link motion and visible keyboard focus."
+    ],
+    "rules": [],
+    "dos": [
+      "Do keep the commerce tokens and Manrope scoped to `/ecommerce-projects`.",
+      "Do preserve real screenshot proportions, accurate capture labels, and image provenance.",
+      "Do retain visible keyboard focus, tab keyboard controls, semantic headings, and reduced-motion behavior.",
+      "Do use the existing fluid gutters, tonal image fields, and thin dividers when extending this route."
+    ],
+    "donts": [
+      "Don't apply this palette or typography to the original portfolio routes without a separate design decision.",
+      "Don't present inferred documentation language as a user-approved brand or workflow preference.",
+      "Don't replace verified project evidence with invented outcomes or imply the two-store collection is exhaustive.",
+      "Don't turn screenshots into rounded decorative cards; the implemented framing is rectangular."
+    ]
+  }
+}

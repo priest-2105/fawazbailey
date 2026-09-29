@@ -1,0 +1,91 @@
+.results { margin-top: 48px; }
+.sectionHeading { margin-bottom: 28px; }
+.sectionHeading h4 { font-size: clamp(26px, 2.5vw, 34px); line-height: 1.25; }
+.sectionHeading p { margin-top: 10px; color: var(--commerce-muted); font-size: 13px; }
+.chartPanel { background: #fff; border: 1px solid #dfe4df; border-radius: 14px; min-width: 0; }
+.panelHeading { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 28px 28px 24px; }
+.panelHeading h5 { font-size: 19px; font-weight: 600; letter-spacing: -.025em; line-height: 1.4; }
+.panelHeading p { color: var(--commerce-muted); font-size: 11px; margin-top: 5px; }
+.panelHeading p > span { margin-inline: 5px; }
+.evidenceButton { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 9px 12px; border: 1px solid #dfe4df; border-radius: 6px; font-size: 11px; font-weight: 600; white-space: nowrap; transition: background .2s, border-color .2s; }
+.evidenceButton:hover { background: #f5f7f2; border-color: #aebcae; }
+.metricTabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid #e8eae7; }
+.metricTabs button { text-align: left; border: 0; border-bottom: 2px solid transparent; color: var(--commerce-ink); background: transparent; padding: 19px 24px 17px; min-width: 0; transition: background .2s; }
+.metricTabs button + button { border-left: 1px solid #e8eae7; }
+.metricTabs button[aria-selected="true"] { border-bottom-color: var(--metric-color); background: #f9f8fc; }
+.metricTabs button:hover { background: #f5f6f5; }
+.metricTabs button:focus-visible { outline-offset: -4px; }
+.metricLabel { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--commerce-muted); white-space: nowrap; }
+.metricLabel i { width: 6px; height: 6px; border-radius: 50%; background: var(--metric-color); flex-shrink: 0; }
+.metricTabs strong { font-size: clamp(26px, 3vw, 38px); letter-spacing: -.035em; line-height: 1.15; font-weight: 500; display: block; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.metricTabs button[aria-selected="true"] strong { color: var(--metric-color); }
+.plotPanel { padding: 26px 28px 18px; min-width: 0; }
+.plotPanel:focus-visible { outline-offset: -4px; }
+.plotHeading { display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 10px; }
+.plotHeading > span:first-child { font-weight: 650; }
+.plotHeading > span:last-child { color: var(--commerce-muted); }
+.chartCanvas { height: 250px; width: 100%; min-width: 0; margin-top: 14px; font-variant-numeric: tabular-nums; }
+.metricExplanation { font-size: 11px; color: var(--commerce-muted); margin-top: 15px; min-height: 36px; }
+.chartFooter { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 28px; border-top: 1px solid #e8eae7; font-size: 10px; color: var(--commerce-muted); }
+.chartFooter a { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; }
+.chartFooter a:hover { text-decoration: underline; }
+.tooltip { padding: 12px 16px; background: #fff; border: 1px solid #dfe4df; border-radius: 8px; color: var(--commerce-muted); font-size: 10px; min-width: 120px; }
+.tooltip span, .tooltip strong { display: block; }
+.tooltip strong { font-size: 25px; font-weight: 550; margin-block: 2px; font-variant-numeric: tabular-nums; }
+.businessResults { margin-top: 32px; }
+.businessHeading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.businessHeading h5 { font-size: 18px; font-weight: 500; letter-spacing: -.025em; }
+.businessHeading > span { font-size: 10px; color: var(--commerce-muted); }
+.businessMetrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; border-bottom: 1px solid var(--commerce-line); margin-top: 20px; padding-bottom: 24px; }
+.businessMetrics dt, .launchMetrics dt { font-size: 11px; color: var(--commerce-muted); }
+.businessMetrics dd { font-size: 30px; letter-spacing: -.035em; font-variant-numeric: tabular-nums; margin-top: 5px; line-height: 1.3; }
+.businessMetrics dd > span { font-size: 10px; letter-spacing: 0; color: var(--commerce-muted); margin-left: 7px; white-space: nowrap; }
+.businessResults > p { font-size: 12px; line-height: 1.85; color: var(--commerce-muted); margin-top: 18px; }
+.dataNotes { margin-top: 16px; font-size: 11px; }
+.dataNotes summary { width: fit-content; cursor: pointer; padding-block: 10px; font-weight: 600; }
+.dataNotes > p { color: var(--commerce-muted); margin-block: 12px; line-height: 1.8; }
+.tableScroll { max-height: 300px; overflow: auto; scrollbar-color: #aebcae #f5f7f2; }
+.tableScroll table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; font-variant-numeric: tabular-nums; }
+.tableScroll caption { text-align: left; padding-bottom: 12px; color: var(--commerce-muted); }
+.tableScroll th, .tableScroll td { border-bottom: 1px solid var(--commerce-line); padding: 10px 8px; }
+.tableScroll thead { background: #eaf0e5; }
+.tableScroll tbody th { font-weight: 500; white-space: nowrap; }
+.searchAppearance { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; min-height: 44px; margin-top: 8px; text-decoration: underline !important; }
+.searchEvidence { margin-top: 44px; border-block: 1px solid var(--commerce-line); padding-block: 28px; }
+.searchEvidence .panelHeading { padding: 0; }
+.searchEvidence h4 { font-size: 25px; line-height: 1.25; }
+.launchMetrics { display: flex; gap: 60px; margin-top: 28px; }
+.launchMetrics dd { font-size: 38px; line-height: 1.25; font-weight: 500; letter-spacing: -.035em; margin-top: 6px; font-variant-numeric: tabular-nums; }
+.evidenceNote { color: var(--commerce-muted); font-size: 12px; line-height: 1.85; margin-top: 20px; max-width: 70ch; }
+@media (max-width: 1000px) {
+  .panelHeading { padding: 22px 20px; gap: 16px; }
+  .metricTabs button { padding: 16px 14px; }
+  .metricLabel { font-size: 10px; }
+  .plotPanel { padding: 24px 20px 16px; }
+  .businessMetrics dd > span { display: block; margin: 4px 0 0; }
+}
+@media (max-width: 640px) {
+  .results { margin-top: 36px; }
+  .sectionHeading { margin-bottom: 22px; }
+  .sectionHeading h4 { font-size: 28px; }
+  .panelHeading { align-items: flex-start; flex-direction: column; gap: 16px; padding: 22px 18px; }
+  .evidenceButton { font-size: 11px; min-height: 42px; }
+  .metricTabs { grid-template-columns: 1fr 1fr; }
+  .metricTabs button { padding: 17px 18px; }
+  .metricTabs button:nth-child(3) { border-left: 0; }
+  .metricTabs button:nth-child(n+3) { border-top: 1px solid #e8eae7; }
+  .metricTabs strong { font-size: 30px; }
+  .plotPanel { padding: 22px 12px 14px; }
+  .plotHeading { padding-inline: 5px; }
+  .chartCanvas { height: 220px; margin-top: 12px; }
+  .metricExplanation { padding-inline: 5px; font-size: 10px; }
+  .chartFooter { padding: 12px 18px; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .businessHeading { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .businessMetrics { gap: 14px; }
+  .businessMetrics dt { font-size: 10px; }
+  .businessMetrics dd { font-size: 27px; }
+  .searchEvidence h4 { font-size: 26px; }
+  .launchMetrics { gap: 36px; }
+  .tableScroll th, .tableScroll td { padding: 9px 5px; font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .evidenceButton, .metricTabs button { transition: none; } }

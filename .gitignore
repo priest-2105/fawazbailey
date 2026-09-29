@@ -41,3 +41,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local browser research and visual review captures
+/.impeccable/research/
+/.impeccable/review/

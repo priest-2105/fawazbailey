@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Inter, Archivo_Black } from "next/font/google";
-import ContextMenu from "@/components/ContextMenu";
+import localFont from "next/font/local";
+import PortfolioEffects from "@/components/PortfolioEffects";
 import ContactProvider from "@/components/ContactProvider";
-import Millipede from "@/components/Millipede";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+const inter = localFont({
+  src: "./fonts/inter-latin.woff2",
+  weight: "300 900",
   variable: "--font-inter",
   display: "swap",
 });
 
-const archivoBlack = Archivo_Black({
-  subsets: ["latin"],
-  weight: ["400"],
+const archivoBlack = localFont({
+  src: "./fonts/archivo-black-latin.woff2",
+  weight: "400",
   variable: "--font-archivo",
   display: "swap",
 });
@@ -49,8 +48,7 @@ export default function RootLayout({
       <body>
         <ContactProvider>
           {children}
-          <ContextMenu />
-          <Millipede />
+          <PortfolioEffects />
         </ContactProvider>
       </body>
     </html>
